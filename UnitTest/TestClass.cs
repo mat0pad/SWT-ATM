@@ -16,6 +16,13 @@ namespace UnitTest
             // TODO: Add your test code here teset gergh gfggfgfd
             Assert.Pass("Your first passing test");
         }
+
+        [Test]
+        public void TestMethod2()
+        {
+            // TODO: Add your test code here teset gergh gfggfgfd
+            Assert.Pass("Your first passing test");
+        }
     }
 }
  

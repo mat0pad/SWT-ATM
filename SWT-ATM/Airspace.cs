@@ -9,7 +9,12 @@ namespace SWT_ATM
             throw new NotImplementedException();
         }
 
-        public void Write()
+		public void Update(EventSubject subject)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Write()
         {
             throw new NotImplementedException();
         }

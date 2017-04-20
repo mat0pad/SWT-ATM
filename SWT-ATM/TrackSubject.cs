@@ -6,24 +6,32 @@ using System.Threading.Tasks;
 
 namespace SWT_ATM
 {
-    abstract class TrackSubject : ISubject
+    public abstract class TrackSubject : ISubject<ITrackObserver,TrackSubject>
     {
 
-        private List<int> list;
+        private List<ITrackObserver> list;
 
-        public void notify()
+        protected TrackSubject()
         {
-            throw new NotImplementedException();
+            list = new List<ITrackObserver>();
         }
 
-        public void attach()
+        public void Notify(TrackSubject subject)
         {
-            throw new NotImplementedException();
+            foreach (var item in list)
+            {
+               item.Update(subject);
+            }
         }
 
-        public void deAttach()
+        public void Attach(ITrackObserver track)
         {
-            throw new NotImplementedException();
+            list.Add(track);
+        }
+
+        public void Deattach(ITrackObserver track)
+        {
+            list.Remove(track);
         }
     }
 }

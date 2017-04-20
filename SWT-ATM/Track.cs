@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SWT_ATM
 {
-    class Track 
+    class Track : TrackSubject
     {
     }
 }

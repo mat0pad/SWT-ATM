@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace SWT_ATM
 {
-    interface ISubject
+    public interface ISubject<I, S>
     {
-        void notify();
-        void attach();
-        void deAttach();
+        void Notify(S item);
+        void Attach(I item);
+        void Deattach(I item);
     }
 }

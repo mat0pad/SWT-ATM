@@ -1,22 +1,33 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SWT_ATM
 {
-    public class EventSubject : ISubject
+    public abstract class EventSubject : ISubject<IEventObserver, EventSubject>
     {
-        public void attach()
+        private List<IEventObserver> list;
+
+        protected EventSubject()
         {
-            throw new NotImplementedException();
+            list = new List<IEventObserver>();
         }
 
-        public void deAttach()
+        public void Attach(IEventObserver item)
         {
-            throw new NotImplementedException();
+            list.Add(item);
         }
 
-        public void notify()
+        public void Deattach(IEventObserver item)
         {
-            throw new NotImplementedException();
+            list.Remove(item);
+        }
+
+        public void Notify(EventSubject subject)
+        {
+            foreach (var item in list)
+            {
+                item.Update(subject);
+            }
         }
     }
 }

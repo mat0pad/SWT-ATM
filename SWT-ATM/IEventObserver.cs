@@ -2,6 +2,6 @@
 {
     public interface IEventObserver
     {
-        void Update();
+        void Update(EventSubject subject);
     }
 }

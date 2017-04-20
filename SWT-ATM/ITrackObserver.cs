@@ -1,6 +1,7 @@
 ﻿namespace SWT_ATM
 {
-    internal interface ITrackObserver
+    public interface ITrackObserver
     {
+        void Update(TrackSubject subject);
     }
 }

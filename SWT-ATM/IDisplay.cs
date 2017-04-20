@@ -1,6 +1,6 @@
 ﻿namespace SWT_ATM
 {
-    public interface ILog
+    public interface IDisplay
     {
     }
 }

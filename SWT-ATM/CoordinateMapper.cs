@@ -1,11 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SWT_ATM
 {
-    public class CoordinateMapper: EventSubject
+    public class CoordinateMapper: IObserver<Track>
     {
-        private List<TransponderDataFormat> list { get; set; }
+        private List<Track> List { get; set; }
 
-        private List<ITrackObserver> tracks { get; set; }
+        public void Update(Track subject)
+        {
+            List.Add(subject);
+        }
     }
 }

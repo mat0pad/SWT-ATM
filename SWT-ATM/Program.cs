@@ -10,9 +10,7 @@ namespace SWT_ATM
     {
         static void Main(string[] args)
         {
-            GODMODE:
-            Console.WriteLine("GOD PATTERN");
-            goto GODMODE;
+           
         }
     }
 }

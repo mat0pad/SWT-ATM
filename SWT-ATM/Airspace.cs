@@ -1,17 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SWT_ATM
 {
-    public class Airspace : ILog, IEventObserver
+    public class Airspace : IAirspace
     {
-        public void Update()
-        {
-            throw new NotImplementedException();
-        }
+        private List<TransponderDataFormat> List { get; set; }
 
-        public void Write()
-        {
-            throw new NotImplementedException();
-        }
+        private IDisplay Display { get; set; }
+
+        private ILog Log { get; set; }
+
+        private IMonitor Monitor { get; set; }
+
     }
 }

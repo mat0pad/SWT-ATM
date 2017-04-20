@@ -41,29 +41,31 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="TransponderReceiver%281%29">
-      <HintPath>..\..\..\..\..\Downloads\TransponderReceiver(1).dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Airspace.cs" />
     <Compile Include="CoordinateMapper.cs" />
-    <Compile Include="EventSubject.cs" />
-    <Compile Include="IEventObserver.cs" />
+    <Compile Include="IAirspace.cs" />
+    <Compile Include="IDisplay.cs" />
+    <Compile Include="IObserver.cs" />
     <Compile Include="ILog.cs" />
     <Compile Include="IMonitor.cs" />
-    <Compile Include="ISubject.cs" />
-    <Compile Include="ITrackObserver.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Monitor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Track.cs" />
-    <Compile Include="TrackSubject.cs" />
+    <Compile Include="Subject.cs" />
     <Compile Include="TransponderDataFormat.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TransponderReceiver\TransponderReceiver.csproj">
+      <Project>{8BBF715E-7016-4A96-93B1-5A1843A237DC}</Project>
+      <Name>TransponderReceiver</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

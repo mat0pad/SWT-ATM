@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SWT_ATM
 {
-    public class Log
+    public class Log: ILog
     {
 
     }

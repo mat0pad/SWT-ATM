@@ -3,21 +3,14 @@ using System.Linq;
 
 namespace SWT_ATM
 {
-    public class TransponderDataFormat
-    {
-		List<Data> FormatData(List<string> rawData)
+	public class TransponderDataFormat
+	{
+		Data FormatData(string rawData)
 		{
-			List<Data> dataList = new List<Data>();
-
-			foreach (string s in rawData)
-			{ 
-				List<string> trackList = s.Split(';').ToList<string>();
-				dataList.Add(new Data (trackList[0], int.Parse(trackList[1]), int.Parse(trackList[2]), int.Parse(trackList[3]), trackList[4]));
-			}
-
-			return dataList;
+			List<string> trackList = rawData.Split(';').ToList<string>();
+			return new Data(trackList[0], int.Parse(trackList[1]), int.Parse(trackList[2]), int.Parse(trackList[3]), trackList[4]);
 		}
-    }
+	}
 
 	public class Data
 	{

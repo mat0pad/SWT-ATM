@@ -13,5 +13,17 @@ namespace SWT_ATM
 
         private IMonitor Monitor { get; set; }
 
+<<<<<<< HEAD
+=======
+		public void Update(EventSubject subject)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Write()
+        {
+            throw new NotImplementedException();
+        }
+>>>>>>> 136c0ca207fc983fc27522b16ecd19414a89ce45
     }
 }

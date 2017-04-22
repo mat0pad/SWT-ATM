@@ -10,30 +10,29 @@ namespace SWT_ATM
     public class TrackSimulator
     {
         private List<ITransponderReceiver> _list;
+        private static ICoordinateMapper _mapper;
 
-        private static ICoordinateMapper Mapper;
-
-        public TrackSimulator(ICoordinateMapper mapper)
+        public TrackSimulator(ICoordinateMapper mapper, int numOfPlanes)
         {
-            Mapper = mapper; 
+            _mapper = mapper; 
 
             // Create transponder receiver
             _list = new List<ITransponderReceiver>();
 
-            for (int i = 0; i < 10; i++)
-                _list.Add(TransponderReceiverFactory.CreateTransponderDataReceiver());     
+           for (int i = 0; i < numOfPlanes+1; i++)
+                _list.Add(TransponderReceiverFactory.CreateTransponderDataReceiver());
         }
 
         public void StartSimulation()
         {
             foreach (var item in _list)
-                item.TransponderDataReady += OnDataReceieved;  
+                 item.TransponderDataReady += OnDataReceieved;  
         }
 
         public static void OnDataReceieved(object sender, RawTransponderDataEventArgs e)
         {
             if (e.TransponderData.Count > 1)
-                Mapper.MapTrack(e.TransponderData[0]);
+                _mapper.MapTrack(e.TransponderData[0]);
         }
 
     }

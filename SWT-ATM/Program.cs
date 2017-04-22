@@ -11,6 +11,10 @@ namespace SWT_ATM
         static void Main(string[] args)
         {
             Monitor monitor = new Monitor();
+            monitor.SetX(0,10000);
+            monitor.SetZ(500, 20000);
+            monitor.SetY(0, 90000);
+
             Display display = new Display();
             Log log = new Log();
 
@@ -19,7 +23,7 @@ namespace SWT_ATM
             CoordinateMapper coordinate = new CoordinateMapper(new TransponderDataFormat());
             coordinate.Attach(airspace);
 
-            TrackSimulator simulator = new TrackSimulator(coordinate);
+            TrackSimulator simulator = new TrackSimulator(coordinate, 40);
             simulator.StartSimulation();
 
 

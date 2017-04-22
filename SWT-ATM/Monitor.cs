@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SWT_ATM
 {
@@ -13,7 +14,9 @@ namespace SWT_ATM
 
         public bool InsideBounds(Data data)
         {
-            throw new System.NotImplementedException();
+            return data.Altitude > ZStart && data.Altitude < ZSlut
+                   && data.YCord > YStart && data.YCord < YSlut
+                   && data.XCord > XStart && data.XCord < XSlut;
         }
 
         public Notification Notification(Data data)

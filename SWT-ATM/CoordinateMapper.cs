@@ -5,7 +5,7 @@ namespace SWT_ATM
 {
     public class CoordinateMapper : Subject<Data>, ICoordinateMapper
     {
-        private List<IObserver<Airspace>> List { get; set; }
+        private List<IObserver<Data>> List { get; set; }
 
         private ITransponderDataFormat Formatter;
 

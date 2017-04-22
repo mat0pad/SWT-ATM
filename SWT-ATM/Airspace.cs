@@ -27,7 +27,8 @@ namespace SWT_ATM
 
         public void Update(Data subject)
         {
-           Console.WriteLine("Track: " + subject.Tag);
+            if(Monitor.InsideBounds(subject))
+                Console.WriteLine("Track: " + subject.Tag);
         }
     }
 }

@@ -49,18 +49,23 @@
   <ItemGroup>
     <Compile Include="Airspace.cs" />
     <Compile Include="CoordinateMapper.cs" />
-    <Compile Include="IAirspace.cs" />
+    <Compile Include="Data.cs" />
+    <Compile Include="Display.cs" />
+    <Compile Include="ICoordinateMapper.cs" />
     <Compile Include="IDisplay.cs" />
     <Compile Include="IObserver.cs" />
     <Compile Include="ILog.cs" />
     <Compile Include="IMonitor.cs" />
+    <Compile Include="ITransponderDataFormat.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Monitor.cs" />
+    <Compile Include="Notification.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Track.cs" />
+    <Compile Include="TrackSimulator.cs" />
     <Compile Include="Subject.cs" />
     <Compile Include="TransponderDataFormat.cs" />
+    <Compile Include="Warning.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

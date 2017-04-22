@@ -2,5 +2,6 @@
 {
     public interface ILog
     {
+        void WriteToLog();
     }
 }

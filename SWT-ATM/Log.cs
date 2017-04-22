@@ -8,6 +8,9 @@ namespace SWT_ATM
 {
     public class Log: ILog
     {
-
+        public void WriteToLog()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

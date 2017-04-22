@@ -3,13 +3,20 @@ using System.Collections.Generic;
 
 namespace SWT_ATM
 {
-    public class CoordinateMapper: IObserver<Track>
+    public class CoordinateMapper : Subject<Data>, ICoordinateMapper
     {
-        private List<Track> List { get; set; }
+        private List<IObserver<Airspace>> List { get; set; }
 
-        public void Update(Track subject)
+        private ITransponderDataFormat Formatter;
+
+        public CoordinateMapper(ITransponderDataFormat formatter)
         {
-            List.Add(subject);
+            Formatter = formatter;
+        }
+
+        public void MapTrack(string rawData)
+        {
+            Notify(Formatter.FormatData(rawData));
         }
     }
 }

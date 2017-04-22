@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace SWT_ATM
 {
-    public class Airspace : IAirspace
+    public class Airspace : IObserver<Data>
     {
-        private List<TransponderDataFormat> List { get; set; }
+        private List<Data> List { get; set; }
 
         private IDisplay Display { get; set; }
 
@@ -13,17 +13,21 @@ namespace SWT_ATM
 
         private IMonitor Monitor { get; set; }
 
-<<<<<<< HEAD
-=======
-		public void Update(EventSubject subject)
-		{
-			throw new NotImplementedException();
-		}
+        public Airspace(IMonitor monitor, IDisplay display, ILog log)
+        {
+            Monitor = monitor;
+            Display = display;
+            Log = log;
+        }
 
-		public void Write()
+        private void CheckIfRelevant(Data data)
         {
             throw new NotImplementedException();
         }
->>>>>>> 136c0ca207fc983fc27522b16ecd19414a89ce45
+
+        public void Update(Data subject)
+        {
+           Console.WriteLine("Track: " + subject.Tag);
+        }
     }
 }

@@ -38,12 +38,6 @@ namespace SWT_ATM
                 s = "ENTERING";
                 Console.WriteLine(data.Tag + " " + s);
                 Log.WriteNotification(data,false);
-
-                // Test Log conflict
-                List<Data> list = new List<Data>();
-                list.Add(data);
-                list.Add(data);
-                Log.WriteWarning(list);
             }
             else if (type == EventType.LEAVING)
             {
@@ -56,6 +50,13 @@ namespace SWT_ATM
             {
                 s = "INSIDE";
                 Console.WriteLine(data.Tag + " " + s);
+
+                List<Data> list = Monitor.Conflicting(data);
+
+                if (list.Count > 1)
+                {
+                    Log.WriteWarning(list);
+                }
             }
                
         }

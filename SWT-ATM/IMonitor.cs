@@ -6,7 +6,7 @@ namespace SWT_ATM
     {
         bool InsideBounds(Data data);
         Notification Notification(Data data);
-        List<Warning> Conflicting(List<Data> listdata);
+        List<Data> Conflicting(Data listdata);
         void SetY(int min, int max);
         void SetZ(int min, int max);
         void SetX(int min, int max);

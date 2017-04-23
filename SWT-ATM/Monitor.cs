@@ -38,10 +38,7 @@ namespace SWT_ATM
 
         private bool IsConflicting()
         {
-            foreach (var item in _list)
-            {
-                
-            }
+            
             return false;
         }
 
@@ -76,9 +73,23 @@ namespace SWT_ATM
             throw new System.NotImplementedException();
         }
 
-        public List<Warning> Conflicting(List<Data> listdata)
+        public List<Data> Conflicting(Data data)
         {
-            throw new System.NotImplementedException();
+            List<Data> inConflict = new List<Data>();
+
+            foreach (var item in _list)
+            {
+                if (data.Tag != item.Tag)
+                {
+                    if ((data.Altitude - item.Altitude) < 300 &&
+                        ((data.XCord - item.XCord) < 5000 || (data.YCord - item.YCord) < 5000))
+                    {
+                        inConflict.Add(item);
+                    }
+                }
+            }
+
+            return inConflict;
         }
 
         public void SetY(int min, int max)

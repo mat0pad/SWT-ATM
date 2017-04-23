@@ -5,7 +5,7 @@ namespace SWT_ATM
 {
     public class Airspace : IObserver<Data>
     {
-        private List<Data> List { get; set; }
+        private List<Data> Tracks;
 
         private IDisplay Display { get; set; }
 
@@ -18,17 +18,69 @@ namespace SWT_ATM
             Monitor = monitor;
             Display = display;
             Log = log;
+
+            Tracks = new List<Data>();
+            Monitor.SetShareList(ref Tracks);
+            
         }
 
-        private void CheckIfRelevant(Data data)
+
+        public void Update(Data data)
         {
-            throw new NotImplementedException();
+            EventType type = Monitor.EventTracker(data);
+
+            string s = "";
+
+            UpdateListAfterEvent(type, data);
+
+            if (type == EventType.ENTERING)
+            {
+                s = "ENTERING";
+                Console.WriteLine(data.Tag + " " + s);
+            }
+            else if (type == EventType.LEAVING)
+            {
+                s = "LEAVING";
+                Console.WriteLine(data.Tag + " " + s);
+            }
+                
+            else if (type == EventType.INSIDE)
+            {
+                s = "INSIDE";
+                Console.WriteLine(data.Tag + " " + s);
+            }
+               
         }
 
-        public void Update(Data subject)
+
+        private void UpdateListAfterEvent(EventType eventType, Data data)
         {
-            if(Monitor.InsideBounds(subject))
-                Console.WriteLine("Track: " + subject.Tag);
+            switch (eventType)
+            {
+                case EventType.ENTERING:
+                    Tracks.Add(data);
+                    break;
+                case EventType.LEAVING:
+                    RemoveItem(data);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void RemoveItem(Data data)
+        {
+            for (int i = 0; i < Tracks.Count; i++)
+            {
+                if (Tracks[i].Tag == data.Tag)
+                {
+                    Tracks.RemoveAt(i);
+                    break;
+                }
+            }
         }
     }
+
+
+
 }

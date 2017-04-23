@@ -12,6 +12,8 @@ namespace SWT_ATM
         private int YStart { get; set; }
         private int YSlut { get; set; }
 
+        private List<Data> _list { get; set; }
+
         public bool InsideBounds(Data data)
         {
             return data.Altitude > ZStart && data.Altitude < ZSlut
@@ -19,8 +21,58 @@ namespace SWT_ATM
                    && data.XCord > XStart && data.XCord < XSlut;
         }
 
+        private bool ExistsInList(Data data)
+        {
+            var found = false;
+
+            foreach (var item in _list)
+            {
+                if (item.Tag == data.Tag)
+                {
+                    found = true;
+                    break;
+                }
+            }
+            return found;
+        }
+
+        private bool IsConflicting()
+        {
+            foreach (var item in _list)
+            {
+                
+            }
+            return false;
+        }
+
+        public EventType EventTracker(Data data)
+        {
+            var wasInAirspace = ExistsInList(data);
+            var inAirspace = InsideBounds(data);
+
+            if (IsConflicting())
+            {
+                if (wasInAirspace && !inAirspace)
+                    return EventType.CONFLICTING_LEAVING;
+                else if (!wasInAirspace && inAirspace)
+                    return EventType.CONFLICTING_ENTERING;
+                else
+                    return EventType.CONFLICTING;
+            }
+            else if(wasInAirspace && !inAirspace)
+                 return EventType.LEAVING;
+            else if(!wasInAirspace && inAirspace)
+                return EventType.ENTERING;
+            else if (inAirspace)
+                return EventType.INSIDE;
+            else
+                return EventType.OUTSIDE;
+        }
+
         public Notification Notification(Data data)
         {
+           
+
             throw new System.NotImplementedException();
         }
 
@@ -45,6 +97,11 @@ namespace SWT_ATM
         {
             XStart = min;
             XSlut = max;
+        }
+
+        public void SetShareList(ref List<Data> list)
+        {
+            _list = list;
         }
     }
 }

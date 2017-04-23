@@ -37,11 +37,19 @@ namespace SWT_ATM
             {
                 s = "ENTERING";
                 Console.WriteLine(data.Tag + " " + s);
+                Log.WriteNotification(data,false);
+
+                // Test Log conflict
+                List<Data> list = new List<Data>();
+                list.Add(data);
+                list.Add(data);
+                Log.WriteWarning(list);
             }
             else if (type == EventType.LEAVING)
             {
                 s = "LEAVING";
                 Console.WriteLine(data.Tag + " " + s);
+                Log.WriteNotification(data, true);
             }
                 
             else if (type == EventType.INSIDE)

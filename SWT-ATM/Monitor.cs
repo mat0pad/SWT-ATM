@@ -5,12 +5,12 @@ namespace SWT_ATM
 {
     public class Monitor : IMonitor
     {
-        private int XStart { get; set; }
-        private int XSlut { get; set; }
-        private int ZStart { get; set; }
-        private int ZSlut { get; set; }
-        private int YStart { get; set; }
-        private int YSlut { get; set; }
+        private int XStart;
+        private int XSlut;
+        private int ZStart;
+        private int ZSlut;
+        private int YStart;
+        private int YSlut;
 
         public Monitor()
         {

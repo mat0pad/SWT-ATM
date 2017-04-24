@@ -11,7 +11,7 @@ namespace SWT_ATM
     public class Log: ILog
     {
         private static string _path;
-        private Object locker = new Object();
+        private Object locker = new Object(); // Used for locking/mutex
 
         public Log()
         {

@@ -29,9 +29,10 @@ namespace SWT_ATM
         {
             EventType type = Monitor.EventTracker(data);
 
-            string s = "";
-
+            // Add/Remove track to list
             UpdateListAfterEvent(type, data);
+
+            string s = "";
 
             switch (type)
             {

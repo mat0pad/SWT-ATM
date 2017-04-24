@@ -10,6 +10,11 @@ namespace SWT_ATM
     {
         static void Main(string[] args)
         {
+
+			Display display = new Display();
+			display.ShowTracks(new List<Data>());
+
+			/*
             Monitor monitor = new Monitor();
             monitor.SetX(0,10000);
             monitor.SetZ(500, 20000);
@@ -29,7 +34,7 @@ namespace SWT_ATM
 
             while (true) { }
 
-
+*/
         }
     }
 }

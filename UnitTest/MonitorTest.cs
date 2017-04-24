@@ -11,7 +11,7 @@ namespace UnitTest
     [TestFixture]
     class MonitorTest
     {
-        private Monitor _monitor;
+        private IMonitor _monitor;
 
 
         [SetUp]

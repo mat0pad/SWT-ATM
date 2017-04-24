@@ -23,6 +23,18 @@ namespace SWT_ATM
                 _list.Add(TransponderReceiverFactory.CreateTransponderDataReceiver());
         }
 
+        public TrackSimulator(ICoordinateMapper mapper, int numOfPlanes, List<ITransponderReceiver> list)
+        {
+            _mapper = mapper;
+
+            // Create transponder receiver
+            _list = list;
+
+            for (int i = 0; i < numOfPlanes + 1; i++)
+                _list.Add(TransponderReceiverFactory.CreateTransponderDataReceiver());
+        }
+
+
         public void StartSimulation()
         {
             foreach (var item in _list)

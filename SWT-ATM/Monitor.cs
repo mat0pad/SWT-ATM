@@ -68,7 +68,7 @@ namespace SWT_ATM
                 }
             }
 
-            return _tracksInConflict.Count > 1;
+            return _tracksInConflict.Count >= 1;
         }
 
         public EventType EventTracker(Data data)

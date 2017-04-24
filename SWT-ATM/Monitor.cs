@@ -12,7 +12,19 @@ namespace SWT_ATM
         private int YStart { get; set; }
         private int YSlut { get; set; }
 
+        public Monitor()
+        {
+            _tracksInConflict = new List<Data>();
+        }
+
         private List<Data> _list { get; set; }
+
+        private List<Data> _tracksInConflict;
+
+        public List<Data> GetTracksInConflict()
+        {
+            return _tracksInConflict;
+        }
 
         public bool InsideBounds(Data data)
         {
@@ -25,21 +37,38 @@ namespace SWT_ATM
         {
             var found = false;
 
-            foreach (var item in _list)
+            for(int i = 0; i < _list.Count; i++)
             {
-                if (item.Tag == data.Tag)
+                if (_list[i].Tag == data.Tag)
                 {
                     found = true;
+                    _list[i].Timestamp = data.Timestamp;
+                    _list[i].XCord = data.XCord;
+                    _list[i].YCord = data.YCord;
+                    _list[i].Altitude = data.Altitude;
                     break;
                 }
             }
             return found;
         }
 
-        private bool IsConflicting()
+        private bool IsConflicting(Data data)
         {
-            
-            return false;
+            _tracksInConflict.Clear();
+
+            foreach (var item in _list)
+            {
+                if (data.Tag != item.Tag)
+                {
+                    if ((data.Altitude - item.Altitude) < 300 &&
+                        ((data.XCord - item.XCord) < 5000 || (data.YCord - item.YCord) < 5000))
+                    {
+                        _tracksInConflict.Add(item);
+                    }
+                }
+            }
+
+            return _tracksInConflict.Count > 1;
         }
 
         public EventType EventTracker(Data data)
@@ -47,7 +76,7 @@ namespace SWT_ATM
             var wasInAirspace = ExistsInList(data);
             var inAirspace = InsideBounds(data);
 
-            if (IsConflicting())
+            if (IsConflicting(data))
             {
                 if (wasInAirspace && !inAirspace)
                     return EventType.CONFLICTING_LEAVING;
@@ -64,32 +93,6 @@ namespace SWT_ATM
                 return EventType.INSIDE;
             else
                 return EventType.OUTSIDE;
-        }
-
-        public Notification Notification(Data data)
-        {
-           
-
-            throw new System.NotImplementedException();
-        }
-
-        public List<Data> Conflicting(Data data)
-        {
-            List<Data> inConflict = new List<Data>();
-
-            foreach (var item in _list)
-            {
-                if (data.Tag != item.Tag)
-                {
-                    if ((data.Altitude - item.Altitude) < 300 &&
-                        ((data.XCord - item.XCord) < 5000 || (data.YCord - item.YCord) < 5000))
-                    {
-                        inConflict.Add(item);
-                    }
-                }
-            }
-
-            return inConflict;
         }
 
         public void SetY(int min, int max)

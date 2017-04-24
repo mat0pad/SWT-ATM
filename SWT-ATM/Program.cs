@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SWT_ATM
@@ -20,16 +21,21 @@ namespace SWT_ATM
 
             Airspace airspace = new Airspace(monitor,display, log);
 
+            var simulationThread = new Thread(() => SimulationThread(airspace));
+            simulationThread.Start();
+
+            while (true) { }
+
+        }
+
+
+        public static void SimulationThread(Airspace airspace)
+        {
             CoordinateMapper coordinate = new CoordinateMapper(new TransponderDataFormat());
             coordinate.Attach(airspace);
 
             TrackSimulator simulator = new TrackSimulator(coordinate, 40);
             simulator.StartSimulation();
-
-
-            while (true) { }
-
-
         }
     }
 }

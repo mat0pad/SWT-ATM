@@ -9,10 +9,10 @@ namespace SWT_ATM
     public class Data
     {
         public readonly string Tag;
-        public readonly int XCord;
-        public readonly int YCord;
-        public readonly int Altitude;
-        public readonly string Timestamp;
+        public int XCord { get; set; }
+        public int YCord { get; set; }
+        public int Altitude { get; set; }
+        public string Timestamp { get; set; }
 
         public Data(string tag, int x, int y, int alt, string time)
         {

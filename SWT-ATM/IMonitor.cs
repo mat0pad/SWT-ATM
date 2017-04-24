@@ -5,8 +5,7 @@ namespace SWT_ATM
     public interface IMonitor
     {
         bool InsideBounds(Data data);
-        Notification Notification(Data data);
-        List<Data> Conflicting(Data listdata);
+        List<Data> GetTracksInConflict();
         void SetY(int min, int max);
         void SetZ(int min, int max);
         void SetX(int min, int max);

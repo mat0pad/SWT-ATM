@@ -33,30 +33,59 @@ namespace SWT_ATM
 
             UpdateListAfterEvent(type, data);
 
-            if (type == EventType.ENTERING)
+            switch (type)
             {
-                s = "ENTERING";
-                Console.WriteLine(data.Tag + " " + s);
-                Log.WriteNotification(data,false);
-            }
-            else if (type == EventType.LEAVING)
-            {
-                s = "LEAVING";
-                Console.WriteLine(data.Tag + " " + s);
-                Log.WriteNotification(data, true);
-            }
+                case EventType.ENTERING:
+                    s = "ENTERING";
+                    Console.WriteLine(data.Tag + " " + s);
+                    Log.WriteNotification(data, false);
+                    break;
+    
+                case EventType.LEAVING:
+                    s = "LEAVING";
+                    Console.WriteLine(data.Tag + " " + s);
+                    Log.WriteNotification(data, true);
+                    break;
+
+                case EventType.INSIDE:
+                    s = "INSIDE";
+                    Console.WriteLine(data.Tag + " " + s);
+                    break;
+
+                case EventType.CONFLICTING:
+
+                    s = "CONFLICTING";
+                    Console.WriteLine(data.Tag + " " + s);
+
+                    List<Data> list1 = Monitor.GetTracksInConflict();
+                    if (list1.Count > 1)
+                        Log.WriteWarning(list1);
+                    
+                    break;
+
+                case EventType.CONFLICTING_ENTERING:
+
+                    s = "CONFLICTING ENTERING";
+                    Console.WriteLine(data.Tag + " " + s);
+
+                    List<Data> list2 = Monitor.GetTracksInConflict();
+                    if (list2.Count > 1)
+                        Log.WriteWarning(list2);
+                    break;
+
+                case EventType.CONFLICTING_LEAVING:
+
+                    s = "CONFLICTING ENTERING";
+                    Console.WriteLine(data.Tag + " " + s);
+
+                    List<Data> list3 = Monitor.GetTracksInConflict();
+                    if (list3.Count > 1)
+                        Log.WriteWarning(list3);
+                    break;
+
+                default:
+                    break;
                 
-            else if (type == EventType.INSIDE)
-            {
-                s = "INSIDE";
-                Console.WriteLine(data.Tag + " " + s);
-
-                List<Data> list = Monitor.Conflicting(data);
-
-                if (list.Count > 1)
-                {
-                    Log.WriteWarning(list);
-                }
             }
                
         }

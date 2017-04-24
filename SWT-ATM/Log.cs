@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SWT_ATM
@@ -10,6 +11,7 @@ namespace SWT_ATM
     public class Log: ILog
     {
         private static string _path;
+        private Object locker = new Object();
 
         public Log()
         {
@@ -31,7 +33,6 @@ namespace SWT_ATM
 
             File.WriteAllText(_path, "Log Of Events" + Environment.NewLine + Environment.NewLine + "Timestamp        \tEvent Type\tEvent Category\tTag of Track(s)");
         }
-
 
         public void WriteNotification(Data data, bool isLeaving)
         {
@@ -57,9 +58,12 @@ namespace SWT_ATM
         {
             // The using statement automatically flushes AND CLOSES the stream and calls 
             // IDisposable.Dispose on the stream object.
-            using (StreamWriter file = new StreamWriter(_path, true))
+            lock (locker)
             {
-                file.WriteLine(text2Write);
+                using (StreamWriter file = new StreamWriter(_path, true))
+                {
+                    file.WriteLine(text2Write);
+                }
             }
         }
     }

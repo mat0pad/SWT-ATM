@@ -41,9 +41,9 @@ namespace SWT_ATM
                  item.TransponderDataReady += OnDataReceieved;  
         }
 
-        public static void OnDataReceieved(object sender, RawTransponderDataEventArgs e)
+        public void OnDataReceieved(object sender, RawTransponderDataEventArgs e)
         {
-            if (e.TransponderData.Count > 1)
+            if (e.TransponderData.Count > 0)
                 _mapper.MapTrack(e.TransponderData[0]);
         }
 

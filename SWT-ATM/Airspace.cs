@@ -59,7 +59,7 @@ namespace SWT_ATM
                     Console.WriteLine(data.Tag + " " + s);
 
                     List<Data> list1 = Monitor.GetTracksInConflict();
-                    if (list1.Count > 1)
+                    if (list1.Count > 1) //måske >= 1
                         Log.WriteWarning(list1);
                     
                     break;

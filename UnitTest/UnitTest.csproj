@@ -45,6 +45,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AirspaceTest.cs" />
+    <Compile Include="DisplayTest.cs" />
     <Compile Include="MonitorTest.cs" />
     <Compile Include="TestClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -57,12 +59,9 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
-=======
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
->>>>>>> a4504d7697f9b93ae5503cc9d4b3c2d01d840d49
     <ProjectReference Include="..\SWT-ATM\SWT-ATM.csproj">
       <Project>{92f053d6-2b2f-45d9-b75e-e6b791e30ef2}</Project>
       <Name>SWT-ATM</Name>

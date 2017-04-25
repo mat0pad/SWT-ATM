@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SWT_ATM
@@ -12,9 +13,26 @@ namespace SWT_ATM
         {
 
 			Display display = new Display();
-			display.ShowTracks(new List<Data>());
 
-			/*
+            int i = 0;
+
+            while(true)
+            {
+                Data data1 = new Data("testTag", i, i, i, "testTime");
+                Data data2 = new Data("testTag", 1, i, 3, "testTime");
+                Data data3 = new Data("testTag", 1, 2, i, i.ToString());
+
+                List<Data> dataList = new List<Data>{data1, data2, data3};
+
+                display.ShowTracks(dataList);
+
+
+                // Just to simulate update behavior
+                i++;
+                int milliseconds = 500;
+                Thread.Sleep(milliseconds);
+            }
+            /*
             Monitor monitor = new Monitor();
             monitor.SetX(0,10000);
             monitor.SetZ(500, 20000);

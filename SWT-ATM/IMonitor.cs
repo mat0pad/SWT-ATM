@@ -12,6 +12,5 @@ namespace SWT_ATM
         void SetX(int min, int max);
         void SetShareList(ref List<Data> list);
         EventType EventTracker(Data data);
-
     }
 }

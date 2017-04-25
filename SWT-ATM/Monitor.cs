@@ -117,5 +117,29 @@ namespace SWT_ATM
         {
             _list = list;
         }
+
+        public int[] GetY()
+        {
+            int[] array = new int[2];
+            array[0] = YStart;
+            array[1] = YSlut;
+            return array;
+        }
+
+        public int[] GetX()
+        {
+            int[] array = new int[2];
+            array[0] = XStart;
+            array[1] = XSlut;
+            return array;
+        }
+
+        public int[] GetZ()
+        {
+            int[] array = new int[2];
+            array[0] = ZStart;
+            array[1] = ZSlut;
+            return array;
+        }
     }
 }

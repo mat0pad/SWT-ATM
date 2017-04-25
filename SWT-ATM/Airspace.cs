@@ -24,6 +24,10 @@ namespace SWT_ATM
             
         }
 
+        public List<Data> getTracks()
+        {
+            return Tracks;
+        }
 
         public void Update(Data data)
         {
@@ -59,7 +63,7 @@ namespace SWT_ATM
                     Console.WriteLine(data.Tag + " " + s);
 
                     List<Data> list1 = Monitor.GetTracksInConflict();
-                    if (list1.Count > 1) //måske >= 1
+                    if (list1.Count >= 1) //måske >= 1
                         Log.WriteWarning(list1);
                     
                     break;
@@ -70,21 +74,18 @@ namespace SWT_ATM
                     Console.WriteLine(data.Tag + " " + s);
 
                     List<Data> list2 = Monitor.GetTracksInConflict();
-                    if (list2.Count > 1)
+                    if (list2.Count >= 1)
                         Log.WriteWarning(list2);
                     break;
 
                 case EventType.CONFLICTING_LEAVING:
 
-                    s = "CONFLICTING ENTERING";
+                    s = "CONFLICTING LEAVING";
                     Console.WriteLine(data.Tag + " " + s);
 
                     List<Data> list3 = Monitor.GetTracksInConflict();
-                    if (list3.Count > 1)
+                    if (list3.Count >= 1)
                         Log.WriteWarning(list3);
-                    break;
-
-                default:
                     break;
                 
             }

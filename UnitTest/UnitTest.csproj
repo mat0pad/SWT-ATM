@@ -49,6 +49,7 @@
     <Compile Include="CoordinateMapperTest.cs" />
     <Compile Include="DisplayTest.cs" />
     <Compile Include="MonitorTest.cs" />
+    <Compile Include="SubjectTest.cs" />
     <Compile Include="TestClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestTrackSimulator.cs" />

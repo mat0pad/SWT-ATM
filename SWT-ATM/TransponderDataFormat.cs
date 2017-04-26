@@ -10,5 +10,5 @@ namespace SWT_ATM
 			List<string> trackList = rawData.Split(';').ToList<string>();
 			return new Data(trackList[0], int.Parse(trackList[1]), int.Parse(trackList[2]), int.Parse(trackList[3]), trackList[4]);
 		}
-	}
+    }
 }

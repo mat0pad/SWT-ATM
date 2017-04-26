@@ -25,7 +25,6 @@ namespace SWT_ATM
             simulationThread.Start();
 
             while (true) { }
-
         }
 
 
@@ -37,5 +36,6 @@ namespace SWT_ATM
             TrackSimulator simulator = new TrackSimulator(coordinate, 40);
             simulator.StartSimulation();
         }
+
     }
 }

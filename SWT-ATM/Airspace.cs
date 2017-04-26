@@ -24,7 +24,7 @@ namespace SWT_ATM
             
         }
 
-        public List<Data> getTracks()
+        public List<Data> GetTracks()
         {
             return Tracks;
         }
@@ -44,17 +44,20 @@ namespace SWT_ATM
                     s = "ENTERING";
                     Console.WriteLine(data.Tag + " " + s);
                     Log.WriteNotification(data, false);
+
                     break;
     
                 case EventType.LEAVING:
                     s = "LEAVING";
                     Console.WriteLine(data.Tag + " " + s);
                     Log.WriteNotification(data, true);
+
                     break;
 
                 case EventType.INSIDE:
                     s = "INSIDE";
                     Console.WriteLine(data.Tag + " " + s);
+
                     break;
 
                 case EventType.CONFLICTING:
@@ -63,7 +66,7 @@ namespace SWT_ATM
                     Console.WriteLine(data.Tag + " " + s);
 
                     List<Data> list1 = Monitor.GetTracksInConflict();
-                    if (list1.Count >= 1) //måske >= 1
+                    if (list1.Count >= 1) // måske >= 1
                         Log.WriteWarning(list1);
                     
                     break;
@@ -76,6 +79,7 @@ namespace SWT_ATM
                     List<Data> list2 = Monitor.GetTracksInConflict();
                     if (list2.Count >= 1)
                         Log.WriteWarning(list2);
+
                     break;
 
                 case EventType.CONFLICTING_LEAVING:
@@ -86,8 +90,8 @@ namespace SWT_ATM
                     List<Data> list3 = Monitor.GetTracksInConflict();
                     if (list3.Count >= 1)
                         Log.WriteWarning(list3);
-                    break;
-                
+
+                    break;   
             }
                
         }
@@ -102,8 +106,6 @@ namespace SWT_ATM
                     break;
                 case EventType.LEAVING:
                     RemoveItem(data);
-                    break;
-                default:
                     break;
             }
         }

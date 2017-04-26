@@ -85,6 +85,7 @@ namespace UnitTest
         public void ConstructorException()
         {
             Assert.Throws<NullReferenceException>(() => new TrackSimulator(mapper,1,null));
+            mapper.ReceivedWithAnyArgs().MapTrack("test");
         }
 
 

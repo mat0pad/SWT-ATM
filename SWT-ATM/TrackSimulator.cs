@@ -32,6 +32,7 @@ namespace SWT_ATM
 
             for (int i = 0; i < numOfPlanes + 1; i++)
                 _list.Add(TransponderReceiverFactory.CreateTransponderDataReceiver());
+              
         }
 
 

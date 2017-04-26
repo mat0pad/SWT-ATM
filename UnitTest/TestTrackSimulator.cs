@@ -25,7 +25,7 @@ namespace UnitTest
 
             list.Add(Substitute.For<ITransponderReceiver>());
 
-            simulator = new TrackSimulator(mapper, 1, list);             
+            simulator = new TrackSimulator(mapper, -1, list);             
         }
 
         [Test]
@@ -59,18 +59,34 @@ namespace UnitTest
         [Test]
         public void OnDataReceievedRaised()
         {
-          /*  var testData = new List<string>();
+            var testData = new List<string>();
+
             testData.Add("test");
 
             var args = new RawTransponderDataEventArgs(testData);
 
-            simulator.StartSimulation();
-
             list[0].TransponderDataReady += simulator.OnDataReceieved;
 
-            
+            list[0].TransponderDataReady += Raise.EventWith(args);
 
-            mapper.ReceivedWithAnyArgs().MapTrack("test");*/
+            mapper.Received().MapTrack("test");
         }
+
+        [Test]
+        public void StartSimulationNotReceived()
+        {
+            simulator.StartSimulation();
+
+            mapper.DidNotReceiveWithAnyArgs().MapTrack("");
+
+        }
+
+        [Test]
+        public void ConstructorException()
+        {
+            Assert.Throws<NullReferenceException>(() => new TrackSimulator(mapper,1,null));
+        }
+
+
     }
 }

@@ -34,6 +34,27 @@ namespace SWT_ATM
             File.WriteAllText(_path, "Log Of Events" + Environment.NewLine + Environment.NewLine + "Timestamp        \tEvent Type\tEvent Category\tTag of Track(s)");
         }
 
+        public Log(string path)
+        {
+            _path = path;
+
+            if (File.Exists(_path))
+            {
+                // Use a try block to catch IOExceptions, to
+                // handle the case of the file already being opened by another process.
+                try
+                {
+                    File.Delete(_path);
+                }
+                catch (IOException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+
+            File.WriteAllText(_path, "Log Of Events" + Environment.NewLine + Environment.NewLine + "Timestamp        \tEvent Type\tEvent Category\tTag of Track(s)");
+        }
+
         public void WriteNotification(Data data, bool isLeaving)
         {
             WriteToLog(Environment.NewLine + data.Timestamp + "\t" + (isLeaving ? "LEAVING    " : "ENTERING   ") + "\t" + "NOTIFICATION" + "\t" + data.Tag);

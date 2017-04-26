@@ -68,8 +68,6 @@ namespace UnitTest
 
             list[0].TransponderDataReady += simulator.OnDataReceieved;
 
-            
-
             mapper.ReceivedWithAnyArgs().MapTrack("test");*/
         }
     }

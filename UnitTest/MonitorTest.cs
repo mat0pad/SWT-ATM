@@ -48,19 +48,6 @@ namespace UnitTest
             Assert.That(array[i].Equals(_monitor.GetZ()[i]));
         }
 
-
-        [TestCase(true , 200)]
-        [TestCase(false , 0)]
-        public void InsideBoundsTest(bool isinside,int place)
-        {
-            Data data = new Data("", place, place, place, "");
-
-            setBoundary(100, 1000);
-
-            Assert.That(_monitor.InsideBounds(data).Equals(isinside));
-        }
-
-
         [Test]
         public void EventTrackException()
         {

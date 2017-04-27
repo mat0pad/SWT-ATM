@@ -33,10 +33,11 @@ namespace UnitTest
 
             _log.WriteNotification(data, isleaving);
 
-            using (StreamReader file = new StreamReader(path, true))
+            using (var file = new StreamReader(path, true))
             {
                 line = file.ReadToEnd();
             }
+
             if(isleaving)
                 Assert.That(line.Contains("LEAVING"));
             else

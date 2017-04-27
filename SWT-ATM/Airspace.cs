@@ -5,7 +5,7 @@ namespace SWT_ATM
 {
     public class Airspace : IObserver<Data>
     {
-        private List<Data> Tracks;
+        private List<Data> _tracks;
 
         private List<Data> _tracksInConlict;
 
@@ -21,15 +21,15 @@ namespace SWT_ATM
             Display = display;
             Log = log;
 
-            Tracks = new List<Data>();
-            Monitor.SetShareList(ref Tracks);
+            _tracks = new List<Data>();
+            Monitor.SetShareList(ref _tracks);
             
             _tracksInConlict = new List<Data>();
         }
 
         public List<Data> GetTracks()
         {
-            return Tracks;
+            return _tracks;
         }
 
         public void Update(Data data)
@@ -111,7 +111,7 @@ namespace SWT_ATM
             switch (eventType)
             {
                 case EventType.ENTERING:
-                    Tracks.Add(data);
+                    _tracks.Add(data);
                     break;
                 case EventType.LEAVING:
                     RemoveItem(data);
@@ -121,11 +121,11 @@ namespace SWT_ATM
 
         private void RemoveItem(Data data)
         {
-            for (int i = 0; i < Tracks.Count; i++)
+            for (int i = 0; i < _tracks.Count; i++)
             {
-                if (Tracks[i].Tag == data.Tag)
+                if (_tracks[i].Tag == data.Tag)
                 {
-                    Tracks.RemoveAt(i);
+                    _tracks.RemoveAt(i);
                     break;
                 }
             }

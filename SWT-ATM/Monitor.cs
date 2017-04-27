@@ -26,7 +26,7 @@ namespace SWT_ATM
             return _tracksInConflict;
         }
 
-        public bool InsideBounds(Data data)
+        private bool InsideBounds(Data data)
         {
             return data.Altitude > ZStart && data.Altitude < ZSlut
                    && data.YCord > YStart && data.YCord < YSlut

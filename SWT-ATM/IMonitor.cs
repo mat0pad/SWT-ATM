@@ -4,7 +4,6 @@ namespace SWT_ATM
 {
     public interface IMonitor
     {
-        bool InsideBounds(Data data);
         List<Data> GetTracksInConflict();
         void SetY(int min, int max);
         void SetZ(int min, int max);

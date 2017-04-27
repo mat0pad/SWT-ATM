@@ -3,7 +3,5 @@
     public interface ICoordinateMapper
     {
         void MapTrack(string rawData);
-
-
     }
 }

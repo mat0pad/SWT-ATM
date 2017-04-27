@@ -30,7 +30,7 @@ namespace IntegrationTest
         {
             simulator.StartSimulation();
 
-            Thread.Sleep(2000); 
+            Thread.Sleep(2000); // Bad should instead await first until MapTrack called
 
             mapper.ReceivedWithAnyArgs().MapTrack(null);
         }

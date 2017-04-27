@@ -7,6 +7,8 @@ namespace SWT_ATM
     {
         private List<Data> Tracks;
 
+        private List<Data> _tracksInConlict;
+
         private IDisplay Display { get; set; }
 
         private ILog Log { get; set; }
@@ -22,6 +24,7 @@ namespace SWT_ATM
             Tracks = new List<Data>();
             Monitor.SetShareList(ref Tracks);
             
+            _tracksInConlict = new List<Data>();
         }
 
         public List<Data> GetTracks()
@@ -65,9 +68,11 @@ namespace SWT_ATM
                     s = "CONFLICTING";
                     Console.WriteLine(data.Tag + " " + s);
 
-                    List<Data> list1 = Monitor.GetTracksInConflict();
-                    if (list1.Count >= 1) // måske >= 1
-                        Log.WriteWarning(list1);
+                    _tracksInConlict = Monitor.GetTracksInConflict(); // Get others
+                    _tracksInConlict.Add(data); // Add self
+
+                    if (_tracksInConlict.Count > 1)
+                        Log.WriteWarning(_tracksInConlict);
                     
                     break;
 
@@ -76,9 +81,11 @@ namespace SWT_ATM
                     s = "CONFLICTING ENTERING";
                     Console.WriteLine(data.Tag + " " + s);
 
-                    List<Data> list2 = Monitor.GetTracksInConflict();
-                    if (list2.Count >= 1)
-                        Log.WriteWarning(list2);
+                    _tracksInConlict = Monitor.GetTracksInConflict(); // Get others
+                    _tracksInConlict.Add(data); // Add self
+
+                    if (_tracksInConlict.Count > 1)
+                        Log.WriteWarning(_tracksInConlict);
 
                     break;
 
@@ -87,9 +94,11 @@ namespace SWT_ATM
                     s = "CONFLICTING LEAVING";
                     Console.WriteLine(data.Tag + " " + s);
 
-                    List<Data> list3 = Monitor.GetTracksInConflict();
-                    if (list3.Count >= 1)
-                        Log.WriteWarning(list3);
+                    _tracksInConlict = Monitor.GetTracksInConflict(); // Get others
+                    _tracksInConlict.Add(data); // Add self
+
+                    if (_tracksInConlict.Count > 1)
+                        Log.WriteWarning(_tracksInConlict);
 
                     break;   
             }

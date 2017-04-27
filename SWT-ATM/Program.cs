@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ namespace SWT_ATM
 
         public static void SimulationThread(Airspace airspace)
         {
-            ICoordinateMapper coordinate = new CoordinateMapper(new TransponderDataFormat());
+            CoordinateMapper coordinate = new CoordinateMapper(new TransponderDataFormat());
             coordinate.Attach(airspace);
 
             TrackSimulator simulator = new TrackSimulator(coordinate, 40);

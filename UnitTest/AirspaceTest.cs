@@ -214,7 +214,7 @@ namespace UnitTest
 
             _airspace.Update(data);
 
-            Assert.That(_airspace.getTracks().Count > 0);
+            Assert.That(_airspace.GetTracks().Count > 0);
         }
 
         [Test]
@@ -230,7 +230,7 @@ namespace UnitTest
 
             _airspace.Update(data);
 
-            Assert.That(_airspace.getTracks().Count == 0);
+            Assert.That(_airspace.GetTracks().Count == 0);
         }
 
         [Test]
@@ -259,7 +259,7 @@ namespace UnitTest
             _airspace.Update(data2);
 
 
-            Assert.That(_airspace.getTracks().Count == 1);
+            Assert.That(_airspace.GetTracks().Count == 1);
 
         }
 

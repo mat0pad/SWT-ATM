@@ -40,6 +40,8 @@ namespace IntegrationTest
             var testData = new List<string>();
             testData.Add("ATR423;39045;12932;14000;20151006213456789");
 
+            monitor.GetTracksInConflict().Returns(new List<Data>());
+
             simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
 
             monitor.Received(1).EventTracker(Arg.Is<Data>(d =>
@@ -106,7 +108,6 @@ namespace IntegrationTest
                 d.XCord == 5001 && d.YCord == 5001), true);
         }
 
-
         [Test]
         public void TrackInsideAirspaceLogDoesNotWrite()
         {
@@ -141,8 +142,8 @@ namespace IntegrationTest
             var log = Substitute.For<ILog>();
 
             var monitor = new Monitor();
-            monitor.SetX(0, 10000);
-            monitor.SetY(0, 10000);
+            monitor.SetX(0, 10001);
+            monitor.SetY(0, 10001);
             monitor.SetZ(500, 20000);
 
             var display = Substitute.For<IDisplay>();
@@ -152,20 +153,119 @@ namespace IntegrationTest
             mapper.Attach(airspace);
 
             var testData = new List<string>();
-            testData.Add("ATR423;10;10;14000;20151006213456789");
+            testData.Add("ATR423;10;10;14000;20151006213456719");
 
+            // ATR423 ENTERING
             simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
 
             testData[0] = "ATR423;501;501;1000;20151006213456789";
+
+            // ATR423 INSIDE
             simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
         
-            testData[0] = ("AT422;10000;10000;1000;20151006213456789");
+            testData[0] = "AT422;10000;10000;1000;20151006213456799";
+
+            // AT422 ENTERING
             simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
  
-            testData[0] = "AT422;1000;1000;1000;20151006213456789";
+            testData[0] = "AT422;1000;1000;1000;20151006213456999";
+
+            // AT422 CONFLICTING
             simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
 
-            log.Received(1).WriteWarning(Arg.Any<List<Data>>());
+            log.Received(1).WriteWarning(Arg.Is<List<Data>>( d => 
+            d[1].Tag == "AT422" && d[1].XCord == 1000 && d[1].YCord == 1000 &&
+            d[1].Altitude == 1000 && d[1].Timestamp == "20151006213456999" &&
+            d[0].Tag == "ATR423" && d[0].XCord == 501 && d[0].YCord == 501 &&
+            d[0].Altitude == 1000 && d[0].Timestamp == "20151006213456789"
+            ));
+        }
+
+
+        [Test]
+        public void TwoTracksConflictingEnteringAirspaceLogWritesWarning()
+        {
+            var log = Substitute.For<ILog>();
+
+            var monitor = new Monitor();
+            monitor.SetX(0, 10001);
+            monitor.SetY(0, 10001);
+            monitor.SetZ(500, 20000);
+
+            var display = Substitute.For<IDisplay>();
+
+            var airspace = new Airspace(monitor, display, log);
+
+            mapper.Attach(airspace);
+
+            var testData = new List<string>();
+            testData.Add("ATR423;10;10;14000;20151006213456719");
+
+            // ATR423 ENTERING
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "ATR423;501;501;1000;20151006213456789";
+
+            // ATR423 INSIDE
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "AT422;1000;1000;1000;20151006213456999";
+
+            // AT422 CONFLICTING Entering
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            log.Received(1).WriteWarning(Arg.Is<List<Data>>(d =>
+           d[1].Tag == "AT422" && d[1].XCord == 1000 && d[1].YCord == 1000 &&
+           d[1].Altitude == 1000 && d[1].Timestamp == "20151006213456999" &&
+           d[0].Tag == "ATR423" && d[0].XCord == 501 && d[0].YCord == 501 &&
+           d[0].Altitude == 1000 && d[0].Timestamp == "20151006213456789"
+            ));
+        }
+
+
+        [Test]
+        public void TwoTracksConflictingLeavingAirspaceLogWritesWarning()
+        {
+            var log = Substitute.For<ILog>();
+
+            var monitor = new Monitor();
+            monitor.SetX(0, 200);
+            monitor.SetY(0, 200);
+            monitor.SetZ(0, 500);
+
+            var display = Substitute.For<IDisplay>();
+
+            var airspace = new Airspace(monitor, display, log);
+
+            mapper.Attach(airspace);
+
+            var testData = new List<string>();
+            testData.Add("ATR423;10;10;100;20151006213456719");
+
+            // ATR423 ENTERING
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "ATR423;20;20;100;20151006213456789";
+
+            // ATR423 INSIDE
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "AT422;200;200;500;20151006213456999";
+
+            // AT422 ENTERING
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "AT422;201;201;399;20151006213456999";
+
+            // AT422 CONFLICTING LEAVING
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            log.Received(1).WriteWarning(Arg.Is<List<Data>>(d =>
+           d[1].Tag == "AT422" && d[1].XCord == 201 && d[1].YCord == 201 &&
+           d[1].Altitude == 399 && d[1].Timestamp == "20151006213456999" &&
+           d[0].Tag == "ATR423" && d[0].XCord == 20 && d[0].YCord == 20 &&
+           d[0].Altitude == 100 && d[0].Timestamp == "20151006213456789"
+            ));
         }
     }
 }

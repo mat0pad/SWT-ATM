@@ -64,6 +64,7 @@
     <Compile Include="Log.cs" />
     <Compile Include="Monitor.cs" />
     <Compile Include="Notification.cs" />
+    <Compile Include="NotificationCenter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TrackSimulator.cs" />

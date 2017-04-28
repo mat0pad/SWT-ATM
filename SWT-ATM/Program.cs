@@ -17,11 +17,30 @@ namespace SWT_ATM
 
             int i = 1;
 
-            Data data = new Data("timeTest", i, i, 1, "20170830205453166");
+            Data data1 = new Data("timeTest1", i, i, 1, "20170830205453166");
+            Data data2 = new Data("timeTest2", i, i, 1, "20170830205453166");
+            Data data3 = new Data("timeTest3", i, i, 1, "20170830205453166");
+            Data data4 = new Data("timeTest4", i, i, 1, "20170830205453166");
 
-            display.ShowNotification(data, EventType.ENTERING);
+            display.ShowNotification(data1, EventType.CONFLICTING);
+            display.ShowNotification(data2, EventType.CONFLICTING);
+            display.ShowNotification(data3, EventType.CONFLICTING);
 
-            while (true)
+            /*display.ShowWarning(new List<Data> { data1 , data2, data3, data4} , EventType.CONFLICTING);
+            display.ShowWarning(new List<Data> { data2, data2, data2, data2 }, EventType.CONFLICTING);
+            display.ShowWarning(new List<Data> { data3, data3, data3, data3 }, EventType.CONFLICTING);*/
+            
+            Thread.Sleep(1000);
+            display.ShowNotification(data4, EventType.CONFLICTING);
+            //display.ShowWarning(new List<Data> { data2, data2, data2, data4 }, EventType.CONFLICTING);
+            //display.ShowNotification(data2, EventType.CONFLICTING_ENTERING);
+            //display.ShowNotification(data3, EventType.CONFLICTING_LEAVING);
+            Thread.Sleep(1000);
+            //display.ShowNotification(data4, EventType.CONFLICTING);
+
+            while (true) ;
+
+            /*while (true)
             {
                 // Simulate data
                 String time = "201708302054" + string.Format("{0:00}", i) + "166";
@@ -31,31 +50,19 @@ namespace SWT_ATM
                 List<Data> dataList = new List<Data>{data1};
 
                 // Give list to display
-                display.ShowTracks(dataList);
+                //display.ShowTracks(dataList);
 
 
                 // Just to simulate update behavior
                 i++;
 
-
-
-                while (true)
-                {
-                    display.SetSize(150, 30);
+                    //display.SetSize(150, 30);
                     int milliseconds = 200;
                     Thread.Sleep(milliseconds);
-                }
-                        
 
-                if (i == 20)
-                    break; //display.SetWidth(120);
+            }*/
 
-                if (i == 100)
-                    i = 0;
 
-            }
-
-            
             /*
                     Monitor monitor = new Monitor();
                     monitor.SetX(0,10000);

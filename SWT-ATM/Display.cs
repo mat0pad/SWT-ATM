@@ -11,20 +11,23 @@ namespace SWT_ATM
 {
     public class Display : IDisplay
     {
+        private static readonly object ConsoleWriterLock = new object();
+        public static int InnerRightLineBound { get; private set; }
+        public static int MiddleRightLineBound { get; private set; }
+        public static int OuterRightLineBound { get; private set; }
+        public static int Height { get; private set; }
+
         private int _width;
-        private int _height;
-        private int _innerRightLineBounds;
-        private int _middleRightLineBounds;
-        private int _outerRightLineBounds;
         private int _outerBoundHeight;
         private int _rowSeperation;
         private List<Data> _prevList;
+        private readonly NotificationCenter _notificationCenter = new NotificationCenter();
 
 
         public void SetSize(int width, int height)
         {
             _width = width;
-            _height = height;
+            Height = height;
             Configure();
             BuildFrame();
         }
@@ -38,15 +41,15 @@ namespace SWT_ATM
 
         public void SetHeight(int height)
         {
-            _height = height;
+            Height = height;
             Configure();
             BuildFrame();
         }
 
-        public Display(int width = 150, int height = 30)
+        public Display(int width = 150, int height = 50)
         {
             _width = width;
-            _height = height;
+            Height = height;
 
             Configure();
             BuildFrame();
@@ -54,17 +57,17 @@ namespace SWT_ATM
 
         private void Configure()
         {
-            _outerBoundHeight = _height + 2;
+            _outerBoundHeight = Height + 2;
             _rowSeperation = _width*3/5 / 6;
 
-            _innerRightLineBounds = _width * 3 / 5 + 6;
-            _middleRightLineBounds = _width * 4 / 5 + 4;
-            _outerRightLineBounds = _width + 2;
+            InnerRightLineBound = _width * 3 / 5 + 6;
+            MiddleRightLineBound = _width * 4 / 5 + 4;
+            OuterRightLineBound = _width + 2;
 
             if (_width + 1 > Console.BufferWidth)
                 Console.BufferWidth = _width + 2; // "+2" to accomodate right line
-            if (_height + 2 > Console.BufferHeight)
-                Console.BufferHeight = _height + 3; //  "+3" to accommodate the top and bottom line
+            if (Height + 2 > Console.BufferHeight)
+                Console.BufferHeight = Height + 3; //  "+3" to accommodate the top and bottom line
         }
 
         public void ShowTracks(List<Data> d)
@@ -86,7 +89,7 @@ namespace SWT_ATM
             _prevList = d;
         }
 
-        private List<string> FormatTrackData(Data current, Data prev)
+        private static IEnumerable<string> FormatTrackData(Data current, Data prev)
         {
             // Velocity
             var distance = Math.Sqrt(Math.Pow(current.YCord - prev.YCord, 2) + Math.Pow((current.XCord - prev.XCord), 2));
@@ -142,7 +145,7 @@ namespace SWT_ATM
 
             // Left line
 			Console.SetCursorPosition(0, 1);
-			for (int i = 0; i < _height; i++)
+			for (int i = 0; i < Height; i++)
 				Console.WriteLine("|");
 
             // Bottom line
@@ -152,25 +155,25 @@ namespace SWT_ATM
 
 
             // Right inner line
-            for (int i = 1; i < _height + 1; i++)
+            for (int i = 1; i < Height + 1; i++)
             {
-                Console.SetCursorPosition(_innerRightLineBounds - 1, i);
+                Console.SetCursorPosition(InnerRightLineBound - 1, i);
                 Console.WriteLine("|");
             }
 
             // Right horizontal line
             Console.SetCursorPosition(1, Console.CursorTop);
-            for (int i = 1; i < _outerRightLineBounds -_innerRightLineBounds + 1; i++)
+            for (int i = 1; i < OuterRightLineBound -InnerRightLineBound + 1; i++)
             {
-                Console.SetCursorPosition(_innerRightLineBounds-1+i, _height/2);
+                Console.SetCursorPosition(InnerRightLineBound-1+i, Height/2);
                 Console.Write("-");
             }
 
             // Right outer line
             Console.SetCursorPosition(1, Console.CursorTop);
-            for (int i = 1; i < _height + 1; i++)
+            for (int i = 1; i < Height + 1; i++)
             {
-                Console.SetCursorPosition(_outerRightLineBounds-1, i);
+                Console.SetCursorPosition(OuterRightLineBound-1, i);
                 Console.WriteLine("|");
             }
 
@@ -180,19 +183,22 @@ namespace SWT_ATM
             WriteRow(list, _rowSeperation, 1, 1);
 		}
 
-        private void WriteRow(List<string> toWrite, int seperation, int startLeft, int startTop)
+        public static void WriteRow(IEnumerable<string> toWrite, int seperation, int startLeft, int startTop)
         {
-            int i = 0;
+            var i = 0;
+            var rowSeperationString = new string(' ', seperation);
 
-            foreach (string s in toWrite)
+            lock (ConsoleWriterLock)
             {
-                string rowSeperationString = new string(' ', seperation);
-
-                Console.SetCursorPosition(startLeft + seperation * i, startTop);
-                Console.Write(rowSeperationString);
-                Console.SetCursorPosition(startLeft + seperation * i++, startTop);
-                Console.Write(s);
+                foreach (var s in toWrite)
+                {
+                    Console.SetCursorPosition(startLeft + seperation * i, startTop);
+                    Console.Write(rowSeperationString);
+                    Console.SetCursorPosition(startLeft + seperation * i++, startTop);
+                    Console.Write(s);
+                }
             }
+            
         }
 
         ~Display()
@@ -201,27 +207,21 @@ namespace SWT_ATM
         }
 
         public void ShowNotification(Data d, EventType type)
-        {
-            Thread thread = new Thread(delegate () {
-
-                /*string year = d.Timestamp.Substring(0, 4);
-                string month = d.Timestamp.Substring(4, 2);
-                string day = d.Timestamp.Substring(6, 2);*/
-                string hour = d.Timestamp.Substring(8, 2);
-                string minutes = d.Timestamp.Substring(10, 2);
-                string seconds = d.Timestamp.Substring(12, 2);
-                string miliseconds = d.Timestamp.Substring(14);
-
-                WriteRow(new List<string> { d.Tag, hour + ":" + minutes + ":" + seconds + "," + miliseconds }, 11, _middleRightLineBounds, 2);
-                Thread.Sleep(5000);
-            });
-
-            thread.Start();
+        {       
+              var item = new List<string>{"n", d.Tag, type.ToString()};
+             _notificationCenter.GetNotificationQueue().Enqueue(item);
+             _notificationCenter.GetSignalHandle().Set();
         }
 
-        public void ShowWarning(List<Warning> w)
+        public void ShowWarning(List<List<Data>> w, EventType type)
         {
-            throw new NotImplementedException();
+            var warningList = new List<List<string>> {new List<string> { "w"}};
+
+            /*warningList.AddRange(w.Select(data => data.Tag));
+            warningList.Add(type.ToString());
+
+            _notificationCenter.GetNotificationQueue().Enqueue(warningList);
+            _notificationCenter.GetSignalHandle().Set();*/
         }
     }
 }

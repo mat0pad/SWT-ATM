@@ -13,6 +13,5 @@ namespace SWT_ATM
         int[] GetZ();
         void SetShareList(ref List<Data> list);
         EventType EventTracker(Data data);
-
     }
 }

@@ -57,7 +57,7 @@ namespace SWT_ATM
         {
             _tracksInConflict.Clear();
 
-            foreach (var item in _list)
+            foreach (var item in _list.ToList())
             {
                 if (data.Tag != item.Tag)
                 {

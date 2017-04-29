@@ -136,24 +136,30 @@ namespace SWT_ATM
             // Velocity
             var distance = Math.Sqrt(Math.Pow(current.YCord - prev.YCord, 2) + Math.Pow((current.XCord - prev.XCord), 2));
 
-            var currentTime = current.Timestamp.Substring(10);
-            var currentMinutes = int.Parse(currentTime.Substring(0, 2));
-            var currentSeconds = int.Parse(currentTime.Substring(2, 2));
-            var currentMiliseconds = int.Parse(currentTime.Substring(4));
+            var velocity = 0.00;
+            if (current.Timestamp.Length >= 10)
+            {
 
-            var oldTime = prev.Timestamp.Substring(10);
-            var oldMinutes = int.Parse(oldTime.Substring(0, 2));
-            var oldSeconds = int.Parse(oldTime.Substring(2, 2));
-            var oldMiliseconds = int.Parse(oldTime.Substring(4));
 
-            var minutesDiff = currentMinutes - oldMinutes;
-            var secDiff = currentSeconds - oldSeconds;
-            var miliDiff = currentMiliseconds - oldMiliseconds;
+                var currentTime = current.Timestamp.Substring(10);
+                var currentMinutes = int.Parse(currentTime.Substring(0, 2));
+                var currentSeconds = int.Parse(currentTime.Substring(2, 2));
+                var currentMiliseconds = int.Parse(currentTime.Substring(4));
 
-            var timeDiff = (minutesDiff * 60 * 1000 + secDiff * 1000 + miliDiff) / 1000;
+                var oldTime = prev.Timestamp.Substring(10);
+                var oldMinutes = int.Parse(oldTime.Substring(0, 2));
+                var oldSeconds = int.Parse(oldTime.Substring(2, 2));
+                var oldMiliseconds = int.Parse(oldTime.Substring(4));
 
-            var velocity = distance / timeDiff;
+                var minutesDiff = currentMinutes - oldMinutes;
+                var secDiff = currentSeconds - oldSeconds;
+                var miliDiff = currentMiliseconds - oldMiliseconds;
 
+                var timeDiff = (minutesDiff * 60 * 1000 + secDiff * 1000 + miliDiff) / 1000;
+
+                velocity = distance / timeDiff;
+
+            }
 
             // Compass course
             var y1 = current.YCord;

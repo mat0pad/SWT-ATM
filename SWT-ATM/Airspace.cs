@@ -59,7 +59,7 @@ namespace SWT_ATM
 
                 case EventType.INSIDE:
                     s = "INSIDE";
-                    Display.ShowTracks(_tracks);
+                    Display.ShowTracks(new List<Data>(_tracks));
                     // Console.WriteLine(data.Tag + " " + s);
                     break;
 

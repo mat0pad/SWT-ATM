@@ -13,7 +13,7 @@ namespace SWT_ATM
     {
         static void Main(string[] args)
         {
-
+            /*
             IDisplay display = new Display();
             IMonitor monitor = new Monitor();
 
@@ -38,18 +38,19 @@ namespace SWT_ATM
             monitor.SetShareList(ref list);
             var testConflicts = monitor.GetAllConflicts();
 
-            display.ShowWarning(testConflicts);
-            Thread.Sleep(3000);
-            display.ShowWarning(new List<List<Data>> { new List<Data> { data2, data2, data2, data2 }, new List<Data> { data2, data2, data2 } }); // Viser nye warnings
-            Thread.Sleep(3000);
-            display.ShowWarning(new List<List<Data>>()); // Fjerner alle warnings
+          display.ShowWarning(testConflicts);
+          Thread.Sleep(3000);
+          display.ShowWarning(new List<List<Data>> { new List<Data> { data2, data2, data2, data2 }, new List<Data> { data2, data2, data2 } }); // Viser nye warnings
+          Thread.Sleep(3000);
+          display.ShowWarning(new List<List<Data>>()); // Fjerner alle warnings
+            */
 
 
 
 
 
 
-            /*Monitor monitor = new Monitor();
+            Monitor monitor = new Monitor();
             monitor.SetX(0, 10000);
             monitor.SetZ(500, 20000);
             monitor.SetY(0, 90000);
@@ -63,7 +64,7 @@ namespace SWT_ATM
             coordinate.Attach(airspace);
 
             TrackSimulator simulator = new TrackSimulator(coordinate, 40);
-            simulator.StartSimulation();*/
+            simulator.StartSimulation();
 
         }
     }

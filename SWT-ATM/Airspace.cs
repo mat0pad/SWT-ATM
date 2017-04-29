@@ -47,6 +47,7 @@ namespace SWT_ATM
                     s = "ENTERING";
                     Console.WriteLine(data.Tag + " " + s);
                     Log.WriteNotification(data, false);
+                    Display.ShowNotification(data,EventType.ENTERING);
 
                     break;
     
@@ -54,13 +55,12 @@ namespace SWT_ATM
                     s = "LEAVING";
                     Console.WriteLine(data.Tag + " " + s);
                     Log.WriteNotification(data, true);
-
+                    Display.ShowNotification(data,EventType.LEAVING);
                     break;
 
                 case EventType.INSIDE:
                     s = "INSIDE";
                     Console.WriteLine(data.Tag + " " + s);
-
                     break;
 
                 case EventType.CONFLICTING:
@@ -72,8 +72,13 @@ namespace SWT_ATM
                     _tracksInConlict.Add(data); // Add self
 
                     if (_tracksInConlict.Count > 1)
+                    {
                         Log.WriteWarning(_tracksInConlict);
-                    
+                        var templist = new List<List<Data>>();
+                        templist.Add(_tracksInConlict);
+                        //Display.ShowWarning(templist);
+                    }
+
                     break;
 
                 case EventType.CONFLICTING_ENTERING:
@@ -84,9 +89,13 @@ namespace SWT_ATM
                     _tracksInConlict = Monitor.GetTracksInConflict(); // Get others
                     _tracksInConlict.Add(data); // Add self
 
-                    if (_tracksInConlict.Count > 1)
-                        Log.WriteWarning(_tracksInConlict);
+                    Display.ShowNotification(data,EventType.ENTERING);
 
+                    if (_tracksInConlict.Count > 1)
+                    {
+                        Log.WriteWarning(_tracksInConlict);
+                        //Display.ShowWarning(templist);
+                    }
                     break;
 
                 case EventType.CONFLICTING_LEAVING:
@@ -97,8 +106,15 @@ namespace SWT_ATM
                     _tracksInConlict = Monitor.GetTracksInConflict(); // Get others
                     _tracksInConlict.Add(data); // Add self
 
+                    Display.ShowNotification(data,EventType.LEAVING);
+
                     if (_tracksInConlict.Count > 1)
+                    {
                         Log.WriteWarning(_tracksInConlict);
+                        var templist = new List<List<Data>>();
+                        templist.Add(_tracksInConlict);
+                       // Display.ShowWarning(templist);
+                    }
 
                     break;   
             }

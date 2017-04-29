@@ -1,0 +1,4 @@
+Log Of Events
+
+Timestamp        	Event Type	Event Category	Tag of Track(s)
+1203	ENTERING   	NOTIFICATION	test1

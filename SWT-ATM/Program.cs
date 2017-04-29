@@ -22,16 +22,16 @@ namespace SWT_ATM
             Data data3 = new Data("timeTest3", i, i, 1, "20170830205453166");
             Data data4 = new Data("timeTest4", i, i, 1, "20170830205453166");
 
-            display.ShowNotification(data1, EventType.CONFLICTING);
-            display.ShowNotification(data2, EventType.CONFLICTING);
-            display.ShowNotification(data3, EventType.CONFLICTING);
+            display.ShowNotification(data1, EventType.ENTERING);
+            display.ShowNotification(data2, EventType.LEAVING);
+            display.ShowNotification(data3, EventType.ENTERING);
 
             /*display.ShowWarning(new List<Data> { data1 , data2, data3, data4} , EventType.CONFLICTING);
             display.ShowWarning(new List<Data> { data2, data2, data2, data2 }, EventType.CONFLICTING);
             display.ShowWarning(new List<Data> { data3, data3, data3, data3 }, EventType.CONFLICTING);*/
             
             Thread.Sleep(1000);
-            display.ShowNotification(data4, EventType.CONFLICTING);
+            display.ShowNotification(data4, EventType.LEAVING);
             //display.ShowWarning(new List<Data> { data2, data2, data2, data4 }, EventType.CONFLICTING);
             //display.ShowNotification(data2, EventType.CONFLICTING_ENTERING);
             //display.ShowNotification(data3, EventType.CONFLICTING_LEAVING);

@@ -208,20 +208,25 @@ namespace SWT_ATM
 
         public void ShowNotification(Data d, EventType type)
         {       
-              var item = new List<string>{"n", d.Tag, type.ToString()};
+              var item = new List<string>{d.Tag, type.ToString()};
              _notificationCenter.GetNotificationQueue().Enqueue(item);
-             _notificationCenter.GetSignalHandle().Set();
+             _notificationCenter.GetNotificationSignalHandle().Set();
         }
 
-        public void ShowWarning(List<List<Data>> w, EventType type)
+        public void ShowWarning(List<List<Data>> w, List<EventType> type)
         {
-            var warningList = new List<List<string>> {new List<string> { "w"}};
+            var warningsList = new List<List<string>> {new List<string> { "w"}};
 
-            /*warningList.AddRange(w.Select(data => data.Tag));
-            warningList.Add(type.ToString());
+            var i = 0;
+            foreach (List<Data> wList in w)
+            {
+                var tmpList = new List<string>(wList.Select(data => data.Tag));
+                tmpList.Add(type[i++].ToString());
+                warningsList.Add(tmpList);
+            }
 
-            _notificationCenter.GetNotificationQueue().Enqueue(warningList);
-            _notificationCenter.GetSignalHandle().Set();*/
+            _notificationCenter.GetWwarningsQueue().Enqueue(warningsList);
+            _notificationCenter.GetWarningsSignalHandle().Set();
         }
     }
 }

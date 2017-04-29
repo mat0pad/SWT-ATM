@@ -37,7 +37,7 @@ namespace SWT_ATM
         {
             var found = false;
 
-            for(int i = 0; i < _list.Count; i++)
+            for (int i = 0; i < _list.Count; i++)
             {
                 if (_list[i].Tag == data.Tag)
                 {
@@ -71,6 +71,39 @@ namespace SWT_ATM
             return _tracksInConflict.Count >= 1;
         }
 
+        public List<List<Data>> GetAllConflicts()
+        {
+            List<Data> foundConflictsForCurrent = new List<Data>();
+            List<Data> tracksToCheck = new List<Data>(_list);
+            List<List<Data>> conflictList = new List<List<Data>>();
+
+            for (int i = tracksToCheck.Count - 1; i >= 0; i--)
+            {
+                var item = tracksToCheck[i];
+                tracksToCheck.Remove(item);
+                foundConflictsForCurrent.Clear();
+                foundConflictsForCurrent.Add(item);
+
+                foreach (var data in tracksToCheck)
+                {
+                    if (data.Tag != item.Tag)
+                    {
+                        if (Math.Abs((data.Altitude - item.Altitude)) < 300 &&
+                            (Math.Abs(data.XCord - item.XCord)) < 5000 && (Math.Abs(data.YCord - item.YCord) < 5000))
+                        {
+                            foundConflictsForCurrent.Add(data);
+                        }
+                    }
+                }
+                if(i != 0)
+                conflictList.Add(new List<Data>(foundConflictsForCurrent));
+            }
+            return conflictList;
+        }
+
+
+
+
         public EventType EventTracker(Data data)
         {
             var wasInAirspace = ExistsInList(data);
@@ -85,9 +118,9 @@ namespace SWT_ATM
                 else
                     return EventType.CONFLICTING;
             }
-            else if(wasInAirspace && !inAirspace)
-                 return EventType.LEAVING;
-            else if(!wasInAirspace && inAirspace)
+            else if (wasInAirspace && !inAirspace)
+                return EventType.LEAVING;
+            else if (!wasInAirspace && inAirspace)
                 return EventType.ENTERING;
             else if (inAirspace)
                 return EventType.INSIDE;
@@ -141,5 +174,6 @@ namespace SWT_ATM
             array[1] = ZSlut;
             return array;
         }
+
     }
 }

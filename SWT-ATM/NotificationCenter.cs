@@ -132,7 +132,11 @@ namespace SWT_ATM
             // Rewrite (new) warnings
             i = 0;
             foreach (var w in warnings)
-                Display.WriteRow(w, 10, Display.InnerRightLineBound, Display.Height / 2 + ++i);
+            {
+                List<string> tmpList = new List<string>(w);
+                tmpList.Add("CONFLICTING");
+                Display.WriteRow(tmpList, 10, Display.InnerRightLineBound, Display.Height / 2 + ++i);
+            }
 
             _prevWarningCount = i;
         }

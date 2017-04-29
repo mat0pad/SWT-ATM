@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 using SWT_ATM;
+using System.Diagnostics;
 //using Monitor = SWT_ATM.Monitor;
 
 namespace UnitTest
@@ -52,6 +53,32 @@ namespace UnitTest
         public void EventTrackException()
         {
             Assert.Throws<NullReferenceException>(() => _monitor.EventTracker(null));
+        }
+
+        [Test]
+        public void GetAllConflicts()
+        {
+            Data data1 = new Data("1", 0, 0, 500, "");
+            Data data2 = new Data("2", 4999, 4999, 799, "");
+            Data data3 = new Data("3", 5000, 5000, 800, "");
+
+            var list = new List<Data> { data1, data2, data3 };
+
+            _monitor.SetShareList(ref list);
+
+            var testConflicts =_monitor.GetAllConflicts();
+
+            List<Data> conflict1 = testConflicts[0];
+            List<Data> conflict2 = testConflicts[1];
+
+            Debug.WriteLine("GetAllConflicts TEST: " + conflict1.Count); 
+            Debug.WriteLine("GetAllConflicts TEST: " + conflict1[0].Tag + " " + conflict1[1].Tag);
+            Debug.WriteLine("GetAllConflicts TEST: " + conflict2[0].Tag + " " + conflict2[1].Tag);
+
+            Assert.IsTrue(conflict1[0].Tag == "3");
+            Assert.IsTrue(conflict1[1].Tag == "2");
+            Assert.IsTrue(conflict2[0].Tag == "2");
+            Assert.IsTrue(conflict2[1].Tag == "1");
         }
 
 

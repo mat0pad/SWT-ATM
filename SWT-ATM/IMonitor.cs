@@ -5,6 +5,7 @@ namespace SWT_ATM
     public interface IMonitor
     {
         List<Data> GetTracksInConflict();
+        List<List<Data>> GetAllConflicts();
         void SetY(int min, int max);
         void SetZ(int min, int max);
         void SetX(int min, int max);

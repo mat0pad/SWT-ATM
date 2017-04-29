@@ -105,7 +105,6 @@ namespace SWT_ATM
                
         }
 
-
         private void UpdateListAfterEvent(EventType eventType, Data data)
         {
             switch (eventType)

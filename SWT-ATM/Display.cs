@@ -22,6 +22,19 @@ namespace SWT_ATM
         private List<Data> _prevList;
         private readonly NotificationCenter _notificationCenter = new NotificationCenter();
 
+        public Display(int width = 150, int height = 50)
+        {
+            _width = width;
+            Height = height;
+
+            Configure();
+            BuildFrame();
+        }
+
+        ~Display()
+        {
+            Console.SetCursorPosition(0, _outerBoundHeight);
+        }
 
         public void SetSize(int width, int height)
         {
@@ -45,27 +58,44 @@ namespace SWT_ATM
             BuildFrame();
         }
 
-        public Display(int width = 150, int height = 50)
+        public static void WriteRow(IEnumerable<string> toWrite, int seperation, int startLeft, int startTop)
         {
-            _width = width;
-            Height = height;
+            var i = 0;
+            var rowSeperationString = new string(' ', seperation);
 
-            Configure();
-            BuildFrame();
+            lock (ConsoleWriterLock)
+            {
+                foreach (var s in toWrite)
+                {
+                    Console.SetCursorPosition(startLeft + seperation * i, startTop);
+                    Console.Write(rowSeperationString);
+                    Console.SetCursorPosition(startLeft + seperation * i++, startTop);
+                    Console.Write(s);
+                }
+            }
+
         }
 
-        private void Configure()
+        public void ShowNotification(Data d, EventType type)
         {
-            _outerBoundHeight = Height + 2;
-            _rowSeperation = _width*3/5 / 6;
+            var item = new List<string> { d.Tag, type.ToString() };
+            _notificationCenter.GetNotificationQueue().Enqueue(item);
+            _notificationCenter.GetNotificationSignalHandle().Set();
+        }
 
-            InnerRightLineBound = _width * 3 / 5 + 6;
-            OuterRightLineBound = _width + 2;
+        public void ShowWarning(List<List<Data>> w)
+        {
+            var warningsList = new List<List<string>>();
 
-            if (_width + 1 > Console.BufferWidth)
-                Console.BufferWidth = _width + 2; // "+2" to accomodate right line
-            if (Height + 2 > Console.BufferHeight)
-                Console.BufferHeight = Height + 3; //  "+3" to accommodate the top and bottom line
+            var i = 0;
+            foreach (List<Data> wList in w)
+            {
+                var tmpList = new List<string>(wList.Select(data => data.Tag));
+                warningsList.Add(tmpList);
+            }
+
+            _notificationCenter.GetWwarningsQueue().Enqueue(warningsList);
+            _notificationCenter.GetWarningsSignalHandle().Set();
         }
 
         public void ShowTracks(List<Data> d)
@@ -85,6 +115,20 @@ namespace SWT_ATM
             }
 
             _prevList = d;
+        }
+
+        private void Configure()
+        {
+            _outerBoundHeight = Height + 2;
+            _rowSeperation = _width*3/5 / 6;
+
+            InnerRightLineBound = _width * 3 / 5 + 6;
+            OuterRightLineBound = _width + 2;
+
+            if (_width + 1 > Console.BufferWidth)
+                Console.BufferWidth = _width + 2; // "+2" to accomodate right line
+            if (Height + 2 > Console.BufferHeight)
+                Console.BufferHeight = Height + 3; //  "+3" to accommodate the top and bottom line
         }
 
         private static IEnumerable<string> FormatTrackData(Data current, Data prev)
@@ -180,51 +224,5 @@ namespace SWT_ATM
 
             WriteRow(list, _rowSeperation, 1, 1);
 		}
-
-        public static void WriteRow(IEnumerable<string> toWrite, int seperation, int startLeft, int startTop)
-        {
-            var i = 0;
-            var rowSeperationString = new string(' ', seperation);
-
-            lock (ConsoleWriterLock)
-            {
-                foreach (var s in toWrite)
-                {
-                    Console.SetCursorPosition(startLeft + seperation * i, startTop);
-                    Console.Write(rowSeperationString);
-                    Console.SetCursorPosition(startLeft + seperation * i++, startTop);
-                    Console.Write(s);
-                }
-            }
-            
-        }
-
-        ~Display()
-        {
-            Console.SetCursorPosition(0, _outerBoundHeight);
-        }
-
-        public void ShowNotification(Data d, EventType type)
-        {       
-              var item = new List<string>{d.Tag, type.ToString()};
-             _notificationCenter.GetNotificationQueue().Enqueue(item);
-             _notificationCenter.GetNotificationSignalHandle().Set();
-        }
-
-        public void ShowWarning(List<List<Data>> w, List<EventType> type)
-        {
-            var warningsList = new List<List<string>>();
-
-            var i = 0;
-            foreach (List<Data> wList in w)
-            {
-                var tmpList = new List<string>(wList.Select(data => data.Tag));
-                tmpList.Add(type[i++].ToString());
-                warningsList.Add(tmpList);
-            }
-
-            _notificationCenter.GetWwarningsQueue().Enqueue(warningsList);
-            _notificationCenter.GetWarningsSignalHandle().Set();
-        }
     }
 }

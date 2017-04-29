@@ -200,7 +200,7 @@ namespace UnitTest
 
             _monitor.EventTracker(data).Returns(EventType.OUTSIDE);
 
-            _display.DidNotReceiveWithAnyArgs().ShowNormal(null);
+            _display.DidNotReceiveWithAnyArgs().ShowTracks(null);
             _log.DidNotReceiveWithAnyArgs().WriteNotification(null,false);
         }
 

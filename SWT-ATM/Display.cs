@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Device.Location;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -100,8 +101,23 @@ namespace SWT_ATM
 
         public void ShowTracks(List<Data> d)
         {
-            var i = 2;
+            
 
+            Debug.Write("item in notifications:");
+            foreach (var s in d)
+            Debug.Write(" " + s.Tag);
+            Debug.WriteLine("");
+
+            string clear = new string(' ', _rowSeperation);
+
+            int i;
+            if(_prevList != null)
+            for (i = 0; i < _prevList.Count; i++)
+            {
+                WriteRow(new List<string> { clear, clear, clear, clear, clear, clear }, _rowSeperation, 1, i+2);
+            }
+
+            i = 2;
             foreach (var track in d)
             {
                 Data oldData = null;

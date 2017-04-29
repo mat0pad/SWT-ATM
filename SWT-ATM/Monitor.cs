@@ -24,7 +24,10 @@ namespace SWT_ATM
 
         public List<Data> GetTracksInConflict()
         {
+            lock(_tracksInConflict)
+            { 
             return _tracksInConflict;
+            }
         }
 
         private bool InsideBounds(Data data)
@@ -55,20 +58,22 @@ namespace SWT_ATM
 
         private bool IsConflicting(Data data)
         {
-            _tracksInConflict.Clear();
-
-            foreach (var item in _list.ToList())
+            lock (_tracksInConflict)
             {
-                if (data.Tag != item.Tag)
+                _tracksInConflict.Clear();
+
+                foreach (var item in _list.ToList())
                 {
-                    if ((data.Altitude - item.Altitude) < 300 &&
-                        ((data.XCord - item.XCord) < 5000 && (data.YCord - item.YCord) < 5000))
+                    if (data.Tag != item.Tag)
                     {
-                        _tracksInConflict.Add(item);
+                        if ((data.Altitude - item.Altitude) < 300 &&
+                            ((data.XCord - item.XCord) < 5000 && (data.YCord - item.YCord) < 5000))
+                        {
+                            _tracksInConflict.Add(item);
+                        }
                     }
                 }
             }
-
             return _tracksInConflict.Count >= 1;
         }
 

@@ -45,22 +45,22 @@ namespace SWT_ATM
             {
                 case EventType.ENTERING:
                     s = "ENTERING";
-                    //Console.WriteLine(data.Tag + " " + s);
                     Log.WriteNotification(data, false);
+                    //Display.ShowTracks(_tracks);
                     Display.ShowNotification(data,EventType.ENTERING);
 
                     break;
     
                 case EventType.LEAVING:
                     s = "LEAVING";
-                    //Console.WriteLine(data.Tag + " " + s);
                     Log.WriteNotification(data, true);
                     Display.ShowNotification(data,EventType.LEAVING);
                     break;
 
                 case EventType.INSIDE:
                     s = "INSIDE";
-                   // Console.WriteLine(data.Tag + " " + s);
+                    Display.ShowTracks(_tracks);
+                    // Console.WriteLine(data.Tag + " " + s);
                     break;
 
                 case EventType.CONFLICTING:
@@ -73,9 +73,7 @@ namespace SWT_ATM
 
                     if (_tracksInConlict.Count > 1)
                     {
-                        Log.WriteWarning(_tracksInConlict);
-                        var templist = new List<List<Data>>();
-                        templist.Add(_tracksInConlict);
+                        //Log.WriteWarning(_tracksInConlict);
                         //Display.ShowWarning(templist);
                     }
 
@@ -91,7 +89,7 @@ namespace SWT_ATM
 
                     if (_tracksInConlict.Count > 1)
                     {
-                        Log.WriteWarning(_tracksInConlict);
+                     //   Log.WriteWarning(_tracksInConlict);
                         //Display.ShowWarning(templist);
                     }
                     break;
@@ -106,9 +104,7 @@ namespace SWT_ATM
 
                     if (_tracksInConlict.Count > 1)
                     {
-                        Log.WriteWarning(_tracksInConlict);
-                        var templist = new List<List<Data>>();
-                        templist.Add(_tracksInConlict);
+                       // Log.WriteWarning(_tracksInConlict);
                        // Display.ShowWarning(templist);
                     }
 

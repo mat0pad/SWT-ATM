@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -65,13 +66,21 @@ namespace SWT_ATM
             string tracksInConflict = "";
             string timestamp = "";
 
-            for (int i = 0 ; i < list.Count; i++)
+            foreach (var item in list)
             {
-                if (i == 0)
+                tracksInConflict += (item.Tag + "    ");
+            }
+            timestamp = list[0].Timestamp;
+            /*
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (i == 0 && String.IsNullOrEmpty(list[0].Timestamp))
                     timestamp = list[0].Timestamp;
                 
-                tracksInConflict += list[i].Tag + "   ";
+                if(String.IsNullOrEmpty(list[i].Tag))
+                    tracksInConflict += list[i].Tag + "   ";
             }
+            */
             WriteToLog(Environment.NewLine + timestamp + "\t" + "CONFLICTING" + "\t" + "WARNING     " + "\t" + tracksInConflict);
         }
 

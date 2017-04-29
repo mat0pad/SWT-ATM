@@ -13,32 +13,28 @@ namespace SWT_ATM
         static void Main(string[] args)
         {
 
-			Display display = new Display();
+            Display display = new Display();
 
-            int i = 1;
-
+            int i = 1; // Kan bruges til at opdatere position på nedenstående data
             Data data1 = new Data("timeTest1", i, i, 1, "20170830205453166");
             Data data2 = new Data("timeTest2", i, i, 1, "20170830205453166");
             Data data3 = new Data("timeTest3", i, i, 1, "20170830205453166");
             Data data4 = new Data("timeTest4", i, i, 1, "20170830205453166");
 
-            display.ShowNotification(data1, EventType.ENTERING);
+            // Notifications, fjernes efter 5 sek
+            display.ShowNotification(data1, EventType.LEAVING);
             display.ShowNotification(data2, EventType.LEAVING);
             display.ShowNotification(data3, EventType.ENTERING);
 
-            /*display.ShowWarning(new List<Data> { data1 , data2, data3, data4} , EventType.CONFLICTING);
-            display.ShowWarning(new List<Data> { data2, data2, data2, data2 }, EventType.CONFLICTING);
-            display.ShowWarning(new List<Data> { data3, data3, data3, data3 }, EventType.CONFLICTING);*/
-            
-            Thread.Sleep(1000);
-            display.ShowNotification(data4, EventType.LEAVING);
-            //display.ShowWarning(new List<Data> { data2, data2, data2, data4 }, EventType.CONFLICTING);
-            //display.ShowNotification(data2, EventType.CONFLICTING_ENTERING);
-            //display.ShowNotification(data3, EventType.CONFLICTING_LEAVING);
-            Thread.Sleep(1000);
-            //display.ShowNotification(data4, EventType.CONFLICTING);
 
-            while (true) ;
+            // Warnings, modtager liste indeholdende liste af dem der konflikter "lige nu", samt tilhørende liste af eventtype
+            display.ShowWarning(new List<List<Data>> { new List<Data> { data2, data2, data2, data2 } }, new List<EventType>{EventType.CONFLICTING });
+            Thread.Sleep(3000);
+            display.ShowWarning(new List<List<Data>> { new List<Data> { data2, data2, data2, data2 }, new List<Data> { data2, data2, data2}}, new List<EventType> { EventType.CONFLICTING, EventType.CONFLICTING_ENTERING});
+            Thread.Sleep(3000);
+            display.ShowWarning(new List<List<Data>>(), null); // Fjerner alle warnings
+
+            while (true) ; // Istedet for thrad join
 
             /*while (true)
             {

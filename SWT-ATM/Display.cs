@@ -215,7 +215,7 @@ namespace SWT_ATM
 
         public void ShowWarning(List<List<Data>> w, List<EventType> type)
         {
-            var warningsList = new List<List<string>> {new List<string> { "w"}};
+            var warningsList = new List<List<string>>();
 
             var i = 0;
             foreach (List<Data> wList in w)

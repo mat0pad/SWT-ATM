@@ -101,13 +101,6 @@ namespace SWT_ATM
 
         public void ShowTracks(List<Data> d)
         {
-            
-
-            Debug.Write("item in notifications:");
-            foreach (var s in d)
-            Debug.Write(" " + s.Tag);
-            Debug.WriteLine("");
-
             string clear = new string(' ', _rowSeperation);
 
             int i;

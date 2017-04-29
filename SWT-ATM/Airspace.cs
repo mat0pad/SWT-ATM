@@ -21,7 +21,6 @@ namespace SWT_ATM
 
             Tracks = new List<Data>();
             Monitor.SetShareList(ref Tracks);
-            
         }
 
 
@@ -57,8 +56,7 @@ namespace SWT_ATM
                 {
                     Log.WriteWarning(list);
                 }
-            }
-               
+            } 
         }
 
 
@@ -89,7 +87,4 @@ namespace SWT_ATM
             }
         }
     }
-
-
-
 }

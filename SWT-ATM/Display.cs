@@ -13,7 +13,6 @@ namespace SWT_ATM
     {
         private static readonly object ConsoleWriterLock = new object();
         public static int InnerRightLineBound { get; private set; }
-        public static int MiddleRightLineBound { get; private set; }
         public static int OuterRightLineBound { get; private set; }
         public static int Height { get; private set; }
 
@@ -61,7 +60,6 @@ namespace SWT_ATM
             _rowSeperation = _width*3/5 / 6;
 
             InnerRightLineBound = _width * 3 / 5 + 6;
-            MiddleRightLineBound = _width * 4 / 5 + 4;
             OuterRightLineBound = _width + 2;
 
             if (_width + 1 > Console.BufferWidth)

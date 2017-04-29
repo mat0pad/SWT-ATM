@@ -45,7 +45,7 @@ namespace SWT_ATM
             {
                 case EventType.ENTERING:
                     s = "ENTERING";
-                    Console.WriteLine(data.Tag + " " + s);
+                    //Console.WriteLine(data.Tag + " " + s);
                     Log.WriteNotification(data, false);
                     Display.ShowNotification(data,EventType.ENTERING);
 
@@ -53,20 +53,20 @@ namespace SWT_ATM
     
                 case EventType.LEAVING:
                     s = "LEAVING";
-                    Console.WriteLine(data.Tag + " " + s);
+                    //Console.WriteLine(data.Tag + " " + s);
                     Log.WriteNotification(data, true);
                     Display.ShowNotification(data,EventType.LEAVING);
                     break;
 
                 case EventType.INSIDE:
                     s = "INSIDE";
-                    Console.WriteLine(data.Tag + " " + s);
+                   // Console.WriteLine(data.Tag + " " + s);
                     break;
 
                 case EventType.CONFLICTING:
 
                     s = "CONFLICTING";
-                    Console.WriteLine(data.Tag + " " + s);
+                    //Console.WriteLine(data.Tag + " " + s);
 
                     _tracksInConlict = Monitor.GetTracksInConflict(); // Get others
                     _tracksInConlict.Add(data); // Add self
@@ -84,12 +84,10 @@ namespace SWT_ATM
                 case EventType.CONFLICTING_ENTERING:
 
                     s = "CONFLICTING ENTERING";
-                    Console.WriteLine(data.Tag + " " + s);
+                   // Console.WriteLine(data.Tag + " " + s);
 
                     _tracksInConlict = Monitor.GetTracksInConflict(); // Get others
                     _tracksInConlict.Add(data); // Add self
-
-                    Display.ShowNotification(data,EventType.ENTERING);
 
                     if (_tracksInConlict.Count > 1)
                     {
@@ -101,12 +99,10 @@ namespace SWT_ATM
                 case EventType.CONFLICTING_LEAVING:
 
                     s = "CONFLICTING LEAVING";
-                    Console.WriteLine(data.Tag + " " + s);
+                   // Console.WriteLine(data.Tag + " " + s);
 
                     _tracksInConlict = Monitor.GetTracksInConflict(); // Get others
                     _tracksInConlict.Add(data); // Add self
-
-                    Display.ShowNotification(data,EventType.LEAVING);
 
                     if (_tracksInConlict.Count > 1)
                     {

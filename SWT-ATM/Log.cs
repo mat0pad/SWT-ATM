@@ -65,22 +65,25 @@ namespace SWT_ATM
         {
             string tracksInConflict = "";
             string timestamp = "";
-
+            
+            /*
             foreach (var item in list)
             {
                 tracksInConflict += (item.Tag + "    ");
+                timestamp = item.Timestamp;
             }
-            timestamp = list[0].Timestamp;
-            /*
-            for (int i = 0; i < list.Count; i++)
+            */
+            
+            for (int i = list.Count - 1; i > 0; i--)
             {
                 if (i == 0 && String.IsNullOrEmpty(list[0].Timestamp))
                     timestamp = list[0].Timestamp;
                 
-                if(String.IsNullOrEmpty(list[i].Tag))
+                if(String.IsNullOrWhiteSpace(list[i].Tag))
                     tracksInConflict += list[i].Tag + "   ";
             }
-            */
+            
+            
             WriteToLog(Environment.NewLine + timestamp + "\t" + "CONFLICTING" + "\t" + "WARNING     " + "\t" + tracksInConflict);
         }
 

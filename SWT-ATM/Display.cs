@@ -13,6 +13,7 @@ namespace SWT_ATM
     public class Display : IDisplay
     {
         private static readonly object ConsoleWriterLock = new object();
+        private static readonly object WarningLock = new object();
         public static int InnerRightLineBound { get; private set; }
         public static int OuterRightLineBound { get; private set; }
         public static int Height { get; private set; }
@@ -85,10 +86,9 @@ namespace SWT_ATM
         }
 
         public void ShowWarning(List<List<Data>> w)
-        {
+        { 
             var warningsList = new List<List<string>>();
 
-            var i = 0;
             foreach (List<Data> wList in w)
             {
                 var tmpList = new List<string>(wList.Select(data => data.Tag));
@@ -168,6 +168,8 @@ namespace SWT_ATM
 
                 velocity = distance / timeDiff;
 
+                current.Velocity = velocity;
+
             }
 
             // Compass course
@@ -184,6 +186,8 @@ namespace SWT_ATM
 
             var compassCourseRad = Math.Atan2(y4 - y3, x4 - x3) - Math.Atan2(y1-y2, x1-x2);
             var compassCourseDeg = compassCourseRad * 180 / Math.PI;
+
+            current.CompassCourse = compassCourseDeg;
 
             return new List<string> {current.Tag, current.XCord.ToString(), current.YCord.ToString(), current.Altitude.ToString(),
                 $"{velocity:0}",

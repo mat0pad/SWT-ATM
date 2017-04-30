@@ -5,12 +5,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Timers;
 using System.Threading.Tasks;
 
 namespace SWT_ATM
 {
     public class NotificationCenter
     {
+        private static readonly object TimerCreationLock = new object();
         private readonly ConcurrentQueue<List<string>> _notificationsQueue = new ConcurrentQueue<List<string>>();
         private readonly AutoResetEvent _notficationSignal = new AutoResetEvent(false);
         private readonly AutoResetEvent _warningSignal = new AutoResetEvent(false);
@@ -57,17 +59,22 @@ namespace SWT_ATM
                 List<string> item;
                 while (_notificationsQueue.TryDequeue(out item))
                 {
+                    lock(TimerCreationLock)
+                    { 
                     var msg = item;
 
                     WriteNotification(msg);
-                    TimerCallback timerDelegate = delegate (object obj)
-                    {
-                        DeleteNotification();
-                    };
+                    Execute(DeleteNotification, 5000);
 
-                    var timer = new Timer(timerDelegate, null, 5000, Timeout.Infinite);
+                    }
                 }
             }
+        }
+
+        public async Task Execute(Action action, int timeoutInMilliseconds)
+        {
+            await Task.Delay(timeoutInMilliseconds);
+            action();
         }
 
         private void WarningThread()
@@ -94,7 +101,7 @@ namespace SWT_ATM
 
                 foreach (var n in _notificationsToShow)
                 {
-                    Display.WriteRow(n, 10, Display.InnerRightLineBound, i++);
+                    Display.WriteRow(n, Seperation, Display.InnerRightLineBound, i++);
                 }
             }
         }
@@ -112,11 +119,11 @@ namespace SWT_ATM
                 List<string> dummyList;
                 _notificationsToShow.TryDequeue(out dummyList);
 
-                var j = 2;
 
+                var j = 2;
                 // Write new
                 foreach (var n in _notificationsToShow)
-                    Display.WriteRow(n, 10, Display.InnerRightLineBound, j++);
+                    Display.WriteRow(n, Seperation, Display.InnerRightLineBound, j++);
             }
         }
 
@@ -136,7 +143,7 @@ namespace SWT_ATM
             {
                 List<string> tmpList = new List<string>(w);
                 tmpList.Add("CONFLICTING");
-                Display.WriteRow(tmpList, 10, Display.InnerRightLineBound, Display.Height / 2 + ++i);
+                Display.WriteRow(tmpList, Seperation, Display.InnerRightLineBound, Display.Height / 2 + ++i);
             }
 
             _prevWarningCount = i;

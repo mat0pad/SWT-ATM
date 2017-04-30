@@ -68,12 +68,16 @@ namespace SWT_ATM
                     s = "CONFLICTING";
                     //Console.WriteLine(data.Tag + " " + s);
 
-                    _tracksInConlict = Monitor.GetTracksInConflict(); // Get others
-                    _tracksInConlict.Add(data); // Add self
+                    List<Data> list = Monitor.GetTracksInConflict();
+                    Display.ShowWarning(Monitor.GetAllConflicts());
+                    list.Add(data);
+                    
+                    //_tracksInConlict = Monitor.GetTracksInConflict(); // Get others
+                    //_tracksInConlict.Add(data); // Add self
 
-                    if (_tracksInConlict.Count > 1)
+                    if (list.Count > 1)
                     {
-                        //Log.WriteWarning(_tracksInConlict);
+                        Log.WriteWarning(list);
                         //Display.ShowWarning(templist);
                     }
 
@@ -84,12 +88,15 @@ namespace SWT_ATM
                     s = "CONFLICTING ENTERING";
                    // Console.WriteLine(data.Tag + " " + s);
 
-                    _tracksInConlict = Monitor.GetTracksInConflict(); // Get others
-                    _tracksInConlict.Add(data); // Add self
+                    var list1 = Monitor.GetTracksInConflict();
+                    Display.ShowWarning(Monitor.GetAllConflicts());
+                    list1.Add(data);
+                    //_tracksInConlict = Monitor.GetTracksInConflict(); // Get others
+                    //_tracksInConlict.Add(data); // Add self
 
-                    if (_tracksInConlict.Count > 1)
+                    if (list1.Count > 1)
                     {
-                     //   Log.WriteWarning(_tracksInConlict);
+                        Log.WriteWarning(list1);
                         //Display.ShowWarning(templist);
                     }
                     break;
@@ -97,14 +104,17 @@ namespace SWT_ATM
                 case EventType.CONFLICTING_LEAVING:
 
                     s = "CONFLICTING LEAVING";
-                   // Console.WriteLine(data.Tag + " " + s);
 
-                    _tracksInConlict = Monitor.GetTracksInConflict(); // Get others
-                    _tracksInConlict.Add(data); // Add self
+                    var list2 = Monitor.GetTracksInConflict();
+                    list2.Add(data);
+                    Display.ShowWarning(Monitor.GetAllConflicts());
 
-                    if (_tracksInConlict.Count > 1)
+                    //_tracksInConlict = Monitor.GetTracksInConflict(); // Get others
+                    //_tracksInConlict.Add(data); // Add self
+
+                    if (list2.Count > 1)
                     {
-                       // Log.WriteWarning(_tracksInConlict);
+                        Log.WriteWarning(list2);
                        // Display.ShowWarning(templist);
                     }
 

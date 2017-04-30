@@ -14,6 +14,25 @@ namespace SWT_ATM
         static void Main(string[] args)
         {
             /*
+            List<String> list = new List<string>();
+            list.Add("dd");
+            list.Add("dd");
+            list.Add("DD");
+
+            for (int i = list.Count - 1; i >= 0; i--)
+            {
+                Console.WriteLine(i);
+            }
+            */
+
+
+
+
+
+
+
+
+            /*
             IDisplay display = new Display();
             IMonitor monitor = new Monitor();
 
@@ -50,7 +69,7 @@ namespace SWT_ATM
           display.ShowWarning(new List<List<Data>>()); // Fjerner alle warnings
           */
          
-
+            
             
             Monitor monitor = new Monitor();
             monitor.SetX(0, 10000);
@@ -65,8 +84,9 @@ namespace SWT_ATM
             CoordinateMapper coordinate = new CoordinateMapper(new TransponderDataFormat());
             coordinate.Attach(airspace);
 
-            TrackSimulator simulator = new TrackSimulator(coordinate, 50);
+            TrackSimulator simulator = new TrackSimulator(coordinate, 200);
             simulator.StartSimulation();
+            
             
         }
     }

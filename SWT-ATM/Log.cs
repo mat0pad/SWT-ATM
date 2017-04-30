@@ -74,7 +74,7 @@ namespace SWT_ATM
             }
             */
             
-            for (int i = list.Count - 1; i >= 0; i--)
+            for (int i = list.Count - 1; i > 0; i--)
             {
                 if (i == 0 && String.IsNullOrEmpty(list[0].Timestamp))
                     timestamp = list[0].Timestamp;

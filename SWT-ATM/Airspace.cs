@@ -69,8 +69,9 @@ namespace SWT_ATM
                     //Console.WriteLine(data.Tag + " " + s);
 
                     List<Data> list = Monitor.GetTracksInConflict();
+                    Display.ShowWarning(Monitor.GetAllConflicts());
                     list.Add(data);
-
+                    
                     //_tracksInConlict = Monitor.GetTracksInConflict(); // Get others
                     //_tracksInConlict.Add(data); // Add self
 
@@ -88,6 +89,7 @@ namespace SWT_ATM
                    // Console.WriteLine(data.Tag + " " + s);
 
                     var list1 = Monitor.GetTracksInConflict();
+                    Display.ShowWarning(Monitor.GetAllConflicts());
                     list1.Add(data);
                     //_tracksInConlict = Monitor.GetTracksInConflict(); // Get others
                     //_tracksInConlict.Add(data); // Add self
@@ -105,7 +107,7 @@ namespace SWT_ATM
 
                     var list2 = Monitor.GetTracksInConflict();
                     list2.Add(data);
-                    // Console.WriteLine(data.Tag + " " + s);
+                    Display.ShowWarning(Monitor.GetAllConflicts());
 
                     //_tracksInConlict = Monitor.GetTracksInConflict(); // Get others
                     //_tracksInConlict.Add(data); // Add self

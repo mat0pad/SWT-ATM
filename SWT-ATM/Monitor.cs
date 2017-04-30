@@ -24,15 +24,13 @@ namespace SWT_ATM
 
         public List<Data> GetTracksInConflict()
         {
-<<<<<<< HEAD
-            return _tracksInConflict.ToList();
-=======
-            lock(_tracksInConflict)
-            { 
-            return _tracksInConflict;
+
+            lock (_tracksInConflict)
+            {
+                return _tracksInConflict.ToList();
             }
->>>>>>> e334741b1d9c45283f0b74cc820ef8ebff69b2f8
         }
+
 
         private bool InsideBounds(Data data)
         {

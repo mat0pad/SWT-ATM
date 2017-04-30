@@ -68,8 +68,8 @@ namespace SWT_ATM
                 {
                     if (data.Tag != item.Tag)
                     {
-                        if ((data.Altitude - item.Altitude) < 300 &&
-                            ((data.XCord - item.XCord) < 5000 && (data.YCord - item.YCord) < 5000))
+                        if (Math.Abs((data.Altitude - item.Altitude)) < 300 &&
+                            (Math.Abs(data.XCord - item.XCord)) < 5000 && (Math.Abs(data.YCord - item.YCord) < 5000))
                         {
                             _tracksInConflict.Add(item);
                         }

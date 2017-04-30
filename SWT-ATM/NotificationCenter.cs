@@ -59,19 +59,15 @@ namespace SWT_ATM
                 List<string> item;
                 while (_notificationsQueue.TryDequeue(out item))
                 {
-                    lock(TimerCreationLock)
-                    { 
                     var msg = item;
 
                     WriteNotification(msg);
-                    Execute(DeleteNotification, 5000);
-
-                    }
+                    ExecuteDelayed(DeleteNotification, 5000);
                 }
             }
         }
 
-        public async Task Execute(Action action, int timeoutInMilliseconds)
+        public async Task ExecuteDelayed(Action action, int timeoutInMilliseconds)
         {
             await Task.Delay(timeoutInMilliseconds);
             action();

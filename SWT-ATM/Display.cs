@@ -31,11 +31,23 @@ namespace SWT_ATM
 
             Configure();
             BuildFrame();
+
+            Thread t = new Thread(Rebuild);
+            t.Start();
         }
 
         ~Display()
         {
             Console.SetCursorPosition(0, _outerBoundHeight);
+        }
+
+        private void Rebuild()
+        {
+            while (true)
+            {
+                if (Console.ReadKey(true).Key == ConsoleKey.R)
+                    BuildFrame();
+                }
         }
 
         public void SetSize(int width, int height)
@@ -197,7 +209,10 @@ namespace SWT_ATM
 
 		private void BuildFrame() 
 		{
-            Console.Clear();
+            lock (ConsoleWriterLock)
+            {
+                Configure();
+                Console.Clear();
 
             // Top line
             Console.SetCursorPosition(1, 0);
@@ -238,6 +253,7 @@ namespace SWT_ATM
                 Console.WriteLine("|");
             }
 
+            }
 
             List<string> list = new List<string>{"Tag", "Position X", "Position Y", "Altitude", "Velocity", "Compass course"};
 

@@ -36,15 +36,7 @@ namespace UnitTest
 
         }
 
-        [Test]
-        public void test()
-        {
-            _monitor.GetTracksInConflict().Returns(new List<Data>()); //need to set, otherwise Error
 
-            Assert.Throws<NullReferenceException>(() => _airspace.Update(null));
-
-
-        }
 
 
 
@@ -149,13 +141,13 @@ namespace UnitTest
             var list = new List<Data>();
 
             list.Add(data);
-            list.Add(data);
 
             _monitor.EventTracker(data).Returns(EventType.CONFLICTING_ENTERING);
             _monitor.GetTracksInConflict().Returns(list);
 
             _airspace.Update(data);
 
+            list.Add(data);
             _log.Received(1).WriteWarning(list);
         }
 

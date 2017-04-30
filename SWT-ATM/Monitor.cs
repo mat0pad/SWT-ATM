@@ -24,7 +24,7 @@ namespace SWT_ATM
 
         public List<Data> GetTracksInConflict()
         {
-            return _tracksInConflict;
+            return _tracksInConflict.ToList();
         }
 
         private bool InsideBounds(Data data)

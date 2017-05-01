@@ -78,7 +78,6 @@ namespace SWT_ATM
                     if (list.Count > 1)
                     {
                         Log.WriteWarning(list);
-                        //Display.ShowWarning(templist);
                     }
 
                     break;
@@ -97,7 +96,6 @@ namespace SWT_ATM
                     if (list1.Count > 1)
                     {
                         Log.WriteWarning(list1);
-                        //Display.ShowWarning(templist);
                     }
                     break;
 
@@ -115,7 +113,6 @@ namespace SWT_ATM
                     if (list2.Count > 1)
                     {
                         Log.WriteWarning(list2);
-                       // Display.ShowWarning(templist);
                     }
 
                     break;   

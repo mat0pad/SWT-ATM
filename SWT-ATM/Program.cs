@@ -13,24 +13,6 @@ namespace SWT_ATM
     {
         static void Main(string[] args)
         {
-            /*
-            List<String> list = new List<string>();
-            list.Add("dd");
-            list.Add("dd");
-            list.Add("DD");
-
-            for (int i = list.Count - 1; i >= 0; i--)
-            {
-                Console.WriteLine(i);
-            }
-            */
-
-
-
-
-
-
-
 
             /*
             IDisplay display = new Display();

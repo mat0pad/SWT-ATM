@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SWT_ATM
 {
-    public class NotificationCenter
+    public class NotificationCenter : INotificationCenter
     {
         private static readonly object TimerCreationLock = new object();
         private readonly ConcurrentQueue<List<string>> _notificationsQueue = new ConcurrentQueue<List<string>>();
@@ -144,5 +144,6 @@ namespace SWT_ATM
 
             _prevWarningCount = i;
         }
+
     }
 }

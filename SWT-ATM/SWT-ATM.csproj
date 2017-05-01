@@ -60,6 +60,7 @@
     <Compile Include="Display.cs" />
     <Compile Include="ICoordinateMapper.cs" />
     <Compile Include="IDisplay.cs" />
+    <Compile Include="INotificationCenter.cs" />
     <Compile Include="IObserver.cs" />
     <Compile Include="ILog.cs" />
     <Compile Include="IMonitor.cs" />

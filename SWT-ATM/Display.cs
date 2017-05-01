@@ -23,12 +23,26 @@ namespace SWT_ATM
         private int _outerBoundHeight;
         private int _rowSeperation;
         private List<Data> _prevList;
-        private readonly NotificationCenter _notificationCenter = new NotificationCenter();
+        private readonly INotificationCenter _notificationCenter;
 
         public Display(int width = 150, int height = 50)
         {
             _width = width;
             Height = height;
+            _notificationCenter = new NotificationCenter();
+
+            BuildFrame();
+
+            Thread t = new Thread(Rebuild);
+            t.Start();
+        }
+
+        //For testing
+        public Display(INotificationCenter notificationCenter)
+        {
+            _width = 150;
+            Height = 50;
+            _notificationCenter = notificationCenter;
 
             BuildFrame();
 

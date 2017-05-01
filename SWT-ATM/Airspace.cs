@@ -44,25 +44,23 @@ namespace SWT_ATM
             switch (type)
             {
                 case EventType.ENTERING:
-                    s = "ENTERING";
+                    
                     Log.WriteNotification(data, false);
                     DisplayFormatter.ShowNotification(data,EventType.ENTERING);
                     break;
     
                 case EventType.LEAVING:
-                    s = "LEAVING";
+
                     Log.WriteNotification(data, true);
                     DisplayFormatter.ShowNotification(data,EventType.LEAVING);
                     break;
 
                 case EventType.INSIDE:
-                    s = "INSIDE";
+
                     DisplayFormatter.ShowTracks(new List<Data>(_tracks));
                     break;
 
                 case EventType.CONFLICTING:
-
-                    s = "CONFLICTING";
 
                     List<Data> list = Monitor.GetTracksInConflict();
                     DisplayFormatter.ShowWarning(Monitor.GetAllConflicts());
@@ -77,8 +75,6 @@ namespace SWT_ATM
 
                 case EventType.CONFLICTING_ENTERING:
 
-                    s = "CONFLICTING ENTERING";
-
                     var list1 = Monitor.GetTracksInConflict();
                     DisplayFormatter.ShowWarning(Monitor.GetAllConflicts());
                     list1.Add(data);
@@ -90,8 +86,6 @@ namespace SWT_ATM
                     break;
 
                 case EventType.CONFLICTING_LEAVING:
-
-                    s = "CONFLICTING LEAVING";
 
                     var list2 = Monitor.GetTracksInConflict();
                     DisplayFormatter.ShowWarning(Monitor.GetAllConflicts());

@@ -50,6 +50,8 @@
     <Compile Include="DisplayFormatterTest.cs" />
     <Compile Include="LogTest.cs" />
     <Compile Include="MonitorTest.cs" />
+    <Compile Include="NotificationTest.cs" />
+    <Compile Include="PositonCalcTest.cs" />
     <Compile Include="SubjectTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestTrackSimulator.cs" />

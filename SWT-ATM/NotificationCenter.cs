@@ -12,7 +12,7 @@ namespace SWT_ATM
 {
     public class NotificationCenter : INotificationCenter
     {
-        private static readonly object TimerCreationLock = new object();
+        private static readonly object WarningLock = new object();
         private readonly ConcurrentQueue<List<string>> _notificationsQueue = new ConcurrentQueue<List<string>>();
         private readonly AutoResetEvent _notficationSignal = new AutoResetEvent(false);
         private readonly AutoResetEvent _warningSignal = new AutoResetEvent(false);
@@ -21,6 +21,7 @@ namespace SWT_ATM
 
         private const int Seperation = 10; // Distance betweeen notification data in the same row
         private int _prevWarningCount = 0, maxConflictsInWarningMsg = 5; // Used for clearing the current warnings before rewriting the new ones
+        private readonly IDisplay _display;
 
         public void EnqueNotification(List<string> item)
         {
@@ -39,11 +40,12 @@ namespace SWT_ATM
 
         public void SetWarningsSignalHandle()
         {
-             _warningSignal.Set();
+            _warningSignal.Set();
         }
 
-        public NotificationCenter()
+        public NotificationCenter(IDisplay display)
         {
+            _display = display;
             var thread1 = new Thread(NotificationThread);
             var thread2 = new Thread(WarningThread);
             thread1.Start();
@@ -97,7 +99,7 @@ namespace SWT_ATM
 
                 foreach (var n in _notificationsToShow)
                 {
-                    Display.WriteRow(n, Seperation, Display.InnerRightLineBound, i++);
+                    _display.WriteRow(n, Seperation, Display.InnerRightLineBound, i++);
                 }
             }
         }
@@ -110,7 +112,7 @@ namespace SWT_ATM
 
                 // Clear current
                 for (var i = 0; i < _notificationsToShow.Count; i++)
-                    Display.WriteRow(new List<string> { s, s }, Seperation, Display.InnerRightLineBound, i + 2);
+                    _display.WriteRow(new List<string> { s, s }, Seperation, Display.InnerRightLineBound, i + 2);
 
                 List<string> dummyList;
                 _notificationsToShow.TryDequeue(out dummyList);
@@ -119,18 +121,18 @@ namespace SWT_ATM
                 var j = 2;
                 // Write new
                 foreach (var n in _notificationsToShow)
-                    Display.WriteRow(n, Seperation, Display.InnerRightLineBound, j++);
+                    _display.WriteRow(n, Seperation, Display.InnerRightLineBound, j++);
             }
         }
 
         private void UpdateWarnings(IEnumerable<List<string>> warnings)
         {
-            var s = new string(' ', Display.OuterRightLineBound-Display.InnerRightLineBound-1);
+            var s = new string(' ', Display.OuterRightLineBound - Display.InnerRightLineBound - 1);
 
             int i;
             // Clear current warnings
             for (i = 0; i < _prevWarningCount; i++)
-                Display.WriteRow(new List<string> { s }, 0, Display.InnerRightLineBound,
+                _display.WriteRow(new List<string> { s }, 0, Display.InnerRightLineBound,
                     DisplayFormatter.Height / 2 + 1 + i);
 
             // Rewrite (new) warnings
@@ -139,10 +141,11 @@ namespace SWT_ATM
             {
                 List<string> tmpList = new List<string>(w);
                 tmpList.Add("CONFLICTING");
-                Display.WriteRow(tmpList, Seperation, Display.InnerRightLineBound, DisplayFormatter.Height / 2 + ++i);
+                _display.WriteRow(tmpList, Seperation, Display.InnerRightLineBound, DisplayFormatter.Height / 2 + ++i);
             }
 
-            _prevWarningCount = i;
+            lock (WarningLock)
+                _prevWarningCount = i;
         }
 
     }

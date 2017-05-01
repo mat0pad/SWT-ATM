@@ -28,11 +28,19 @@ namespace SWT_ATM
         }
         
 
-        //For testing
         public Display()
         {
             Thread t = new Thread(Rebuild);
             t.Start();
+        }
+
+        public Display(bool disableRebuild)
+        {
+            if(!disableRebuild)
+            { 
+                Thread t = new Thread(Rebuild);
+                t.Start();
+            }
         }
 
         ~Display()
@@ -49,7 +57,7 @@ namespace SWT_ATM
             }
         }
 
-        public static void WriteRow(IEnumerable<string> toWrite, int seperation, int startLeft, int startTop)
+        public void WriteRow(IEnumerable<string> toWrite, int seperation, int startLeft, int startTop)
         {
             var i = 0;
             var rowSeperationString = new string(' ', seperation);

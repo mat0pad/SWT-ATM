@@ -13,7 +13,6 @@ namespace SWT_ATM
     {
         static void Main(string[] args)
         {
-
             Monitor monitor = new Monitor();
             monitor.SetX(0, 10000);   // 0 - 10.000
             monitor.SetZ(500, 20000); // 500 - 20.000

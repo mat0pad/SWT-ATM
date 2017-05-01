@@ -15,7 +15,7 @@ namespace UnitTest
     {
         private Airspace _airspace;
         private ILog _log;
-        private IDisplayFormatter _display;
+        private IDisplayFormatter _displayFormatter;
         private IMonitor _monitor;
 
 
@@ -23,9 +23,10 @@ namespace UnitTest
         public void Init()
         {
             _log = Substitute.For<ILog>();
-            _display = Substitute.For<IDisplayFormatter>();
+            _displayFormatter = Substitute.For<IDisplayFormatter>();
+
             _monitor = Substitute.For<IMonitor>();
-            _airspace = new Airspace(_monitor,_display,_log);
+            _airspace = new Airspace(_monitor,_displayFormatter,_log);
         }
 
 
@@ -192,7 +193,7 @@ namespace UnitTest
 
             _monitor.EventTracker(data).Returns(EventType.OUTSIDE);
 
-            _display.DidNotReceiveWithAnyArgs().ShowTracks(null);
+            _displayFormatter.DidNotReceiveWithAnyArgs().ShowTracks(null);
             _log.DidNotReceiveWithAnyArgs().WriteNotification(null,false);
         }
 

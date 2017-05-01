@@ -10,13 +10,13 @@ namespace SWT_ATM
 {
     public interface INotificationCenter
     {
-        ConcurrentQueue<List<String>> GetNotificationQueue();
+        void EnqueNotification(List<string> item);
 
-        AutoResetEvent GetNotificationSignalHandle();
+        void SetNotificationSignalHandle();
 
-        ConcurrentQueue<List<List<String>>> GetWwarningsQueue();
+        void EnqueWarning(List<List<string>> item);
 
-        AutoResetEvent GetWarningsSignalHandle();
+        void SetWarningsSignalHandle();
 
         Task ExecuteDelayed(Action action, int timeout);
     }

@@ -46,9 +46,7 @@ namespace SWT_ATM
                 case EventType.ENTERING:
                     s = "ENTERING";
                     Log.WriteNotification(data, false);
-                    //Display.ShowTracks(_tracks);
                     DisplayFormatter.ShowNotification(data,EventType.ENTERING);
-
                     break;
     
                 case EventType.LEAVING:
@@ -60,7 +58,6 @@ namespace SWT_ATM
                 case EventType.INSIDE:
                     s = "INSIDE";
                     DisplayFormatter.ShowTracks(new List<Data>(_tracks));
-                    // Console.WriteLine(data.Tag + " " + s);
                     break;
 
                 case EventType.CONFLICTING:
@@ -71,9 +68,6 @@ namespace SWT_ATM
                     DisplayFormatter.ShowWarning(Monitor.GetAllConflicts());
                     list.Add(data);
                     
-                    //_tracksInConlict = Monitor.GetTracksInConflict(); // Get others
-                    //_tracksInConlict.Add(data); // Add self
-
                     if (list.Count > 1)
                     {
                         Log.WriteWarning(list);
@@ -84,13 +78,10 @@ namespace SWT_ATM
                 case EventType.CONFLICTING_ENTERING:
 
                     s = "CONFLICTING ENTERING";
-                   // Console.WriteLine(data.Tag + " " + s);
 
                     var list1 = Monitor.GetTracksInConflict();
                     DisplayFormatter.ShowWarning(Monitor.GetAllConflicts());
                     list1.Add(data);
-                    //_tracksInConlict = Monitor.GetTracksInConflict(); // Get others
-                    //_tracksInConlict.Add(data); // Add self
 
                     if (list1.Count > 1)
                     {
@@ -105,9 +96,6 @@ namespace SWT_ATM
                     var list2 = Monitor.GetTracksInConflict();
                     list2.Add(data);
                     DisplayFormatter.ShowWarning(Monitor.GetAllConflicts());
-
-                    //_tracksInConlict = Monitor.GetTracksInConflict(); // Get others
-                    //_tracksInConlict.Add(data); // Add self
 
                     if (list2.Count > 1)
                     {

@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="TestAirspace.cs" />
     <Compile Include="TestCoordinateMapper.cs" />
+    <Compile Include="TestDisplayFormatter.cs" />
     <Compile Include="TestTrackSimulator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

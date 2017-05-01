@@ -15,7 +15,7 @@ namespace UnitTest
     {
         private Airspace _airspace;
         private ILog _log;
-        private IDisplay _display;
+        private IDisplayFormatter _display;
         private IMonitor _monitor;
 
 
@@ -23,7 +23,7 @@ namespace UnitTest
         public void Init()
         {
             _log = Substitute.For<ILog>();
-            _display = Substitute.For<IDisplay>();
+            _display = Substitute.For<IDisplayFormatter>();
             _monitor = Substitute.For<IMonitor>();
             _airspace = new Airspace(_monitor,_display,_log);
         }

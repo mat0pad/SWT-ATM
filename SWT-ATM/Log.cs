@@ -67,7 +67,7 @@ namespace SWT_ATM
             string timestamp = "";
             
             
-            for (int i = list.Count - 1; i > 0; i--)
+            for (int i = 0; i < list.Count; i++)
             {
                 if (i == 0)
                     timestamp = list[0].Timestamp;

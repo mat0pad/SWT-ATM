@@ -31,9 +31,9 @@ namespace IntegrationTest
         {
             var log = Substitute.For<ILog>();
             var monitor = Substitute.For<IMonitor>();
-            var display = Substitute.For<IDisplay>();
+            var displayFormatter = Substitute.For<IDisplayFormatter>();
 
-            var airspace = new Airspace(monitor, display, log);
+            var airspace = new Airspace(monitor, displayFormatter, log);
 
             mapper.Attach(airspace);
 
@@ -61,9 +61,9 @@ namespace IntegrationTest
             monitor.SetY(0, 5000);
             monitor.SetZ(500, 20000);
 
-            var display = Substitute.For<IDisplay>();
+            var displayFormatter = Substitute.For<IDisplayFormatter>();
 
-            var airspace = new Airspace(monitor, display, log);
+            var airspace = new Airspace(monitor, displayFormatter, log);
 
             mapper.Attach(airspace);
 
@@ -76,6 +76,11 @@ namespace IntegrationTest
                 d.Altitude == 14000 &&
                 d.Tag == "ATR423" && d.Timestamp == "20151006213456789" &&
                 d.XCord == 10 && d.YCord == 10), false);
+
+            displayFormatter.Received(1).ShowNotification(Arg.Is<Data>(d =>
+                d.Altitude == 14000 &&
+                d.Tag == "ATR423" && d.Timestamp == "20151006213456789" &&
+                d.XCord == 10 && d.YCord == 10), EventType.ENTERING);
         }
 
         [Test]
@@ -88,9 +93,9 @@ namespace IntegrationTest
             monitor.SetY(0, 5000);
             monitor.SetZ(500, 20000);
 
-            var display = Substitute.For<IDisplay>();
+            var displayFormatter = Substitute.For<IDisplayFormatter>();
 
-            var airspace = new Airspace(monitor, display, log);
+            var airspace = new Airspace(monitor, displayFormatter, log);
 
             mapper.Attach(airspace);
 
@@ -106,6 +111,11 @@ namespace IntegrationTest
                 d.Altitude == 14000 &&
                 d.Tag == "ATR423" && d.Timestamp == "20151006213456789" &&
                 d.XCord == 5001 && d.YCord == 5001), true);
+
+            displayFormatter.Received(1).ShowNotification(Arg.Is<Data>(d =>
+                d.Altitude == 14000 &&
+                d.Tag == "ATR423" && d.Timestamp == "20151006213456789" &&
+                d.XCord == 5001 && d.YCord == 5001), EventType.LEAVING);
         }
 
         [Test]
@@ -118,9 +128,9 @@ namespace IntegrationTest
             monitor.SetY(0, 5000);
             monitor.SetZ(500, 20000);
 
-            var display = Substitute.For<IDisplay>();
+            var displayFormatter = Substitute.For<IDisplayFormatter>();
 
-            var airspace = new Airspace(monitor, display, log);
+            var airspace = new Airspace(monitor, displayFormatter, log);
 
             mapper.Attach(airspace);
 
@@ -134,6 +144,8 @@ namespace IntegrationTest
 
             // Only called once since still inside should not write to log
             log.Received(1).WriteNotification(Arg.Any<Data>(), false);
+
+            displayFormatter.Received(1).ShowNotification(Arg.Any<Data>(), EventType.ENTERING);
         }
 
         [Test]
@@ -146,9 +158,9 @@ namespace IntegrationTest
             monitor.SetY(0, 10001);
             monitor.SetZ(500, 20000);
 
-            var display = Substitute.For<IDisplay>();
+            var displayFormatter = Substitute.For<IDisplayFormatter>();
 
-            var airspace = new Airspace(monitor, display, log);
+            var airspace = new Airspace(monitor, displayFormatter, log);
 
             mapper.Attach(airspace);
 
@@ -179,6 +191,8 @@ namespace IntegrationTest
             d[0].Tag == "ATR423" && d[0].XCord == 501 && d[0].YCord == 501 &&
             d[0].Altitude == 1000 && d[0].Timestamp == "20151006213456789"
             ));
+
+            displayFormatter.Received(1).ShowWarning(Arg.Any<List<List<Data>>>());
         }
 
 
@@ -192,9 +206,9 @@ namespace IntegrationTest
             monitor.SetY(0, 10001);
             monitor.SetZ(500, 20000);
 
-            var display = Substitute.For<IDisplay>();
+            var displayFormatter = Substitute.For<IDisplayFormatter>();
 
-            var airspace = new Airspace(monitor, display, log);
+            var airspace = new Airspace(monitor, displayFormatter, log);
 
             mapper.Attach(airspace);
 
@@ -220,6 +234,8 @@ namespace IntegrationTest
            d[0].Tag == "ATR423" && d[0].XCord == 501 && d[0].YCord == 501 &&
            d[0].Altitude == 1000 && d[0].Timestamp == "20151006213456789"
             ));
+
+            displayFormatter.Received(1).ShowWarning(Arg.Any<List<List<Data>>>());
         }
 
 
@@ -233,9 +249,9 @@ namespace IntegrationTest
             monitor.SetY(0, 200);
             monitor.SetZ(0, 500);
 
-            var display = Substitute.For<IDisplay>();
+            var displayFormatter = Substitute.For<IDisplayFormatter>();
 
-            var airspace = new Airspace(monitor, display, log);
+            var airspace = new Airspace(monitor, displayFormatter, log);
 
             mapper.Attach(airspace);
 
@@ -266,6 +282,10 @@ namespace IntegrationTest
            d[0].Tag == "ATR423" && d[0].XCord == 20 && d[0].YCord == 20 &&
            d[0].Altitude == 100 && d[0].Timestamp == "20151006213456789"
             ));
+
+            displayFormatter.Received(1).ShowWarning(Arg.Any<List<List<Data>>>());
         }
+
+
     }
 }

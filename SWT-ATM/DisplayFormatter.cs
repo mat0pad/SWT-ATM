@@ -6,10 +6,11 @@ namespace SWT_ATM
     public class DisplayFormatter : IDisplayFormatter
     {
         private IDisplay _display;
+        private IPositionCalc _calc;
 
         public static int Height { get; private set; }
         public static int Width { get; private set; }
-        private IPositionCalc _calc;
+       
         private List<Data> _prevList;
 
         private readonly INotificationCenter _notificationCenter;
@@ -47,9 +48,6 @@ namespace SWT_ATM
 
         public void ShowTracks(List<Data> d)
         {
-            //lock (TracksLock)
-            {
-                
             List<IEnumerable<string>> formattedTracks = new List<IEnumerable<string>>();
             
             var i = 2;
@@ -74,7 +72,7 @@ namespace SWT_ATM
             }
                 _prevList = d;
                 _display.ShowTracks(formattedTracks);
-            }
+            
         }
 
         public void ShowNotification(Data d, EventType type)

@@ -40,7 +40,7 @@ namespace SWT_ATM
             CoordinateMapper coordinate = new CoordinateMapper(new TransponderDataFormat());
             coordinate.Attach(airspace);
 
-            TrackSimulator simulator = new TrackSimulator(coordinate, 1000);
+            TrackSimulator simulator = new TrackSimulator(coordinate, 100);
             simulator.StartSimulation();
 
         }

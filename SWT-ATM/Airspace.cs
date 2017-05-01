@@ -94,8 +94,8 @@ namespace SWT_ATM
                     s = "CONFLICTING LEAVING";
 
                     var list2 = Monitor.GetTracksInConflict();
-                    list2.Add(data);
                     DisplayFormatter.ShowWarning(Monitor.GetAllConflicts());
+                    list2.Add(data);
 
                     if (list2.Count > 1)
                     {

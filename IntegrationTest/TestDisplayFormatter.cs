@@ -151,7 +151,6 @@ namespace IntegrationTest
 
         }
 
-
         [Test]
         public void DisplayFormatterDoesConflictingLeavingWarning()
         {
@@ -161,12 +160,11 @@ namespace IntegrationTest
 
             displayFormatter = new DisplayFormatter(display, positionCalc, notificationCenter);
 
-            var _monitor = new Monitor();
             monitor.SetX(0, 200);
             monitor.SetY(0, 200);
             monitor.SetZ(0, 500);
 
-            mapper.Attach(new Airspace(_monitor, displayFormatter, log));
+            mapper.Attach(new Airspace(monitor, displayFormatter, log));
 
             var testData = new List<string>();
             testData.Add("ATR423;10;10;100;20151006213456719");
@@ -192,6 +190,59 @@ namespace IntegrationTest
             notificationCenter.Received(1).EnqueWarning(Arg.Any<List<List<string>>>());
             notificationCenter.Received(1).SetWarningsSignalHandle();
 
+        }
+
+
+        [Test]
+        public void DisplayFormatterDoesShowTracks()
+        {
+            var notificationCenter = Substitute.For<INotificationCenter>();
+            var positionCalc = Substitute.For<IPositionCalc>();
+            var display = Substitute.For<IDisplay>();
+
+            displayFormatter = new DisplayFormatter(display, positionCalc, notificationCenter);
+
+            mapper.Attach(new Airspace(monitor, displayFormatter, log));
+
+            var testData = new List<string>();
+            testData.Add("ATR423;10;10;14000;20151006213456719");
+
+            // ATR423 ENTERING
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "ATR423;501;501;1000;20151006213456789";
+
+            // ATR423 INSIDE
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            display.Received(1).ShowTracks(Arg.Any<List<IEnumerable<string>>>());
+            positionCalc.ReceivedWithAnyArgs().FormatTrackData(null, null);
+        }
+
+
+        [Test]
+        public void DisplayFormatterDoesShowTracksWithPositionCalc()
+        {
+            var notificationCenter = Substitute.For<INotificationCenter>();
+            var positionCalc = new PositionCalc();
+            var display = Substitute.For<IDisplay>();
+
+            displayFormatter = new DisplayFormatter(display, positionCalc, notificationCenter);
+
+            mapper.Attach(new Airspace(monitor, displayFormatter, log));
+
+            var testData = new List<string>();
+            testData.Add("ATR423;10;10;14000;20151006213456719");
+
+            // ATR423 ENTERING
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "ATR423;501;501;1000;20151006213456789";
+
+            // ATR423 INSIDE
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            display.Received(1).ShowTracks(Arg.Any<List<IEnumerable<string>>>());
         }
     }
 }

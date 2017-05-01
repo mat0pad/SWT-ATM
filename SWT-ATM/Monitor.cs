@@ -68,8 +68,8 @@ namespace SWT_ATM
                 {
                     if (data.Tag != item.Tag)
                     {
-                        if ((data.Altitude - item.Altitude) < 300 &&
-                            ((data.XCord - item.XCord) < 5000 && (data.YCord - item.YCord) < 5000))
+                        if (Math.Abs((data.Altitude - item.Altitude)) < 300 &&
+                            (Math.Abs(data.XCord - item.XCord)) < 5000 && (Math.Abs(data.YCord - item.YCord) < 5000))
                         {
                             _tracksInConflict.Add(item);
                         }
@@ -85,7 +85,7 @@ namespace SWT_ATM
             List<Data> tracksToCheck = new List<Data>(_list);
             List<List<Data>> conflictList = new List<List<Data>>();
 
-            for (int i = tracksToCheck.Count - 1; i >= 0; i--)
+            for (int i = tracksToCheck.Count - 1; i > 0; i--)
             {
                 var item = tracksToCheck[i];
                 tracksToCheck.Remove(item);
@@ -103,8 +103,8 @@ namespace SWT_ATM
                         }
                     }
                 }
-                if(i != 0)
-                conflictList.Add(new List<Data>(foundConflictsForCurrent));
+                if (foundConflictsForCurrent.Count != 1)
+                    conflictList.Add(new List<Data>(foundConflictsForCurrent));
             }
             return conflictList;
         }

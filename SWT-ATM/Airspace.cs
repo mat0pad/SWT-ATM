@@ -66,7 +66,6 @@ namespace SWT_ATM
                 case EventType.CONFLICTING:
 
                     s = "CONFLICTING";
-                    //Console.WriteLine(data.Tag + " " + s);
 
                     List<Data> list = Monitor.GetTracksInConflict();
                     Display.ShowWarning(Monitor.GetAllConflicts());

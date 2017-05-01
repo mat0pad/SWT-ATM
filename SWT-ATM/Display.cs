@@ -12,7 +12,9 @@ namespace SWT_ATM
 {
     public class Display : IDisplay
     {
+        private static readonly object TracksLock = new object();
         private static readonly object ConsoleWriterLock = new object();
+        private static readonly object WarningLock = new object();
         public static int InnerRightLineBound { get; private set; }
         public static int OuterRightLineBound { get; private set; }
         public static int Height { get; private set; }
@@ -28,8 +30,10 @@ namespace SWT_ATM
             _width = width;
             Height = height;
 
-            Configure();
             BuildFrame();
+
+            Thread t = new Thread(Rebuild);
+            t.Start();
         }
 
         ~Display()
@@ -37,25 +41,31 @@ namespace SWT_ATM
             Console.SetCursorPosition(0, _outerBoundHeight);
         }
 
+        private void Rebuild()
+        {
+            while (true)
+            {
+                if (Console.ReadKey(true).Key == ConsoleKey.R)
+                    BuildFrame();
+            }
+        }
+
         public void SetSize(int width, int height)
         {
             _width = width;
             Height = height;
-            Configure();
             BuildFrame();
         }
 
         public void SetWidth(int width)
         {
             _width = width;
-            Configure();
             BuildFrame();
         }
 
         public void SetHeight(int height)
         {
             Height = height;
-            Configure();
             BuildFrame();
         }
 
@@ -88,7 +98,6 @@ namespace SWT_ATM
         {
             var warningsList = new List<List<string>>();
 
-            var i = 0;
             foreach (List<Data> wList in w)
             {
                 var tmpList = new List<string>(wList.Select(data => data.Tag));
@@ -101,14 +110,17 @@ namespace SWT_ATM
 
         public void ShowTracks(List<Data> d)
         {
+            lock(TracksLock)
+            { 
             string clear = new string(' ', _rowSeperation);
 
+            // Clear all
             int i;
-            if(_prevList != null)
-            for (i = 0; i < _prevList.Count; i++)
-            {
-                WriteRow(new List<string> { clear, clear, clear, clear, clear, clear }, _rowSeperation, 1, i+2);
-            }
+            if (_prevList != null)
+                for (i = 0; i < _prevList.Count; i++)
+                {
+                    WriteRow(new List<string> { clear, clear, clear, clear, clear, clear }, _rowSeperation, 1, i + 2);
+                }
 
             i = 2;
             foreach (var track in d)
@@ -118,18 +130,27 @@ namespace SWT_ATM
                 if (_prevList != null)
                     oldData = _prevList.FirstOrDefault(prevData => prevData.Tag == track.Tag);
 
-                var trackInfo = FormatTrackData(track, oldData ?? new Data("", 0, 0, 0, "0000000000000000"));
+                if (oldData != null && track.XCord != oldData.XCord && track.YCord != oldData.YCord)
+                {
+                    var trackInfo = FormatTrackData(track, oldData ?? new Data("", 0, 0, 0, "0000000000000000"));
+                    WriteRow(trackInfo, _rowSeperation, 1, i++);
+                }
+                else
+                {
+                    var trackInfo = FormatTrackData(track, new Data("", 0, 0, 0, "0000000000000000"));
+                    WriteRow(trackInfo, _rowSeperation, 1, i++);
+                }
 
-                WriteRow(trackInfo, _rowSeperation, 1, i++);
             }
 
             _prevList = d;
+            }
         }
 
         private void Configure()
         {
             _outerBoundHeight = Height + 2;
-            _rowSeperation = _width*3/5 / 6;
+            _rowSeperation = _width * 3 / 5 / 6;
 
             InnerRightLineBound = _width * 3 / 5 + 6;
             OuterRightLineBound = _width + 2;
@@ -148,8 +169,6 @@ namespace SWT_ATM
             var velocity = 0.00;
             if (current.Timestamp.Length >= 10)
             {
-
-
                 var currentTime = current.Timestamp.Substring(10);
                 var currentMinutes = int.Parse(currentTime.Substring(0, 2));
                 var currentSeconds = int.Parse(currentTime.Substring(2, 2));
@@ -168,6 +187,8 @@ namespace SWT_ATM
 
                 velocity = distance / timeDiff;
 
+                current.Velocity = velocity;
+
             }
 
             // Compass course
@@ -175,15 +196,17 @@ namespace SWT_ATM
             var x1 = current.XCord;
             var y2 = prev.YCord;
             var x2 = prev.XCord;
-            
+
             // Line representing north
             var y3 = 0;
             var x3 = 0;
             var y4 = 1;
             var x4 = 0;
 
-            var compassCourseRad = Math.Atan2(y4 - y3, x4 - x3) - Math.Atan2(y1-y2, x1-x2);
+            var compassCourseRad = Math.Atan2(y4 - y3, x4 - x3) - Math.Atan2(y1 - y2, x1 - x2);
             var compassCourseDeg = compassCourseRad * 180 / Math.PI;
+
+            current.CompassCourse = compassCourseDeg;
 
             return new List<string> {current.Tag, current.XCord.ToString(), current.YCord.ToString(), current.Altitude.ToString(),
                 $"{velocity:0}",
@@ -191,53 +214,57 @@ namespace SWT_ATM
             };
         }
 
-		private void BuildFrame() 
-		{
-            Console.Clear();
-
-            // Top line
-            Console.SetCursorPosition(1, 0);
-            for (int i = 0; i < _width; i++)
-				Console.Write("-");
-
-            // Left line
-			Console.SetCursorPosition(0, 1);
-			for (int i = 0; i < Height; i++)
-				Console.WriteLine("|");
-
-            // Bottom line
-            Console.SetCursorPosition(1, Console.CursorTop);
-            for (int i = 0; i < _width; i++)
-                Console.Write("-");
-
-
-            // Right inner line
-            for (int i = 1; i < Height + 1; i++)
+        private void BuildFrame()
+        {
+            lock (ConsoleWriterLock)
             {
-                Console.SetCursorPosition(InnerRightLineBound - 1, i);
-                Console.WriteLine("|");
+                Configure();
+                Console.Clear();
+
+                // Top line
+                Console.SetCursorPosition(1, 0);
+                for (int i = 0; i < _width; i++)
+                    Console.Write("-");
+
+                // Left line
+                Console.SetCursorPosition(0, 1);
+                for (int i = 0; i < Height; i++)
+                    Console.WriteLine("|");
+
+                // Bottom line
+                Console.SetCursorPosition(1, Console.CursorTop);
+                for (int i = 0; i < _width; i++)
+                    Console.Write("-");
+
+
+                // Right inner line
+                for (int i = 1; i < Height + 1; i++)
+                {
+                    Console.SetCursorPosition(InnerRightLineBound - 1, i);
+                    Console.WriteLine("|");
+                }
+
+                // Right horizontal line
+                Console.SetCursorPosition(1, Console.CursorTop);
+                for (int i = 1; i < OuterRightLineBound - InnerRightLineBound + 1; i++)
+                {
+                    Console.SetCursorPosition(InnerRightLineBound - 1 + i, Height / 2);
+                    Console.Write("-");
+                }
+
+                // Right outer line
+                Console.SetCursorPosition(1, Console.CursorTop);
+                for (int i = 1; i < Height + 1; i++)
+                {
+                    Console.SetCursorPosition(OuterRightLineBound - 1, i);
+                    Console.WriteLine("|");
+                }
+
             }
 
-            // Right horizontal line
-            Console.SetCursorPosition(1, Console.CursorTop);
-            for (int i = 1; i < OuterRightLineBound -InnerRightLineBound + 1; i++)
-            {
-                Console.SetCursorPosition(InnerRightLineBound-1+i, Height/2);
-                Console.Write("-");
-            }
-
-            // Right outer line
-            Console.SetCursorPosition(1, Console.CursorTop);
-            for (int i = 1; i < Height + 1; i++)
-            {
-                Console.SetCursorPosition(OuterRightLineBound-1, i);
-                Console.WriteLine("|");
-            }
-
-
-            List<string> list = new List<string>{"Tag", "Position X", "Position Y", "Altitude", "Velocity", "Compass course"};
+            List<string> list = new List<string> { "Tag", "Position X", "Position Y", "Altitude", "Velocity", "Compass course" };
 
             WriteRow(list, _rowSeperation, 1, 1);
-		}
+        }
     }
 }

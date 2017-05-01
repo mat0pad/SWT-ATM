@@ -12,6 +12,8 @@ namespace SWT_ATM
         public int XCord { get; set; }
         public int YCord { get; set; }
         public int Altitude { get; set; }
+        public double Velocity { get; set; }
+        public double CompassCourse { get; set; }
         public string Timestamp { get; set; }
 
         public Data(string tag, int x, int y, int alt, string time)

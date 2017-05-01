@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -117,6 +118,8 @@ namespace IntegrationTest
                 d.Tag == "ATR423" && d.Timestamp == "20151006213456789" &&
                 d.XCord == 5001 && d.YCord == 5001), EventType.LEAVING);
         }
+
+
 
         [Test]
         public void TrackInsideAirspaceLogDoesNotWrite()
@@ -256,7 +259,7 @@ namespace IntegrationTest
             mapper.Attach(airspace);
 
             var testData = new List<string>();
-            testData.Add("ATR423;10;10;100;20151006213456719");
+            testData.Add("ATR423;0;0;100;20151006213456719");
 
             // ATR423 ENTERING
             simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
@@ -284,6 +287,258 @@ namespace IntegrationTest
             ));
 
             displayFormatter.Received(1).ShowWarning(Arg.Any<List<List<Data>>>());
+        }
+
+
+        [Test]
+        public void TrackEnteringAirspaceRealLogWritesNotification()
+        {
+            var path = Directory.GetCurrentDirectory() + @"\test.txt";
+            string line;
+
+            var log = new Log(path);
+
+            var monitor = new Monitor();
+            monitor.SetX(0, 5000);
+            monitor.SetY(0, 5000);
+            monitor.SetZ(500, 20000);
+
+            var displayFormatter = Substitute.For<IDisplayFormatter>();
+
+            var airspace = new Airspace(monitor, displayFormatter, log);
+
+            mapper.Attach(airspace);
+
+            var testData = new List<string>();
+            testData.Add("ATR423;10;10;14000;20151006213456789");
+
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            using (var file = new StreamReader(path, true))
+            {
+                line = file.ReadToEnd();
+            }
+            File.Create(path).Close(); //delete file after use
+
+            Assert.That(line.Contains("ENTERING"));
+        }
+
+        [Test]
+        public void TrackLeavingAirspaceRealLogWritesNotification()
+        {
+            var path = Directory.GetCurrentDirectory() + @"\test.txt";
+            string line;
+
+            var log = new Log(path);
+
+            var monitor = new Monitor();
+            monitor.SetX(0, 5000);
+            monitor.SetY(0, 5000);
+            monitor.SetZ(500, 20000);
+
+            var displayFormatter = Substitute.For<IDisplayFormatter>();
+
+            var airspace = new Airspace(monitor, displayFormatter, log);
+
+            mapper.Attach(airspace);
+
+            var testData = new List<string>();
+            testData.Add("ATR423;10;10;14000;20151006213456789");
+
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "ATR423;5001;5001;14000;20151006213456789";
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            using (var file = new StreamReader(path, true))
+            {
+                line = file.ReadToEnd();
+            }
+            File.Create(path).Close(); //delete file after use
+
+            Assert.That(line.Contains("LEAVING"));
+
+        }
+
+        [Test]
+        public void TrackInsideAirspaceRealLogDoesNotWrite()
+        {
+            var path = Directory.GetCurrentDirectory() + @"\test.txt";
+            string line;
+
+            var log = new Log(path);
+
+            var monitor = new Monitor();
+            monitor.SetX(0, 5000);
+            monitor.SetY(0, 5000);
+            monitor.SetZ(500, 20000);
+
+            var displayFormatter = Substitute.For<IDisplayFormatter>();
+
+            var airspace = new Airspace(monitor, displayFormatter, log);
+
+            mapper.Attach(airspace);
+
+            var testData = new List<string>();
+            testData.Add("ATR423;10;10;14000;20151006213456789");
+
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "ATR423;501;501;14000;20151006213456789";
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            using (var file = new StreamReader(path, true))
+            {
+                line = file.ReadToEnd();
+            }
+            File.Create(path).Close(); //delete file after use
+
+            Assert.That(!line.Contains("INSIDE"));
+        }
+
+
+        [Test]
+        public void TwoTracksConflictingAirspaceRealLogWritesWarning()
+        {
+            var path = Directory.GetCurrentDirectory() + @"\test.txt";
+            string line;
+
+            var log = new Log(path);
+
+            var monitor = new Monitor();
+            monitor.SetX(0, 10001);
+            monitor.SetY(0, 10001);
+            monitor.SetZ(500, 20000);
+
+            var displayFormatter = Substitute.For<IDisplayFormatter>();
+
+            var airspace = new Airspace(monitor, displayFormatter, log);
+
+            mapper.Attach(airspace);
+
+            var testData = new List<string>();
+            testData.Add("ATR423;10;10;14000;20151006213456719");
+
+            // ATR423 ENTERING
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "ATR423;501;501;1000;20151006213456789";
+
+            // ATR423 INSIDE
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "AT422;10000;10000;1000;20151006213456799";
+
+            // AT422 ENTERING
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "AT422;1000;1000;1000;20151006213456999";
+
+            // AT422 CONFLICTING
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            using (var file = new StreamReader(path, true))
+            {
+                line = file.ReadToEnd();
+            }
+            File.Create(path).Close(); //delete file after use
+
+            Assert.That(line.Contains("CONFLICT"));
+        }
+
+        [Test]
+        public void TwoTracksConflictingEnteringAirspaceRealLogWritesWarning()
+        {
+
+            var path = Directory.GetCurrentDirectory() + @"\test.txt";
+            string line;
+
+            var log = new Log(path);
+
+            var monitor = new Monitor();
+            monitor.SetX(0, 10001);
+            monitor.SetY(0, 10001);
+            monitor.SetZ(500, 20000);
+
+            var displayFormatter = Substitute.For<IDisplayFormatter>();
+
+            var airspace = new Airspace(monitor, displayFormatter, log);
+
+            mapper.Attach(airspace);
+
+            var testData = new List<string>();
+            testData.Add("ATR423;10;10;14000;20151006213456719");
+
+            // ATR423 ENTERING
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "ATR423;501;501;1000;20151006213456789";
+
+            // ATR423 INSIDE
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "AT422;1000;1000;1000;20151006213456999";
+
+            // AT422 CONFLICTING Entering
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            using (var file = new StreamReader(path, true))
+            {
+                line = file.ReadToEnd();
+            }
+            File.Create(path).Close(); //delete file after use
+
+            Assert.That(line.Contains("CONFLICTING"));
+        }
+
+
+        [Test]
+        public void TwoTracksConflictingLeavingAirspaceRealLogWritesWarning()
+        {
+
+            var path = Directory.GetCurrentDirectory() + @"\test.txt";
+            string line;
+
+            var log = new Log(path);
+
+            var monitor = new Monitor();
+            monitor.SetX(0, 200);
+            monitor.SetY(0, 200);
+            monitor.SetZ(0, 500);
+
+            var displayFormatter = Substitute.For<IDisplayFormatter>();
+
+            var airspace = new Airspace(monitor, displayFormatter, log);
+
+            mapper.Attach(airspace);
+
+            var testData = new List<string>();
+            testData.Add("ATR423;0;0;100;20151006213456719");
+
+            // ATR423 ENTERING
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "ATR423;20;20;100;20151006213456789";
+
+            // ATR423 INSIDE
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "AT422;200;200;500;20151006213456999";
+
+            // AT422 ENTERING
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "AT422;201;201;399;20151006213456999";
+
+            // AT422 CONFLICTING LEAVING
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+            using (var file = new StreamReader(path, true))
+            {
+                line = file.ReadToEnd();
+            }
+            File.Create(path).Close(); //delete file after use
+
+            Assert.That(line.Contains("CONFLICTING"));
         }
 
 

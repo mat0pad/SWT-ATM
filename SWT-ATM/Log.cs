@@ -66,20 +66,12 @@ namespace SWT_ATM
             string tracksInConflict = "";
             string timestamp = "";
             
-            /*
-            foreach (var item in list)
-            {
-                tracksInConflict += (item.Tag + "    ");
-                timestamp = item.Timestamp;
-            }
-            */
             
             for (int i = list.Count - 1; i > 0; i--)
             {
-                if (i == 0 && String.IsNullOrEmpty(list[0].Timestamp))
+                if (i == 0)
                     timestamp = list[0].Timestamp;
                 
-                if(String.IsNullOrWhiteSpace(list[i].Tag))
                     tracksInConflict += list[i].Tag + "   ";
             }
             

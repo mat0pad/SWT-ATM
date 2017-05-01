@@ -42,17 +42,19 @@ namespace SWT_ATM
         private bool ExistsInList(Data data)
         {
             var found = false;
-
-            for (int i = 0; i < _list.Count; i++)
+            lock (_list)
             {
-                if (_list[i].Tag == data.Tag)
+                for (int i = 0; i < _list.Count; i++)
                 {
-                    found = true;
-                    _list[i].Timestamp = data.Timestamp;
-                    _list[i].XCord = data.XCord;
-                    _list[i].YCord = data.YCord;
-                    _list[i].Altitude = data.Altitude;
-                    break;
+                    if (_list[i].Tag == data.Tag)
+                    {
+                        found = true;
+                        _list[i].Timestamp = data.Timestamp;
+                        _list[i].XCord = data.XCord;
+                        _list[i].YCord = data.YCord;
+                        _list[i].Altitude = data.Altitude;
+                        break;
+                    }
                 }
             }
             return found;
@@ -64,14 +66,17 @@ namespace SWT_ATM
             {
                 _tracksInConflict.Clear();
 
-                foreach (var item in _list.ToList())
+                lock (_list)
                 {
-                    if (data.Tag != item.Tag)
+                    foreach (var item in _list.ToList())
                     {
-                        if (Math.Abs((data.Altitude - item.Altitude)) < 300 &&
-                            (Math.Abs(data.XCord - item.XCord)) < 5000 && (Math.Abs(data.YCord - item.YCord) < 5000))
+                        if (data.Tag != item.Tag)
                         {
-                            _tracksInConflict.Add(item);
+                            if (Math.Abs((data.Altitude - item.Altitude)) < 300 &&
+                                (Math.Abs(data.XCord - item.XCord)) < 5000 && (Math.Abs(data.YCord - item.YCord) < 5000))
+                            {
+                                _tracksInConflict.Add(item);
+                            }
                         }
                     }
                 }
@@ -82,29 +87,35 @@ namespace SWT_ATM
         public List<List<Data>> GetAllConflicts()
         {
             List<Data> foundConflictsForCurrent = new List<Data>();
+
             List<Data> tracksToCheck = new List<Data>(_list);
-            List<List<Data>> conflictList = new List<List<Data>>();
+            
 
-            for (int i = tracksToCheck.Count - 1; i > 0; i--)
+        List<List<Data>> conflictList = new List<List<Data>>();
+
+            lock (tracksToCheck)
             {
-                var item = tracksToCheck[i];
-                tracksToCheck.Remove(item);
-                foundConflictsForCurrent.Clear();
-                foundConflictsForCurrent.Add(item);
-
-                foreach (var data in tracksToCheck)
+                for (int i = tracksToCheck.Count - 1; i > 0; i--)
                 {
-                    if (data.Tag != item.Tag)
+                    var item = tracksToCheck[i];
+                    tracksToCheck.Remove(item);
+                    foundConflictsForCurrent.Clear();
+                    foundConflictsForCurrent.Add(item);
+
+                    foreach (var data in tracksToCheck)
                     {
-                        if (Math.Abs((data.Altitude - item.Altitude)) < 300 &&
-                            (Math.Abs(data.XCord - item.XCord)) < 5000 && (Math.Abs(data.YCord - item.YCord) < 5000))
+                        if (data.Tag != item.Tag)
                         {
-                            foundConflictsForCurrent.Add(data);
+                            if (Math.Abs((data.Altitude - item.Altitude)) < 300 &&
+                                (Math.Abs(data.XCord - item.XCord)) < 5000 && (Math.Abs(data.YCord - item.YCord) < 5000))
+                            {
+                                foundConflictsForCurrent.Add(data);
+                            }
                         }
                     }
+                    if (foundConflictsForCurrent.Count != 1)
+                        conflictList.Add(new List<Data>(foundConflictsForCurrent));
                 }
-                if (foundConflictsForCurrent.Count != 1)
-                    conflictList.Add(new List<Data>(foundConflictsForCurrent));
             }
             return conflictList;
         }

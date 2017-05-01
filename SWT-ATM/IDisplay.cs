@@ -4,11 +4,9 @@ namespace SWT_ATM
 {
     public interface IDisplay
     {
-         void SetSize(int width, int height);
+         void Configure(int width, int height);
 
-         void SetWidth(int width);
-
-         void SetHeight(int height);
+         void BuildFrame(int width, int height);
 
          void ShowTracks(List<Data> d);
 

@@ -14,23 +14,24 @@ namespace SWT_ATM
     {
         private static readonly object TracksLock = new object();
         private static readonly object ConsoleWriterLock = new object();
-        private static readonly object WarningLock = new object();
         public static int InnerRightLineBound { get; private set; }
         public static int OuterRightLineBound { get; private set; }
 
+        private int _prevTrackCount;
         private int _outerBoundHeight;
         private int _rowSeperation;
 
-        private List<Data> _prevList;
-        private readonly INotificationCenter _notificationCenter;
-        private IPositionCalc _calc;
+
+        public int GetRowSeperation()
+        {
+            return _rowSeperation;
+        }
+        
+        
 
         //For testing
-        public Display(INotificationCenter notificationCenter, IPositionCalc calc)
+        public Display()
         {
-            _notificationCenter = notificationCenter;
-            _calc = calc;
-
             Thread t = new Thread(Rebuild);
             t.Start();
         }
@@ -67,67 +68,41 @@ namespace SWT_ATM
 
         }
 
-        public void ShowNotification(List<string> item)
-        {
-            _notificationCenter.GetNotificationQueue().Enqueue(item);
-            _notificationCenter.GetNotificationSignalHandle().Set();
-        }
 
-        public void ShowWarning(List<List<string>> w)
-        {
-            _notificationCenter.GetWwarningsQueue().Enqueue(w);
-            _notificationCenter.GetWarningsSignalHandle().Set();
-        }
-
-        public void ShowTracks(List<Data> d)
+        public void ShowTracks(List<IEnumerable<string>> d)
         {
             lock (TracksLock)
             {
-                ClearAll();
+                ClearAll(_prevTrackCount);
                 
                 WriteTracks(d);
 
-                _prevList = d;
+                _prevTrackCount = d.Count;
             }
         }
 
-        private void ClearAll()
+        private void ClearAll(int prevCount)
         {
             string clear = new string(' ', _rowSeperation);
 
             // Clear all
             int i;
-            if (_prevList != null)
-                for (i = 0; i < _prevList.Count; i++)
+                for (i = 0; i < prevCount; i++)
                 {
                     WriteRow(new List<string> { clear, clear, clear, clear, clear, clear }, _rowSeperation, 1, i + 2);
                 }
         }
 
 
-        private void WriteTracks(List<Data> d)
+        private void WriteTracks(List<IEnumerable<string>> d)
         {
             var i = 2;
 
             foreach (var track in d)
             {
-                Data oldData = null;
-
-                if (_prevList != null)
-                    oldData = _prevList.FirstOrDefault(prevData => prevData.Tag == track.Tag);
-
-                if (oldData != null && track.XCord != oldData.XCord && track.YCord != oldData.YCord)
-                {
-                    var trackInfo = _calc.FormatTrackData(track, oldData);
-                    WriteRow(trackInfo, _rowSeperation, 1, i++);
-                }
-                else
-                {
-                    var trackInfo = _calc.FormatTrackData(track, new Data("", 0, 0, 0, "0000000000000000"));
-                    WriteRow(trackInfo, _rowSeperation, 1, i++);
-                }
-
+                    WriteRow(track, _rowSeperation, 1, i++);
             }
+        
         }
 
 

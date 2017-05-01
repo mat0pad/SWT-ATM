@@ -9,13 +9,19 @@ namespace SWT_ATM
 
         public static int Height { get; private set; }
         public static int Width { get; private set; }
+        private IPositionCalc _calc;
+        private List<Data> _prevList;
 
-        public DisplayFormatter(IDisplay display, int width = 150, int height = 50)
+        private readonly INotificationCenter _notificationCenter;
+
+        public DisplayFormatter(IDisplay display, IPositionCalc calc, INotificationCenter notificationCenter, int width = 150, int height = 50)
         {
-            _display = display;
+            _calc = calc;
+            _notificationCenter = notificationCenter;
 
             Width = width;
             Height = height;
+            _display = display;
 
             _display.BuildFrame(width, height);
         }
@@ -41,12 +47,42 @@ namespace SWT_ATM
 
         public void ShowTracks(List<Data> d)
         {
-            _display.ShowTracks(d);
+            //lock (TracksLock)
+            {
+                
+            List<IEnumerable<string>> formattedTracks = new List<IEnumerable<string>>();
+            
+            var i = 2;
+            IEnumerable<string> trackInfo;
+            foreach (var track in d)
+            {
+                Data oldData = null;
+
+                if (_prevList != null)
+                    oldData = _prevList.FirstOrDefault(prevData => prevData.Tag == track.Tag);
+
+                if (oldData != null && track.XCord != oldData.XCord && track.YCord != oldData.YCord)
+                {
+                    trackInfo = _calc.FormatTrackData(track, oldData);
+                }
+                else
+                {
+                    trackInfo = _calc.FormatTrackData(track, new Data("", 0, 0, 0, "0000000000000000"));
+                }
+
+                formattedTracks.Add(trackInfo);
+            }
+                _prevList = d;
+                _display.ShowTracks(formattedTracks);
+            }
         }
 
         public void ShowNotification(Data d, EventType type)
         {
-            _display.ShowNotification(new List<string> { d.Tag, type.ToString() });
+            var item = new List<string> { d.Tag, type.ToString() };
+
+            _notificationCenter.GetNotificationQueue().Enqueue(item);
+            _notificationCenter.GetNotificationSignalHandle().Set();
         }
 
         public void ShowWarning(List<List<Data>> w)
@@ -59,7 +95,8 @@ namespace SWT_ATM
                 warningsList.Add(tmpList);
             }
 
-            _display.ShowWarning(warningsList);
+            _notificationCenter.GetWwarningsQueue().Enqueue(warningsList);
+            _notificationCenter.GetWarningsSignalHandle().Set();
         }
     }
 }

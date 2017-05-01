@@ -23,9 +23,9 @@ namespace SWT_ATM
             INotificationCenter notificationCenter = new NotificationCenter();
             IPositionCalc calc = new PositionCalc();
 
-            IDisplay display = new Display(notificationCenter, calc);
+            IDisplay display = new Display();
 
-            IDisplayFormatter formatter = new DisplayFormatter(display);
+            IDisplayFormatter formatter = new DisplayFormatter(display, calc, notificationCenter);
 
             ILog log = new Log();
 
@@ -40,7 +40,7 @@ namespace SWT_ATM
             CoordinateMapper coordinate = new CoordinateMapper(new TransponderDataFormat());
             coordinate.Attach(airspace);
 
-            TrackSimulator simulator = new TrackSimulator(coordinate, 200);
+            TrackSimulator simulator = new TrackSimulator(coordinate, 1000);
             simulator.StartSimulation();
 
         }

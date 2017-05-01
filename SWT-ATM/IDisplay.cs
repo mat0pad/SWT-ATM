@@ -4,16 +4,14 @@ namespace SWT_ATM
 {
     public interface IDisplay
     {
-         void Configure(int width, int height);
+        void Configure(int width, int height);
 
-         void BuildFrame(int width, int height);
+        void BuildFrame(int width, int height);
 
-         //void WriteRow(IEnumerable<string> toWrite, int seperation, int startLeft, int startTop);
+        //void WriteRow(IEnumerable<string> toWrite, int seperation, int startLeft, int startTop);
 
-         void ShowNotification(List<string> list);
+        void ShowTracks(List<IEnumerable<string>> d);
 
-         void ShowWarning(List<List<string>> w);
-
-        void ShowTracks(List<Data> d);
+        int GetRowSeperation();
     }
 }

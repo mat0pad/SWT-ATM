@@ -8,12 +8,12 @@ namespace SWT_ATM
 
          void BuildFrame(int width, int height);
 
-         void ShowTracks(List<Data> d);
-
          //void WriteRow(IEnumerable<string> toWrite, int seperation, int startLeft, int startTop);
 
-         void ShowNotification(Data d, EventType type);
+         void ShowNotification(List<string> list);
 
-         void ShowWarning(List<List<Data>> w);
+         void ShowWarning(List<List<string>> w);
+
+        void ShowTracks(List<Data> d);
     }
 }

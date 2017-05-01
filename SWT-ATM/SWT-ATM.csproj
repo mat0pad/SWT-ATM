@@ -58,23 +58,26 @@
     <Compile Include="CoordinateMapper.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="Display.cs" />
+    <Compile Include="DisplayFormatter.cs" />
     <Compile Include="ICoordinateMapper.cs" />
     <Compile Include="IDisplay.cs" />
+    <Compile Include="IDisplayFormatter.cs" />
+    <Compile Include="INotificationCenter.cs" />
     <Compile Include="IObserver.cs" />
     <Compile Include="ILog.cs" />
     <Compile Include="IMonitor.cs" />
+    <Compile Include="IPositionCalc.cs" />
     <Compile Include="ITransponderDataFormat.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Monitor.cs" />
-    <Compile Include="Notification.cs" />
     <Compile Include="NotificationCenter.cs" />
+    <Compile Include="PositionCalc.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TrackSimulator.cs" />
     <Compile Include="Subject.cs" />
     <Compile Include="EventType.cs" />
     <Compile Include="TransponderDataFormat.cs" />
-    <Compile Include="Warning.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

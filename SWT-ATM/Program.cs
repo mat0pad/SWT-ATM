@@ -15,15 +15,21 @@ namespace SWT_ATM
         {
 
             Monitor monitor = new Monitor();
-             monitor.SetX(0, 10000);
-             monitor.SetZ(500, 20000);
-             monitor.SetY(0, 90000);
+            monitor.SetX(0, 10000);   // 0 - 10.000
+            monitor.SetZ(500, 20000); // 500 - 20.000
+            monitor.SetY(0, 90000);   // 0 - 90.000
 
-             IDisplay display = new Display();
 
-             ILog log = new Log();
+            INotificationCenter notificationCenter = new NotificationCenter();
+            IPositionCalc calc = new PositionCalc();
 
-             Airspace airspace = new Airspace(monitor, display, log);
+            IDisplay display = new Display(notificationCenter, calc);
+
+            IDisplayFormatter formatter = new DisplayFormatter(display);
+
+            ILog log = new Log();
+
+            Airspace airspace = new Airspace(monitor, formatter, log);
 
             var simThread = new Thread(() => SimulationThread(airspace));
             simThread.Start();

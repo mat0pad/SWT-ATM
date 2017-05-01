@@ -21,14 +21,14 @@ namespace SWT_ATM
         private int _outerBoundHeight;
         private int _rowSeperation;
 
+        private List<Data> _prevList;
+        private readonly INotificationCenter _notificationCenter;
         private IPositionCalc _calc;
 
-        private List<Data> _prevList;
-        private readonly NotificationCenter _notificationCenter = new NotificationCenter();
-
-        public Display(IPositionCalc calc)
+        //For testing
+        public Display(INotificationCenter notificationCenter, IPositionCalc calc)
         {
-           
+            _notificationCenter = notificationCenter;
             _calc = calc;
 
             Thread t = new Thread(Rebuild);
@@ -45,11 +45,9 @@ namespace SWT_ATM
             while (true)
             {
                 if (Console.ReadKey(true).Key == ConsoleKey.R)
-                    BuildFrame();
+                    BuildFrame(DisplayFormatter.Width,DisplayFormatter.Height);
             }
         }
-
-      
 
         public static void WriteRow(IEnumerable<string> toWrite, int seperation, int startLeft, int startTop)
         {
@@ -69,31 +67,32 @@ namespace SWT_ATM
 
         }
 
-        public void ShowNotification(Data d, EventType type)
+        public void ShowNotification(List<string> item)
         {
-            var item = new List<string> { d.Tag, type.ToString() };
             _notificationCenter.GetNotificationQueue().Enqueue(item);
             _notificationCenter.GetNotificationSignalHandle().Set();
         }
 
-        public void ShowWarning(List<List<Data>> w)
+        public void ShowWarning(List<List<string>> w)
         {
-            var warningsList = new List<List<string>>();
-
-            foreach (List<Data> wList in w)
-            {
-                var tmpList = new List<string>(wList.Select(data => data.Tag));
-                warningsList.Add(tmpList);
-            }
-
-            _notificationCenter.GetWwarningsQueue().Enqueue(warningsList);
+            _notificationCenter.GetWwarningsQueue().Enqueue(w);
             _notificationCenter.GetWarningsSignalHandle().Set();
         }
 
         public void ShowTracks(List<Data> d)
         {
-            lock(TracksLock)
-            { 
+            lock (TracksLock)
+            {
+                ClearAll();
+                
+                WriteTracks(d);
+
+                _prevList = d;
+            }
+        }
+
+        private void ClearAll()
+        {
             string clear = new string(' ', _rowSeperation);
 
             // Clear all
@@ -103,8 +102,13 @@ namespace SWT_ATM
                 {
                     WriteRow(new List<string> { clear, clear, clear, clear, clear, clear }, _rowSeperation, 1, i + 2);
                 }
+        }
 
-            i = 2;
+
+        private void WriteTracks(List<Data> d)
+        {
+            var i = 2;
+
             foreach (var track in d)
             {
                 Data oldData = null;
@@ -114,7 +118,7 @@ namespace SWT_ATM
 
                 if (oldData != null && track.XCord != oldData.XCord && track.YCord != oldData.YCord)
                 {
-                    var trackInfo = _calc.FormatTrackData(track, oldData ?? new Data("", 0, 0, 0, "0000000000000000"));
+                    var trackInfo = _calc.FormatTrackData(track, oldData);
                     WriteRow(trackInfo, _rowSeperation, 1, i++);
                 }
                 else
@@ -124,12 +128,10 @@ namespace SWT_ATM
                 }
 
             }
-
-            _prevList = d;
-            }
         }
 
-        private void Configure(int width, int height)
+
+        public void Configure(int width, int height)
         {
             _outerBoundHeight = height + 2;
             _rowSeperation = width * 3 / 5 / 6;
@@ -144,12 +146,11 @@ namespace SWT_ATM
         }
 
 
-
-        private void BuildFrame(int width, int height)
+        public void BuildFrame(int width, int height)
         {
             lock (ConsoleWriterLock)
             {
-                Configure(width,height);
+                Configure(width, height);
                 Console.Clear();
 
                 // Top line

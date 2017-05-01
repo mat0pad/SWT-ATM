@@ -28,11 +28,19 @@ namespace SWT_ATM
         }
         
 
-        //For testing
         public Display()
         {
             Thread t = new Thread(Rebuild);
             t.Start();
+        }
+
+        public Display(bool disableRebuild)
+        {
+            if(!disableRebuild)
+            { 
+                Thread t = new Thread(Rebuild);
+                t.Start();
+            }
         }
 
         ~Display()

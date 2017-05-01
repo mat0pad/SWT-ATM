@@ -19,10 +19,11 @@ namespace SWT_ATM
             monitor.SetY(0, 90000);   // 0 - 90.000
 
 
-            INotificationCenter notificationCenter = new NotificationCenter();
+            
             IPositionCalc calc = new PositionCalc();
 
             IDisplay display = new Display();
+            INotificationCenter notificationCenter = new NotificationCenter(display);
 
             IDisplayFormatter formatter = new DisplayFormatter(display, calc, notificationCenter);
 

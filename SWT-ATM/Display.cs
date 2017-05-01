@@ -49,7 +49,7 @@ namespace SWT_ATM
             }
         }
 
-        public static void WriteRow(IEnumerable<string> toWrite, int seperation, int startLeft, int startTop)
+        public void WriteRow(IEnumerable<string> toWrite, int seperation, int startLeft, int startTop)
         {
             var i = 0;
             var rowSeperationString = new string(' ', seperation);

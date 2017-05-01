@@ -8,7 +8,7 @@ namespace SWT_ATM
 
         void BuildFrame(int width, int height);
 
-        //void WriteRow(IEnumerable<string> toWrite, int seperation, int startLeft, int startTop);
+        void WriteRow(IEnumerable<string> toWrite, int seperation, int startLeft, int startTop);
 
         void ShowTracks(List<IEnumerable<string>> d);
 

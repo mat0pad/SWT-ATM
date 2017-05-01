@@ -83,7 +83,7 @@ namespace SWT_ATM
             var item = new List<string> { d.Tag, type.ToString() };
 
             _notificationCenter.EnqueNotification(item);
-            _notificationCenter.SetWarningsSignalHandle();
+            _notificationCenter.SetNotificationSignalHandle();
         }
 
         public void ShowWarning(List<List<Data>> w)

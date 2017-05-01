@@ -27,7 +27,6 @@ namespace SWT_ATM
             return _rowSeperation;
         }
         
-        
 
         //For testing
         public Display()

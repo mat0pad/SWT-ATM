@@ -9,7 +9,7 @@ namespace SWT_ATM
         void SetHeight(int height);
 
         void ShowTracks(List<Data> d);
-        void ShowNotification(Data d, EventType type);
+        void ShowNotification(Data d, EventType? type);
         void ShowWarning(List<List<Data>> w);
     }
 }

@@ -42,16 +42,13 @@ namespace SWT_ATM
         public void SetHeight(int height)
         {
             Height = height;
-            _display.BuildFrame(Width, Height); 
+            _display.BuildFrame(Width, Height);
         }
 
         public void ShowTracks(List<Data> d)
         {
-            //lock (TracksLock)
-            {
-                
             List<IEnumerable<string>> formattedTracks = new List<IEnumerable<string>>();
-            
+
             var i = 2;
             IEnumerable<string> trackInfo;
             foreach (var track in d)
@@ -72,17 +69,21 @@ namespace SWT_ATM
 
                 formattedTracks.Add(trackInfo);
             }
-                _prevList = d;
-                _display.ShowTracks(formattedTracks);
-            }
+            if (_prevList != null)
+                lock (_prevList)
+                    _prevList = d;
+
+            _display.ShowTracks(formattedTracks);
         }
 
-        public void ShowNotification(Data d, EventType type)
+        public void ShowNotification(Data d, EventType? type)
         {
+            if (d == null) return;
+
             var item = new List<string> { d.Tag, type.ToString() };
 
-            _notificationCenter.GetNotificationQueue().Enqueue(item);
-            _notificationCenter.GetNotificationSignalHandle().Set();
+            _notificationCenter.EnqueNotification(item);
+            _notificationCenter.SetWarningsSignalHandle();
         }
 
         public void ShowWarning(List<List<Data>> w)
@@ -95,8 +96,8 @@ namespace SWT_ATM
                 warningsList.Add(tmpList);
             }
 
-            _notificationCenter.GetWwarningsQueue().Enqueue(warningsList);
-            _notificationCenter.GetWarningsSignalHandle().Set();
+            _notificationCenter.EnqueWarning(warningsList);
+            _notificationCenter.SetWarningsSignalHandle();
         }
     }
 }

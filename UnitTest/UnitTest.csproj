@@ -47,7 +47,7 @@
   <ItemGroup>
     <Compile Include="AirspaceTest.cs" />
     <Compile Include="CoordinateMapperTest.cs" />
-    <Compile Include="DisplayTest.cs" />
+    <Compile Include="DisplayFormatterTest.cs" />
     <Compile Include="LogTest.cs" />
     <Compile Include="MonitorTest.cs" />
     <Compile Include="SubjectTest.cs" />

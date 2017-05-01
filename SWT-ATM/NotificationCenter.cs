@@ -21,24 +21,24 @@ namespace SWT_ATM
         private const int Seperation = 10; // Distance betweeen notification data in the same row
         private int _prevWarningCount = 0, maxConflictsInWarningMsg = 5; // Used for clearing the current warnings before rewriting the new ones
 
-        public ConcurrentQueue<List<string>> GetNotificationQueue()
+        public void EnqueNotification(List<string> item)
         {
-            return _notificationsQueue;
+            _notificationsQueue.Enqueue(item);
         }
 
-        public AutoResetEvent GetNotificationSignalHandle()
+        public void SetNotificationSignalHandle()
         {
-            return _notficationSignal;
+            _notficationSignal.Set();
         }
 
-        public ConcurrentQueue<List<List<string>>> GetWwarningsQueue()
+        public void EnqueWarning(List<List<string>> item)
         {
-            return _warnings;
+            _warnings.Enqueue(item);
         }
 
-        public AutoResetEvent GetWarningsSignalHandle()
+        public void SetWarningsSignalHandle()
         {
-            return _warningSignal;
+             _warningSignal.Set();
         }
 
         public NotificationCenter()

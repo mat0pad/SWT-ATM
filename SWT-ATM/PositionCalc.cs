@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SWT_ATM
 {
-    class PositionCalc : IPositionCalc
+    public class PositionCalc : IPositionCalc
     {
         public string CalcVelocity(Data current, Data prev)
         {

@@ -18,6 +18,7 @@ namespace SWT_ATM
         private readonly AutoResetEvent _warningSignal = new AutoResetEvent(false);
         private readonly ConcurrentQueue<List<string>> _notificationsToShow = new ConcurrentQueue<List<string>>();
         private readonly ConcurrentQueue<List<List<string>>> _warnings = new ConcurrentQueue<List<List<string>>>();
+
         private const int Seperation = 10; // Distance betweeen notification data in the same row
         private int _prevWarningCount = 0, maxConflictsInWarningMsg = 5; // Used for clearing the current warnings before rewriting the new ones
         private readonly IDisplay _display;

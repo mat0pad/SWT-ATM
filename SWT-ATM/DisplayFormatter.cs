@@ -6,10 +6,11 @@ namespace SWT_ATM
     public class DisplayFormatter : IDisplayFormatter
     {
         private IDisplay _display;
+        private IPositionCalc _calc;
 
         public static int Height { get; private set; }
         public static int Width { get; private set; }
-        private IPositionCalc _calc;
+       
         private List<Data> _prevList;
 
         private readonly INotificationCenter _notificationCenter;
@@ -69,6 +70,7 @@ namespace SWT_ATM
 
                 formattedTracks.Add(trackInfo);
             }
+
             if (_prevList != null)
                 lock (_prevList)
                     _prevList = d;

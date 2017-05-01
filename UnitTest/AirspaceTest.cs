@@ -24,6 +24,7 @@ namespace UnitTest
         {
             _log = Substitute.For<ILog>();
             _displayFormatter = Substitute.For<IDisplayFormatter>();
+
             _monitor = Substitute.For<IMonitor>();
             _airspace = new Airspace(_monitor,_displayFormatter,_log);
         }

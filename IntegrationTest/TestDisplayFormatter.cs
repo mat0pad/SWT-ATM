@@ -73,8 +73,124 @@ namespace IntegrationTest
 
             simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
 
-            notificationCenter.Received(1).EnqueNotification(Arg.Is<List<string>>(d => d[0] == "ATR423" && d[1] == "ENTERING"));
-            notificationCenter.Received(1).SetNotificationSignalHandle();
+            testData[0] = "ATR423;5001;5001;14000;20151006213456789";
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+
+            notificationCenter.Received(1).EnqueNotification(Arg.Is<List<string>>(d => d[0] == "ATR423" && d[1] == "LEAVING"));
+            notificationCenter.Received(2).SetNotificationSignalHandle();
+
+        }
+
+        [Test]
+        public void DisplayFormatterDoesConflictingWarning()
+        {
+            var notificationCenter = Substitute.For<INotificationCenter>();
+            var positionCalc = Substitute.For<IPositionCalc>();
+            var display = Substitute.For<IDisplay>();
+
+            displayFormatter = new DisplayFormatter(display, positionCalc, notificationCenter);
+
+            mapper.Attach(new Airspace(monitor, displayFormatter, log));
+
+            var testData = new List<string>();
+            testData.Add("ATR423;10;10;14000;20151006213456719");
+
+            // ATR423 ENTERING
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "ATR423;501;501;1000;20151006213456789";
+
+            // ATR423 INSIDE
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "AT422;10000;10000;1000;20151006213456799";
+
+            // AT422 ENTERING
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "AT422;1000;1000;1000;20151006213456999";
+
+            // AT422 CONFLICTING
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            notificationCenter.Received(1).EnqueWarning(Arg.Any<List<List<string>>>());
+            notificationCenter.Received(1).SetWarningsSignalHandle();
+
+        }
+
+        [Test]
+        public void DisplayFormatterDoesConflictingEnteringWarning()
+        {
+            var notificationCenter = Substitute.For<INotificationCenter>();
+            var positionCalc = Substitute.For<IPositionCalc>();
+            var display = Substitute.For<IDisplay>();
+
+            displayFormatter = new DisplayFormatter(display, positionCalc, notificationCenter);
+
+            mapper.Attach(new Airspace(monitor, displayFormatter, log));
+
+            var testData = new List<string>();
+            testData.Add("ATR423;10;10;14000;20151006213456719");
+
+            // ATR423 ENTERING
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "ATR423;501;501;1000;20151006213456789";
+
+            // ATR423 INSIDE
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "AT422;1000;1000;1000;20151006213456999";
+
+            // AT422 CONFLICTING Entering
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            notificationCenter.Received(1).EnqueWarning(Arg.Any<List<List<string>>>());
+            notificationCenter.Received(1).SetWarningsSignalHandle();
+
+        }
+
+
+        [Test]
+        public void DisplayFormatterDoesConflictingLeavingWarning()
+        {
+            var notificationCenter = Substitute.For<INotificationCenter>();
+            var positionCalc = Substitute.For<IPositionCalc>();
+            var display = Substitute.For<IDisplay>();
+
+            displayFormatter = new DisplayFormatter(display, positionCalc, notificationCenter);
+
+            var _monitor = new Monitor();
+            monitor.SetX(0, 200);
+            monitor.SetY(0, 200);
+            monitor.SetZ(0, 500);
+
+            mapper.Attach(new Airspace(_monitor, displayFormatter, log));
+
+            var testData = new List<string>();
+            testData.Add("ATR423;10;10;100;20151006213456719");
+
+            // ATR423 ENTERING
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "ATR423;20;20;100;20151006213456789";
+
+            // ATR423 INSIDE
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "AT422;200;200;500;20151006213456999";
+
+            // AT422 ENTERING
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            testData[0] = "AT422;201;201;399;20151006213456999";
+
+            // AT422 CONFLICTING LEAVING
+            simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
+
+            notificationCenter.Received(1).EnqueWarning(Arg.Any<List<List<string>>>());
+            notificationCenter.Received(1).SetWarningsSignalHandle();
 
         }
     }

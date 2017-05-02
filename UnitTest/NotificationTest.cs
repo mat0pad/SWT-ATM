@@ -31,6 +31,7 @@ namespace UnitTest
         {
             _notificationCenter.EnqueNotification(new List<string> {"test1", "test2"});
             _notificationCenter.SetNotificationSignalHandle();
+            Thread.Sleep(50);
             _display.Received(1).WriteRow(Arg.Is<List<string>>((s => s[0] == "test1" && s[1] == "test2")), 10, Display.InnerRightLineBound, 2);
         }
 

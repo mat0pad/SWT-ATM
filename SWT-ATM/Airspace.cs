@@ -53,6 +53,7 @@ namespace SWT_ATM
 
                     Log.WriteNotification(data, true);
                     DisplayFormatter.ShowNotification(data,EventType.LEAVING);
+                    DisplayFormatter.ShowTracks(new List<Data>(_tracks));
                     break;
 
                 case EventType.INSIDE:

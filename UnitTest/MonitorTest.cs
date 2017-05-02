@@ -49,11 +49,11 @@ namespace UnitTest
             Assert.That(array[i].Equals(_monitor.GetZ()[i]));
         }
 
-        [Test]
+       /* [Test]
         public void EventTrackException()
         {
             Assert.Throws<NullReferenceException>(() => _monitor.EventTracker(null));
-        }
+        }*/
 
         [Test]
         public void GetAllConflicts()

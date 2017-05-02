@@ -44,5 +44,47 @@ namespace UnitTest
                 Assert.That(line.Contains("ENTERING"));
         }
 
+        [Test]
+        public void ConstructorTestNoParameter()
+        {
+            Assert.DoesNotThrow(() => new Log());
+        }
+
+        [Test]
+        public void ExceptionCallConstutNoParameter()
+        {
+            var file = new StreamReader(path);
+            Assert.Throws<System.IO.IOException>(() => new Log(path));
+            file.Close();
+
+        }
+
+        [Test]
+        public void ExceptionCallConstutWithParameter()
+        {
+            var file = new StreamReader(Directory.GetCurrentDirectory() + @"\log.txt");
+            Assert.Throws<System.IO.IOException>(() => new Log());
+            file.Close();
+
+        }
+
+        [Test]
+        public void WriteWarningTest()
+        {
+            string line;
+            Data data = new Data("test1", 100, 200, 300, "1203");
+            List<Data> list = new List<Data>();
+
+            list.Add(data);
+
+            _log.WriteWarning(list);
+
+            using (var file = new StreamReader(path, true))
+            {
+                line = file.ReadToEnd();
+            }
+            Assert.That(line.Contains("1203"));
+        }
+
     }
 }

@@ -54,7 +54,7 @@ namespace UnitTest
             bool b = false;
 
             _notificationCenter.ExecuteDelayed(() => { b = true; }, 5000);
-            Thread.Sleep(5000);
+            Thread.Sleep(5050);
 
             Assert.IsTrue(b);
         }

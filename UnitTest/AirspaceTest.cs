@@ -78,6 +78,20 @@ namespace UnitTest
         }
 
         [Test]
+        public void UpdateOnLeavingDataFormatReceived()
+        {
+            var data = new Data("", 0, 0, 0, "");
+
+            _monitor.EventTracker(data).Returns(EventType.LEAVING);
+
+            _airspace.Update(data);
+
+            _log.Received(1).WriteNotification(data, true);
+
+            _displayFormatter.ShowTracks(Arg.Any<List<Data>>());
+        }
+
+        [Test]
         public void UpdateOnInsideLogReceived()
         {
             var data = new Data("", 0, 0, 0, "");
@@ -167,6 +181,24 @@ namespace UnitTest
             _airspace.Update(data);
 
             _monitor.Received(1).GetTracksInConflict();
+        }
+
+        [Test]
+        public void UpdateOnConflictingLeavingDisplayFormatReceived()
+        {
+            var data = new Data("", 0, 0, 0, "");
+            var list = new List<Data>();
+
+            list.Add(data);
+            list.Add(data);
+
+            _monitor.EventTracker(data).Returns(EventType.CONFLICTING_LEAVING);
+            _monitor.GetTracksInConflict().Returns(list);
+
+            _airspace.Update(data);
+
+            _monitor.Received(1).GetTracksInConflict();
+            _displayFormatter.Received(1).ShowTracks(list);
         }
 
         [Test]

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
+using NSubstitute.Extensions;
 using NSubstitute.Routing.Handlers;
 using NUnit.Framework;
 using SWT_ATM;
@@ -14,7 +15,7 @@ namespace UnitTest
     [TestFixture]
     class NotificationTest
     {
-        private INotificationCenter _notificationCenter;
+        private NotificationCenter _notificationCenter;
         private IDisplay _display;
 
         [SetUp]
@@ -48,6 +49,14 @@ namespace UnitTest
             //_display.Received(1).WriteRow(Arg.Is<List<string>>((s => s[0] == "test1" && s[1] == "test2" && s[2] == "CONFLICT")), 10, Display.InnerRightLineBound, DisplayFormatter.Height / 2 + 1);
             _display.Received(1).WriteRow(Arg.Any<IEnumerable<string>>(), Arg.Any<int>(), Arg.Any<int>(), Arg.Any<int>());
         }*/
+
+
+        [Test]
+        public void EnqueueWarningNoThrowTest()
+        {
+            List<List<string>> list = new List<List<string>>();
+           Assert.DoesNotThrow(() =>  _notificationCenter.EnqueWarning(list)); 
+        }
 
         [Test]
         public void Delay()

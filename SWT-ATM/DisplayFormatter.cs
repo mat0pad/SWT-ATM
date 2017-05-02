@@ -11,7 +11,7 @@ namespace SWT_ATM
         public static int Height { get; private set; }
         public static int Width { get; private set; }
        
-        private List<Data> _prevList;
+        private List<Data> _prevList = new List<Data>();
 
         private readonly INotificationCenter _notificationCenter;
 
@@ -71,7 +71,7 @@ namespace SWT_ATM
                 formattedTracks.Add(trackInfo);
             }
 
-            if (_prevList != null)
+
                 lock (_prevList)
                     _prevList = d;
 

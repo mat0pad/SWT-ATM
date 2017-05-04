@@ -31,6 +31,11 @@ namespace UnitTest
             _displayFormatter = new DisplayFormatter(_display, _calc, _notificationCenter, _testWidth, _testHeight);
         }
 
+        [Test]
+        public void GetHeight()
+        {
+            Assert.IsTrue(_displayFormatter.GetHeight() == _testHeight);
+        }
 
         [Test]
         public void NotificationShowNotificationCall()

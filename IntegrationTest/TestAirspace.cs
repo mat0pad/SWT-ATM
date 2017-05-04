@@ -240,6 +240,8 @@ namespace IntegrationTest
            d[0].Altitude == 1000 && d[0].Timestamp == "20151006213456789"
             ));
 
+            displayFormatter.Received(2).ShowNotification(Arg.Any<Data>(), EventType.ENTERING);
+
             displayFormatter.Received(1).ShowWarning(Arg.Any<List<List<Data>>>());
         }
 
@@ -266,30 +268,29 @@ namespace IntegrationTest
             // ATR423 ENTERING
             simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
 
-            testData[0] = "ATR423;20;20;100;20151006213456789";
+            testData[0] = "ATR423;0;0;199;20151006213456789";
 
             // ATR423 INSIDE
             simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
 
-            testData[0] = "AT422;200;200;500;20151006213456999";
+            testData[0] = "AT422;20;101;499;20151006213456999";
 
             // AT422 ENTERING
             simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
 
-            testData[0] = "AT422;201;201;399;20151006213456999";
+            testData[0] = "ATR423;0;0;302;20151006213456789";
+            testData.Add("AT422;200;200;501;20151006213456999");
 
             // AT422 CONFLICTING LEAVING
             simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
 
-            log.Received(1).WriteWarning(Arg.Is<List<Data>>(d =>
-           d[1].Tag == "AT422" && d[1].XCord == 201 && d[1].YCord == 201 &&
-           d[1].Altitude == 399 && d[1].Timestamp == "20151006213456999" &&
-           d[0].Tag == "ATR423" && d[0].XCord == 20 && d[0].YCord == 20 &&
-           d[0].Altitude == 100 && d[0].Timestamp == "20151006213456789"
-            ));
+           log.Received().WriteWarning(Arg.Any<List<Data>>());
 
             displayFormatter.Received(1).ShowWarning(Arg.Any<List<List<Data>>>());
-           
+
+            displayFormatter.Received(1).ShowNotification(Arg.Any<Data>(), EventType.ENTERING);
+            displayFormatter.Received(1).ShowNotification(Arg.Any<Data>(), EventType.LEAVING);
+
         }
 
 

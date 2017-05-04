@@ -47,14 +47,16 @@ namespace UnitTest
 
             List<List<string>> warnings = new List<List<string>> { warning1, warning2 };
 
-            _display.GetInnerRightLineBound().Returns(50);
+            int returnV = 50;
+
+            _display.GetInnerRightLineBound().Returns(returnV);
             _display.GetOuterRightLineBound().Returns(100);
             _formatter.GetHeight().Returns(100);
 
             _notificationCenter.EnqueWarning(warnings);
             _notificationCenter.SetWarningsSignalHandle();
-            //Thread.Sleep(50);
-            _display.Received(1).WriteRow(Arg.Is<List<string>>((s => s[0] == "test1" && s[1] == "test2" && s[2] == "CONFLICTING")), 10, _display.GetInnerRightLineBound(), _formatter.GetHeight() / 2 + 1);
+            Thread.Sleep(500);
+            _display.Received(1).WriteRow(Arg.Is<List<string>>((s => s[0] == "test1" && s[1] == "test2" && s[2] == "CONFLICTING")), 10, returnV, _formatter.GetHeight() / 2 + 1);
         }
 
 
@@ -66,14 +68,16 @@ namespace UnitTest
 
             List<List<string>> warnings = new List<List<string>> { warning1, warning2 };
 
-            _display.GetInnerRightLineBound().Returns(50);
+            int returnV = 50;
+
+            _display.GetInnerRightLineBound().Returns(returnV);
             _display.GetOuterRightLineBound().Returns(100);
             _formatter.GetHeight().Returns(100);
 
             _notificationCenter.EnqueWarning(warnings);
             _notificationCenter.SetWarningsSignalHandle();
-            //Thread.Sleep(50);
-            _display.Received(1).WriteRow(Arg.Is<List<string>>((s => s[0] == "test3" && s[1] == "test4" && s[2] == "CONFLICTING")), 10, _display.GetInnerRightLineBound(), _formatter.GetHeight() / 2 + 2);  
+            Thread.Sleep(500);
+            _display.Received(1).WriteRow(Arg.Is<List<string>>((s => s[0] == "test3" && s[1] == "test4" && s[2] == "CONFLICTING")), 10, returnV, _formatter.GetHeight() / 2 + 2);  
         }
 
 

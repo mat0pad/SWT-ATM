@@ -87,7 +87,7 @@ namespace SWT_ATM
                     break;
 
                 case EventType.CONFLICTING_LEAVING:
-
+                    
                     var list2 = Monitor.GetTracksInConflict();
                     DisplayFormatter.ShowWarning(Monitor.GetAllConflicts());
                     list2.Add(data);
@@ -96,6 +96,8 @@ namespace SWT_ATM
                     {
                         Log.WriteWarning(list2);
                     }
+
+                    DisplayFormatter.ShowTracks(new List<Data>(_tracks));
 
                     break;   
             }

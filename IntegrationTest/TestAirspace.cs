@@ -117,6 +117,8 @@ namespace IntegrationTest
                 d.Altitude == 14000 &&
                 d.Tag == "ATR423" && d.Timestamp == "20151006213456789" &&
                 d.XCord == 5001 && d.YCord == 5001), EventType.LEAVING);
+
+            displayFormatter.Received(1).ShowTracks(Arg.Any<List<Data>>());
         }
 
 
@@ -287,6 +289,7 @@ namespace IntegrationTest
             ));
 
             displayFormatter.Received(1).ShowWarning(Arg.Any<List<List<Data>>>());
+           
         }
 
 

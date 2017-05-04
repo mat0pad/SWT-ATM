@@ -34,7 +34,7 @@ namespace UnitTest
         [Test]
         public void UpdateMonitorEventTrackerException()
         {
-            Assert.Throws<NullReferenceException>(() => _airspace.Update(new Data("",0,0,0,"")));
+            Assert.Throws<NullReferenceException>(() => _airspace.Update(new List<Data> { new Data("",0,0,0,"")}));
 
         }
 
@@ -49,7 +49,7 @@ namespace UnitTest
 
             _monitor.GetTracksInConflict().Returns(new List<Data>()); //need to set, otherwise Error
                                                                       // not important the test functionality
-            _airspace.Update(data);
+            _airspace.Update(new List<Data> { data});
 
             _monitor.Received(1).EventTracker(data);
         }
@@ -61,7 +61,7 @@ namespace UnitTest
 
             _monitor.EventTracker(data).Returns(EventType.ENTERING);
 
-            _airspace.Update(data);
+            _airspace.Update(new List<Data> { data });
 
             _log.Received(1).WriteNotification(data, false);
         }
@@ -73,7 +73,7 @@ namespace UnitTest
 
             _monitor.EventTracker(data).Returns(EventType.LEAVING);
 
-            _airspace.Update(data);
+            _airspace.Update(new List<Data> { data });
 
             _log.Received(1).WriteNotification(data, true);
         }
@@ -85,7 +85,7 @@ namespace UnitTest
 
             _monitor.EventTracker(data).Returns(EventType.LEAVING);
 
-            _airspace.Update(data);
+            _airspace.Update(new List<Data> { data });
 
             _log.Received(1).WriteNotification(data, true);
 
@@ -99,7 +99,7 @@ namespace UnitTest
 
             _monitor.EventTracker(data).Returns(EventType.INSIDE);
 
-            _airspace.Update(data);
+            _airspace.Update(new List<Data> { data });
 
             _log.DidNotReceiveWithAnyArgs().WriteNotification(null, false);
         }
@@ -112,7 +112,7 @@ namespace UnitTest
             _monitor.EventTracker(data).Returns(EventType.CONFLICTING);
             _monitor.GetTracksInConflict().Returns(new List<Data>());
 
-            _airspace.Update(data);
+            _airspace.Update(new List<Data> { data });
 
             _monitor.Received(1).GetTracksInConflict();
         }
@@ -128,7 +128,7 @@ namespace UnitTest
             _monitor.EventTracker(data).Returns(EventType.CONFLICTING);
             _monitor.GetTracksInConflict().Returns(list);
 
-            _airspace.Update(data);
+            _airspace.Update(new List<Data> { data });
 
             _log.Received(1).WriteWarning(list);
         }
@@ -145,7 +145,7 @@ namespace UnitTest
             _monitor.EventTracker(data).Returns(EventType.CONFLICTING_ENTERING);
             _monitor.GetTracksInConflict().Returns(list);
 
-            _airspace.Update(data);
+            _airspace.Update(new List<Data> { data });
 
             _monitor.Received(1).GetTracksInConflict(); //test
         }
@@ -161,7 +161,7 @@ namespace UnitTest
             _monitor.EventTracker(data).Returns(EventType.CONFLICTING_ENTERING);
             _monitor.GetTracksInConflict().Returns(list);
 
-            _airspace.Update(data);
+            _airspace.Update(new List<Data> { data });
 
             list.Add(data);
             _log.Received(1).WriteWarning(list);
@@ -179,7 +179,7 @@ namespace UnitTest
             _monitor.EventTracker(data).Returns(EventType.CONFLICTING_LEAVING);
             _monitor.GetTracksInConflict().Returns(list);
 
-            _airspace.Update(data);
+            _airspace.Update(new List<Data> { data });
 
             _monitor.Received(1).GetTracksInConflict();
         }
@@ -196,7 +196,7 @@ namespace UnitTest
             _monitor.EventTracker(data).Returns(EventType.CONFLICTING_LEAVING);
             _monitor.GetTracksInConflict().Returns(list);
 
-            _airspace.Update(data);
+            _airspace.Update(new List<Data> { data });
 
             _monitor.Received(1).GetTracksInConflict();
 
@@ -218,7 +218,7 @@ namespace UnitTest
             _monitor.EventTracker(data).Returns(EventType.CONFLICTING_LEAVING);
             _monitor.GetTracksInConflict().Returns(list);
 
-            _airspace.Update(data);
+            _airspace.Update(new List<Data> { data });
 
             _log.Received(1).WriteWarning(list);
         }
@@ -242,7 +242,7 @@ namespace UnitTest
 
             _monitor.EventTracker(data).Returns(EventType.ENTERING);
 
-            _airspace.Update(data);
+            _airspace.Update(new List<Data> { data });
 
             Assert.That(_airspace.GetTracks().Count > 0);
         }
@@ -254,11 +254,11 @@ namespace UnitTest
 
             _monitor.EventTracker(data).Returns(EventType.ENTERING);
 
-            _airspace.Update(data);
+            _airspace.Update(new List<Data> { data });
 
             _monitor.EventTracker(data).Returns(EventType.LEAVING);
 
-            _airspace.Update(data);
+            _airspace.Update(new List<Data> { data });
 
             Assert.That(_airspace.GetTracks().Count == 0);
         }
@@ -285,8 +285,8 @@ namespace UnitTest
             _monitor.EventTracker(data1).Returns(EventType.ENTERING);
             _monitor.EventTracker(data2).Returns(EventType.LEAVING);
 
-            _airspace.Update(data1);
-            _airspace.Update(data2);
+            _airspace.Update(new List<Data> { data1 });
+            _airspace.Update(new List<Data> { data2 });
 
 
             Assert.That(_airspace.GetTracks().Count == 1);

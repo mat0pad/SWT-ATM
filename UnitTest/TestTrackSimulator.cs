@@ -14,18 +14,16 @@ namespace UnitTest
 
         private TrackSimulator simulator;
         private ICoordinateMapper mapper;
-        private List<ITransponderReceiver> list;
+        private ITransponderReceiver receiver;
 
         [SetUp]
         public void SetUp()
         {
             mapper = Substitute.For<ICoordinateMapper>();
 
-            list = new List<ITransponderReceiver>();
+            receiver = Substitute.For<ITransponderReceiver>();
 
-            list.Add(Substitute.For<ITransponderReceiver>());
-
-            simulator = new TrackSimulator(mapper, -1, list);             
+            simulator = new TrackSimulator(mapper, receiver);             
         }
 
         [Test]
@@ -34,7 +32,7 @@ namespace UnitTest
             var testData = new List<string>();
             int num = 0;
 
-            list[0].TransponderDataReady += delegate(object sender, RawTransponderDataEventArgs e)
+            receiver.TransponderDataReady += delegate(object sender, RawTransponderDataEventArgs e)
             {
                 testData.Add("test");
                 num += 1;
@@ -53,7 +51,7 @@ namespace UnitTest
             var args = new RawTransponderDataEventArgs(testData);
             
             simulator.OnDataReceieved(null, args);
-            mapper.Received().MapTrack("test");
+            mapper.Received().MapTrack(testData);
         }
 
         [Test]
@@ -65,11 +63,11 @@ namespace UnitTest
 
             var args = new RawTransponderDataEventArgs(testData);
 
-            list[0].TransponderDataReady += simulator.OnDataReceieved;
+            receiver.TransponderDataReady += simulator.OnDataReceieved;
 
-            list[0].TransponderDataReady += Raise.EventWith(args);
+            receiver.TransponderDataReady += Raise.EventWith(args);
 
-            mapper.Received().MapTrack("test");
+            mapper.Received().MapTrack(testData);
         }
 
         [Test]
@@ -77,14 +75,8 @@ namespace UnitTest
         {
             simulator.StartSimulation();
 
-            mapper.DidNotReceiveWithAnyArgs().MapTrack("");
+            mapper.DidNotReceiveWithAnyArgs().MapTrack(new List<string> { "test" });
 
-        }
-
-        [Test]
-        public void ConstructorException()
-        {
-            Assert.Throws<NullReferenceException>(() => new TrackSimulator(mapper,1,null));
         }
 
 

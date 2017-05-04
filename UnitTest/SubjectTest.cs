@@ -13,7 +13,7 @@ namespace UnitTest
     [TestFixture]
     class SubjectTest
     {
-        private Subject<Data> subject;
+        private Subject<List<Data>> subject;
 
         [SetUp]
         public void Init()
@@ -24,29 +24,31 @@ namespace UnitTest
         [Test]
         public void NotifyObserverReceived()
         {
-            SWT_ATM.IObserver<Data> observer = Substitute.For<SWT_ATM.IObserver<Data>>();
+            SWT_ATM.IObserver<List<Data>> observer = Substitute.For<SWT_ATM.IObserver<List<Data>>>();
             Data data = new Data("", 0, 0, 0, "");
 
             subject.Attach(observer);
 
-            subject.Notify(data);
+            var list = new List<Data> {data};
 
-            observer.Received(1).Update(data);
+            subject.Notify(list);
+
+            observer.Received(1).Update(list);
         }
 
         [Test]
         public void NotifyObserverNotReceived()
         {
-            SWT_ATM.IObserver<Data> observer = Substitute.For<SWT_ATM.IObserver<Data>>();
+            SWT_ATM.IObserver<List<Data>> observer = Substitute.For<SWT_ATM.IObserver<List<Data>>>();
             Data data = new Data("", 0, 0, 0, "");
 
             subject.Attach(observer);
 
             subject.Deattach(observer);
 
-            subject.Notify(data);
+            subject.Notify(new List<Data> { data });
 
-            observer.DidNotReceive().Update(data);
+            observer.DidNotReceive().Update(new List<Data> { data });
         }
     }
 }

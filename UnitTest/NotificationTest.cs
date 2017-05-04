@@ -108,7 +108,71 @@ namespace UnitTest
             _notificationCenter.EnqueWarning(warnings);
             _notificationCenter.SetWarningsSignalHandle();
             Thread.Sleep(500);
-            _display.Received(1).WriteRow(Arg.Is<List<string>>((s => s[0] == "test3" && s[1] == "test4" && s[2] == "CONFLICTING")), 10, returnV, _formatter.GetHeight() / 2 + 2);  
+            _display.Received(1).WriteRow(Arg.Is<List<string>>(s => s[0] == "test3" && s[1] == "test4" && s[2] == "CONFLICTING"), 10, returnV, _formatter.GetHeight() / 2 + 2);  
+        }
+
+
+        [Test] // Kan ikke testes da den afhænger af variabler i Display som afhænger af Console klassen -> virker ikke medmindre konsolvinduet er åbnet
+        public void WarningUpdateClearWarningCall()
+        {
+            List<string> warning1 = new List<string> { "test1", "test2" };
+            List<string> warning2 = new List<string> { "test3", "test4" };
+
+            List<string> warning3 = new List<string> { "test5", "test6" };
+            List<string> warning4 = new List<string> { "test7", "test8" };
+
+            List<List<string>> warnings1 = new List<List<string>> { warning1, warning2 };
+            List<List<string>> warnings2 = new List<List<string>> { warning3, warning4 };
+
+            int returnV = 50;
+
+            _display.GetInnerRightLineBound().Returns(returnV);
+            _display.GetOuterRightLineBound().Returns(100);
+            _formatter.GetHeight().Returns(100);
+
+            // Show warnings
+            _notificationCenter.EnqueWarning(warnings1);
+            _notificationCenter.SetWarningsSignalHandle();
+
+            // Update warnings
+            _notificationCenter.EnqueWarning(warnings2);
+            _notificationCenter.SetWarningsSignalHandle();
+
+            var a = new string(' ', _display.GetOuterRightLineBound() - _display.GetInnerRightLineBound() - 1);
+
+            Thread.Sleep(1000);
+            _display.Received(1).WriteRow(Arg.Is<List<string>>(s => s[0] == a), 0, returnV, _formatter.GetHeight() / 2 + 1 + 1);
+        }
+
+        [Test] // Kan ikke testes da den afhænger af variabler i Display som afhænger af Console klassen -> virker ikke medmindre konsolvinduet er åbnet
+        public void WarningUpdateWriteWarningCall()
+        {
+            List<string> warning1 = new List<string> { "test1", "test2" };
+            List<string> warning2 = new List<string> { "test3", "test4" };
+
+            List<string> warning3 = new List<string> { "test5", "test6" };
+            List<string> warning4 = new List<string> { "test7", "test8" };
+
+            List<List<string>> warnings1 = new List<List<string>> { warning1, warning2 };
+            List<List<string>> warnings2 = new List<List<string>> { warning3, warning4 };
+
+            int returnV = 50;
+
+            _display.GetInnerRightLineBound().Returns(returnV);
+            _display.GetOuterRightLineBound().Returns(100);
+            _formatter.GetHeight().Returns(100);
+
+            // Show warnings
+            _notificationCenter.EnqueWarning(warnings1);
+            _notificationCenter.SetWarningsSignalHandle();
+
+            // Update warnings
+            _notificationCenter.EnqueWarning(warnings2);
+            _notificationCenter.SetWarningsSignalHandle();
+
+
+            Thread.Sleep(1000);
+            _display.Received(1).WriteRow(Arg.Is<List<string>>((s => s[0] == "test7" && s[1] == "test8" && s[2] == "CONFLICTING")), 10, returnV, _formatter.GetHeight() / 2 + 2);
         }
 
 

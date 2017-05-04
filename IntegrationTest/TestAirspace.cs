@@ -118,7 +118,7 @@ namespace IntegrationTest
                 d.Tag == "ATR423" && d.Timestamp == "20151006213456789" &&
                 d.XCord == 5001 && d.YCord == 5001), EventType.LEAVING);
 
-            displayFormatter.Received(1).ShowTracks(Arg.Any<List<Data>>());
+            displayFormatter.Received(2).ShowTracks(Arg.Any<List<Data>>());
         }
 
 

@@ -26,10 +26,12 @@ namespace UnitTest
         [Test]
         public void MapTrack()
         {
-            string test = "test";
-            _mapper.MapTrack(test);
+            List<string> list = new List<string>();
 
-            _format.Received(1).FormatData(test);
+            list.Add("test");
+            _mapper.MapTrack(list);
+
+            _format.Received(1).FormatData("test");
         }
 
     }

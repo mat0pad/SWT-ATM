@@ -31,74 +31,70 @@ namespace SWT_ATM
 
         public void Update(List<Data> data)
         {
-            /*EventType type = Monitor.EventTracker(data);
 
-            // Add/Remove track to list
-            UpdateListAfterEvent(type, data);
-
-            string s = "";
-
-            switch (type)
+            foreach (var track in data)
             {
-                case EventType.ENTERING:
-                    
-                    Log.WriteNotification(data, false);
-                    DisplayFormatter.ShowNotification(data,EventType.ENTERING);
-                    break;
-    
-                case EventType.LEAVING:
+                EventType type = Monitor.EventTracker(track);
 
-                    Log.WriteNotification(data, true);
-                    DisplayFormatter.ShowNotification(data,EventType.LEAVING);
-                    DisplayFormatter.ShowTracks(new List<Data>(_tracks));
-                    break;
+                UpdateListAfterEvent(type, track);
 
-                case EventType.INSIDE:
+                switch (type)
+                {
+                    case EventType.ENTERING:
 
-                    DisplayFormatter.ShowTracks(new List<Data>(_tracks));
-                    break;
+                        Log.WriteNotification(track, false);
+                        DisplayFormatter.ShowNotification(track, EventType.ENTERING);
+                        break;
 
-                case EventType.CONFLICTING:
+                    case EventType.LEAVING:
 
-                    List<Data> list = Monitor.GetTracksInConflict();
-                    DisplayFormatter.ShowWarning(Monitor.GetAllConflicts());
-                    list.Add(data);
-                    
-                    if (list.Count > 1)
-                    {
-                        Log.WriteWarning(list);
-                    }
+                        Log.WriteNotification(track, true);
+                        DisplayFormatter.ShowNotification(track, EventType.LEAVING);
+                        break;
 
-                    break;
+                    case EventType.INSIDE:
+                        break;
 
-                case EventType.CONFLICTING_ENTERING:
+                    case EventType.CONFLICTING:
 
-                    var list1 = Monitor.GetTracksInConflict();
-                    DisplayFormatter.ShowWarning(Monitor.GetAllConflicts());
-                    list1.Add(data);
+                        List<Data> list = Monitor.GetTracksInConflict();
+                        DisplayFormatter.ShowWarning(Monitor.GetAllConflicts());
+                        list.Add(track);
+                        if (list.Count > 1)
+                        {
+                            Log.WriteWarning(list);
+                        }
 
-                    if (list1.Count > 1)
-                    {
-                        Log.WriteWarning(list1);
-                    }
-                    break;
+                        break;
 
-                case EventType.CONFLICTING_LEAVING:
-                    
-                    var list2 = Monitor.GetTracksInConflict();
-                    DisplayFormatter.ShowWarning(Monitor.GetAllConflicts());
-                    list2.Add(data);
+                    case EventType.CONFLICTING_ENTERING:
 
-                    if (list2.Count > 1)
-                    {
-                        Log.WriteWarning(list2);
-                    }
+                        var list1 = Monitor.GetTracksInConflict();
+                        DisplayFormatter.ShowWarning(Monitor.GetAllConflicts());
+                        list1.Add(track);
 
-                    DisplayFormatter.ShowTracks(new List<Data>(_tracks));
+                        if (list1.Count > 1)
+                        {
+                            Log.WriteWarning(list1);
+                        }
+                        break;
 
-                    break;   
-            }*/
-               
+                    case EventType.CONFLICTING_LEAVING:
+
+                        var list2 = Monitor.GetTracksInConflict();
+                        DisplayFormatter.ShowWarning(Monitor.GetAllConflicts());
+                        list2.Add(track);
+
+                        if (list2.Count > 1)
+                        {
+                            Log.WriteWarning(list2);
+                        }
+
+                        break;
+                }
+            }
+            DisplayFormatter.ShowTracks(new List<Data>(_tracks));
+
         }
 
         private void UpdateListAfterEvent(EventType eventType, Data data)

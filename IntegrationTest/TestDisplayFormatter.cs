@@ -216,7 +216,7 @@ namespace IntegrationTest
             // ATR423 INSIDE
             simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
 
-            display.Received(1).ShowTracks(Arg.Any<List<IEnumerable<string>>>());
+            display.Received(2).ShowTracks(Arg.Any<List<IEnumerable<string>>>());
             positionCalc.ReceivedWithAnyArgs().FormatTrackData(null, null);
         }
 
@@ -243,7 +243,7 @@ namespace IntegrationTest
             // ATR423 INSIDE
             simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
 
-            display.Received(1).ShowTracks(Arg.Any<List<IEnumerable<string>>>());
+            display.Received(2).ShowTracks(Arg.Any<List<IEnumerable<string>>>());
         }
     }
 }

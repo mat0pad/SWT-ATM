@@ -5,31 +5,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
+using NSubstitute.Extensions;
 using NSubstitute.Routing.Handlers;
 using NUnit.Framework;
 using SWT_ATM;
 
 namespace UnitTest
 {
-    /*public class DisplayFake : IDisplay
-    {
-        public static int InnerRightLineBound { get { return 0; } }
-        public static int OuterRightLineBound { get { return 0; } }
-
-        public void Configure(int width, int height)
-        { }
-
-        public void BuildFrame(int width, int height)
-        { }
-
-        public void WriteRow(IEnumerable<string> toWrite, int seperation, int startLeft, int startTop)
-        { }
-
-        public void ShowTracks(List<IEnumerable<string>> d)
-        { }
-    }*/
-
-
     [TestFixture]
     class NotificationTest
     {
@@ -92,6 +74,14 @@ namespace UnitTest
             _notificationCenter.SetWarningsSignalHandle();
             //Thread.Sleep(50);
             _display.Received(1).WriteRow(Arg.Is<List<string>>((s => s[0] == "test3" && s[1] == "test4" && s[2] == "CONFLICTING")), 10, _display.GetInnerRightLineBound(), _formatter.GetHeight() / 2 + 2);  
+        }
+
+
+        [Test]
+        public void EnqueueWarningNoThrowTest()
+        {
+            List<List<string>> list = new List<List<string>>();
+           Assert.DoesNotThrow(() =>  _notificationCenter.EnqueWarning(list)); 
         }
 
         [Test]

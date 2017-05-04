@@ -47,6 +47,15 @@ namespace UnitTest
             _notificationCenter.Received(1).SetNotificationSignalHandle();
         }
 
+
+        [Test]
+        public void NotificationShowNotification()
+        {
+            _displayFormatter.ShowNotification(null, null);
+
+            _notificationCenter.DidNotReceive().SetNotificationSignalHandle();
+        }
+
         [Test]
         public void WarningShowWarningCall()
         {
@@ -85,6 +94,49 @@ namespace UnitTest
         }
 
         [Test]
+        public void showTracksNullArgs()
+        {
+            Assert.Throws<NullReferenceException>(() => _displayFormatter.ShowTracks(null));
+        }
+
+
+        [Test]
+        public void ShowTracksCastCalc()
+        {
+            Data data1 = new Data("test1", 0, 0, 0, "");
+            Data data2 = new Data("test2", 0, 0, 0, "");
+
+            List<Data> list = new List<Data> { data1, data2 };
+
+            _displayFormatter.ShowTracks(list);
+
+            _displayFormatter.ShowTracks(list);
+
+            _calc.Received(4).FormatTrackData(Arg.Any<Data>(),Arg.Any<Data>());
+        }
+
+        [Test]
+        public void ShowTracksC()
+        {
+            Data data1 = new Data("test1", 0, 0, 0, "");
+            Data data2 = new Data("test2", 0, 0, 0, "");
+
+            List<Data> list = new List<Data> { data1, data2 };
+
+            _displayFormatter.ShowTracks(list);
+
+            Data data4 = new Data("test1", 1, 20, 20, "");
+            Data data3 = new Data("test2", 10, 20, 20, "");
+            Data data5 = new Data("test2", 10, 20, 20, "");
+
+            List<Data> list1 = new List<Data> { data3, data4 };
+
+            _displayFormatter.ShowTracks(list);
+
+            _calc.Received(4).FormatTrackData(Arg.Any<Data>(), Arg.Any<Data>());
+        }
+
+        [Test]
         public void ShowTracksCall()
         {
             Data data1 = new Data("test1", 0, 0, 0, "");
@@ -94,7 +146,7 @@ namespace UnitTest
 
             _displayFormatter.ShowTracks(list);
 
-            _display.ShowTracks(Arg.Any<List<IEnumerable<string>>>());
+            _display.Received(1).ShowTracks(Arg.Any<List<IEnumerable<string>>>());
         }
     }
 }

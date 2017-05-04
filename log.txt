@@ -1,4 +1,3 @@
 Log Of Events
 
 Timestamp        	Event Type	Event Category	Tag of Track(s)
-20151006213456719	ENTERING   	NOTIFICATION	ATR423

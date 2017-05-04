@@ -1,4 +1,4 @@
 Log Of Events
 
 Timestamp        	Event Type	Event Category	Tag of Track(s)
-1203	ENTERING   	NOTIFICATION	test1
+1203	CONFLICTING	WARNING     	test1   

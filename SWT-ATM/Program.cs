@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using TransponderReceiver;
 
 namespace SWT_ATM
 {
@@ -14,11 +15,9 @@ namespace SWT_ATM
         static void Main(string[] args)
         {
             Monitor monitor = new Monitor();
-            monitor.SetX(0, 10000);   // 0 - 10.000
+            monitor.SetX(0, 100000);   // 0 - 10.000
             monitor.SetZ(500, 20000); // 500 - 20.000
-            monitor.SetY(0, 90000);   // 0 - 90.000
-
-
+            monitor.SetY(0, 900000);   // 0 - 90.000
             
             IPositionCalc calc = new PositionCalc();
 
@@ -41,7 +40,7 @@ namespace SWT_ATM
             CoordinateMapper coordinate = new CoordinateMapper(new TransponderDataFormat());
             coordinate.Attach(airspace);
 
-            TrackSimulator simulator = new TrackSimulator(coordinate, 1000);
+            TrackSimulator simulator = new TrackSimulator(coordinate, TransponderReceiverFactory.CreateTransponderDataReceiver());
             simulator.StartSimulation();
 
         }

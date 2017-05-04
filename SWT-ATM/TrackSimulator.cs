@@ -9,43 +9,39 @@ namespace SWT_ATM
 {
     public class TrackSimulator
     {
-        private List<ITransponderReceiver> _list;
+        private ITransponderReceiver _transponderReceiver;
         private static ICoordinateMapper _mapper;
 
-        public TrackSimulator(ICoordinateMapper mapper, int numOfPlanes)
-        {
-            _mapper = mapper; 
-
-            // Create transponder receiver
-            _list = new List<ITransponderReceiver>();
-
-           for (int i = 0; i < numOfPlanes+1; i++)
-                _list.Add(TransponderReceiverFactory.CreateTransponderDataReceiver());
-        }
-
-        public TrackSimulator(ICoordinateMapper mapper, int numOfPlanes, List<ITransponderReceiver> list)
+        public TrackSimulator(ICoordinateMapper mapper, ITransponderReceiver receiver)
         {
             _mapper = mapper;
 
             // Create transponder receiver
-            _list = list;
+            _transponderReceiver = receiver;
 
-            for (int i = 0; i < numOfPlanes + 1; i++)
-                _list.Add(TransponderReceiverFactory.CreateTransponderDataReceiver());
-              
+            //TransponderReceiverFactory.CreateTransponderDataReceiver();
         }
 
 
         public void StartSimulation()
         {
-            foreach (var item in _list)
-                 item.TransponderDataReady += OnDataReceieved;  
+            _transponderReceiver.TransponderDataReady += OnDataReceieved;  
         }
 
         public void OnDataReceieved(object sender, RawTransponderDataEventArgs e)
         {
             if (e.TransponderData.Count > 0)
-                _mapper.MapTrack(e.TransponderData[0]);
+            {
+               /* foreach (var item in e.TransponderData)
+                {
+                    Console.WriteLine(item);
+                }
+                */
+                
+                _mapper.MapTrack(e.TransponderData);
+
+            
+            }
         }
 
     }

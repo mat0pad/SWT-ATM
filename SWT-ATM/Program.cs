@@ -23,9 +23,10 @@ namespace SWT_ATM
             IPositionCalc calc = new PositionCalc();
 
             IDisplay display = new Display();
-            INotificationCenter notificationCenter = new NotificationCenter(display);
 
+            INotificationCenter notificationCenter = new NotificationCenter(display);
             IDisplayFormatter formatter = new DisplayFormatter(display, calc, notificationCenter);
+            notificationCenter.SetFormatter(formatter);
 
             ILog log = new Log();
 

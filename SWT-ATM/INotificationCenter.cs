@@ -19,5 +19,6 @@ namespace SWT_ATM
         void SetWarningsSignalHandle();
 
         Task ExecuteDelayed(Action action, int timeout);
+        void SetFormatter(IDisplayFormatter formatter);
     }
 }

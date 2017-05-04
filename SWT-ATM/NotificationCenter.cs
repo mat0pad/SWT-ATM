@@ -22,6 +22,7 @@ namespace SWT_ATM
         private const int Seperation = 10; // Distance betweeen notification data in the same row
         private int _prevWarningCount = 0, maxConflictsInWarningMsg = 5; // Used for clearing the current warnings before rewriting the new ones
         private readonly IDisplay _display;
+        private IDisplayFormatter _formatter;
 
         public void EnqueNotification(List<string> item)
         {
@@ -52,6 +53,11 @@ namespace SWT_ATM
             thread2.Start();
         }
 
+        public void SetFormatter(IDisplayFormatter formatter)
+        {
+            _formatter = formatter;
+        }
+
         private void NotificationThread()
         {
             while (true)
@@ -69,12 +75,6 @@ namespace SWT_ATM
             }
         }
 
-        public async Task ExecuteDelayed(Action action, int timeoutInMilliseconds)
-        {
-            await Task.Delay(timeoutInMilliseconds);
-            action();
-        }
-
         private void WarningThread()
         {
             while (true)
@@ -89,6 +89,12 @@ namespace SWT_ATM
             }
         }
 
+        public async Task ExecuteDelayed(Action action, int timeoutInMilliseconds)
+        {
+            await Task.Delay(timeoutInMilliseconds);
+            action();
+        }
+
         private void WriteNotification(List<string> notification)
         {
             lock (_notificationsToShow)
@@ -99,7 +105,7 @@ namespace SWT_ATM
 
                 foreach (var n in _notificationsToShow)
                 {
-                    _display.WriteRow(n, Seperation, Display.InnerRightLineBound, i++);
+                    _display.WriteRow(n, Seperation, _display.GetInnerRightLineBound(), i++);
                 }
             }
         }
@@ -112,7 +118,7 @@ namespace SWT_ATM
 
                 // Clear current
                 for (var i = 0; i < _notificationsToShow.Count; i++)
-                    _display.WriteRow(new List<string> { s, s }, Seperation, Display.InnerRightLineBound, i + 2);
+                    _display.WriteRow(new List<string> { s, s }, Seperation, _display.GetInnerRightLineBound(), i + 2);
 
                 List<string> dummyList;
                 _notificationsToShow.TryDequeue(out dummyList);
@@ -121,19 +127,19 @@ namespace SWT_ATM
                 var j = 2;
                 // Write new
                 foreach (var n in _notificationsToShow)
-                    _display.WriteRow(n, Seperation, Display.InnerRightLineBound, j++);
+                    _display.WriteRow(n, Seperation, _display.GetInnerRightLineBound(), j++);
             }
         }
 
         private void UpdateWarnings(IEnumerable<List<string>> warnings)
         {
-            var s = new string(' ', Display.OuterRightLineBound - Display.InnerRightLineBound - 1);
+            var s = new string(' ', _display.GetOuterRightLineBound() - _display.GetInnerRightLineBound() - 1);
 
             int i;
             // Clear current warnings
             for (i = 0; i < _prevWarningCount; i++)
-                _display.WriteRow(new List<string> { s }, 0, Display.InnerRightLineBound,
-                    DisplayFormatter.Height / 2 + 1 + i);
+                _display.WriteRow(new List<string> { s }, 0, _display.GetInnerRightLineBound(),
+                    _formatter.GetHeight() / 2 + 1 + i);
 
             // Rewrite (new) warnings
             i = 0;
@@ -141,12 +147,11 @@ namespace SWT_ATM
             {
                 List<string> tmpList = new List<string>(w);
                 tmpList.Add("CONFLICTING");
-                _display.WriteRow(tmpList, Seperation, Display.InnerRightLineBound, DisplayFormatter.Height / 2 + ++i);
+                _display.WriteRow(tmpList, Seperation, _display.GetInnerRightLineBound(), _formatter.GetHeight() / 2 + ++i);
             }
 
             lock (WarningLock)
                 _prevWarningCount = i;
         }
-
     }
 }

@@ -23,7 +23,7 @@ namespace IntegrationTest
         {
             format = new TransponderDataFormat();
             mapper = new CoordinateMapper(format);
-            simulator = new TrackSimulator(mapper, 3);
+            simulator = new TrackSimulator(mapper, Substitute.For<ITransponderReceiver>());
         }
 
 

@@ -31,7 +31,6 @@ namespace SWT_ATM
 
         public void Update(List<Data> data)
         {
-            Console.WriteLine("Data received!");
             /*EventType type = Monitor.EventTracker(data);
 
             // Add/Remove track to list

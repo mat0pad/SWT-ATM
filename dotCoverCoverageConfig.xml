@@ -18,7 +18,9 @@
       </FilterEntry>
     </IncludeFilters>
     <ExcludeFilters>
-      <FilterEntry>...</FilterEntry>
+        <FilterEntry>
+		<ModuleMask>Program.cs</ModuleMask>
+	</FilterEntry>
       <FilterEntry>...</FilterEntry>
       <FilterEntry>...</FilterEntry>
     </ExcludeFilters>

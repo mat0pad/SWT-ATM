@@ -19,7 +19,7 @@
     </IncludeFilters>
     <ExcludeFilters>
         <FilterEntry>
-		<ModuleMask>Program.cs</ModuleMask>
+		<ModuleMask>SWT-ATM\Program.cs</ModuleMask>
 	</FilterEntry>
       <FilterEntry>...</FilterEntry>
       <FilterEntry>...</FilterEntry>

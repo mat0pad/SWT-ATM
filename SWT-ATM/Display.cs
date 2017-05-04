@@ -14,12 +14,22 @@ namespace SWT_ATM
     {
         private static readonly object TracksLock = new object();
         private static readonly object ConsoleWriterLock = new object();
-        public static int InnerRightLineBound { get; private set; }
-        public static int OuterRightLineBound { get; private set; }
+        private int _innerRightLineBound;
+        private int _outerRightLineBound;
 
         private int _prevTrackCount;
         private int _outerBoundHeight;
         private int _rowSeperation;
+
+        public int GetInnerRightLineBound()
+        {
+            return _innerRightLineBound;
+        }
+
+        public int GetOuterRightLineBound()
+        {
+            return _outerRightLineBound;
+        }
 
 
         public int GetRowSeperation()
@@ -118,8 +128,8 @@ namespace SWT_ATM
             _outerBoundHeight = height + 2;
             _rowSeperation = width * 3 / 5 / 6;
 
-            InnerRightLineBound = width * 3 / 5 + 6;
-            OuterRightLineBound = width + 2;
+            _innerRightLineBound = width * 3 / 5 + 6;
+            _outerRightLineBound = width + 2;
 
             if (width + 1 > Console.BufferWidth)
                 Console.BufferWidth = width + 2; // "+2" to accomodate right line
@@ -154,15 +164,15 @@ namespace SWT_ATM
                 // Right inner line
                 for (int i = 1; i < height + 1; i++)
                 {
-                    Console.SetCursorPosition(InnerRightLineBound - 1, i);
+                    Console.SetCursorPosition(_innerRightLineBound - 1, i);
                     Console.WriteLine("|");
                 }
 
                 // Right horizontal line
                 Console.SetCursorPosition(1, Console.CursorTop);
-                for (int i = 1; i < OuterRightLineBound - InnerRightLineBound + 1; i++)
+                for (int i = 1; i < _outerRightLineBound - _innerRightLineBound + 1; i++)
                 {
-                    Console.SetCursorPosition(InnerRightLineBound - 1 + i, height / 2);
+                    Console.SetCursorPosition(_innerRightLineBound - 1 + i, height / 2);
                     Console.Write("-");
                 }
 
@@ -170,7 +180,7 @@ namespace SWT_ATM
                 Console.SetCursorPosition(1, Console.CursorTop);
                 for (int i = 1; i < height + 1; i++)
                 {
-                    Console.SetCursorPosition(OuterRightLineBound - 1, i);
+                    Console.SetCursorPosition(_outerRightLineBound - 1, i);
                     Console.WriteLine("|");
                 }
 

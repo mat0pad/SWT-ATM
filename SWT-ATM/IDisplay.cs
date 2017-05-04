@@ -12,6 +12,8 @@ namespace SWT_ATM
 
         void ShowTracks(List<IEnumerable<string>> d);
 
-        int GetRowSeperation();
+        int GetInnerRightLineBound();
+
+        int GetOuterRightLineBound();
     }
 }

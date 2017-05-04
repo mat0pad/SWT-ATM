@@ -27,6 +27,12 @@ namespace SWT_ATM
             _display.BuildFrame(width, height);
         }
 
+        // For testing
+        public int GetHeight()
+        {
+            return Height;
+        }
+
         public void SetSize(int width, int height)
         {
             Width = width;

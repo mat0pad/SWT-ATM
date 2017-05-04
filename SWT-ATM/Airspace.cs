@@ -69,9 +69,10 @@ namespace SWT_ATM
 
                     case EventType.CONFLICTING_ENTERING:
 
-                        var list1 = Monitor.GetTracksInConflict();
-                        DisplayFormatter.ShowWarning(Monitor.GetAllConflicts());
-                        list1.Add(track);
+                    var list1 = Monitor.GetTracksInConflict();
+                    DisplayFormatter.ShowWarning(Monitor.GetAllConflicts());
+                    DisplayFormatter.ShowNotification(data, EventType.ENTERING);
+                    list1.Add(data);
 
                         if (list1.Count > 1)
                         {
@@ -81,9 +82,10 @@ namespace SWT_ATM
 
                     case EventType.CONFLICTING_LEAVING:
 
-                        var list2 = Monitor.GetTracksInConflict();
-                        DisplayFormatter.ShowWarning(Monitor.GetAllConflicts());
-                        list2.Add(track);
+                    var list2 = Monitor.GetTracksInConflict();
+                    DisplayFormatter.ShowWarning(Monitor.GetAllConflicts());
+                    DisplayFormatter.ShowNotification(data, EventType.LEAVING);
+                    list2.Add(data);
 
                         if (list2.Count > 1)
                         {

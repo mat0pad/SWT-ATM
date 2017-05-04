@@ -19,7 +19,7 @@
     </IncludeFilters>
     <ExcludeFilters>
         <FilterEntry>
-	<ClassMask> Program.cs </ClassMask>
+	<ClassMask>Program.cs</ClassMask>
 	</FilterEntry>
       <FilterEntry>...</FilterEntry>
       <FilterEntry>...</FilterEntry>

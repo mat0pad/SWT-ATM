@@ -27,7 +27,7 @@ namespace IntegrationTest
         {
             format = new TransponderDataFormat();
             mapper = new CoordinateMapper(format);
-            simulator = new TrackSimulator(mapper, 3);
+            simulator = new TrackSimulator(mapper, Substitute.For<ITransponderReceiver>());
 
             monitor = new Monitor();
             monitor.SetX(0, 5000);
@@ -216,7 +216,7 @@ namespace IntegrationTest
             // ATR423 INSIDE
             simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
 
-            display.Received(1).ShowTracks(Arg.Any<List<IEnumerable<string>>>());
+            display.Received(2).ShowTracks(Arg.Any<List<IEnumerable<string>>>());
             positionCalc.ReceivedWithAnyArgs().FormatTrackData(null, null);
         }
 
@@ -243,7 +243,7 @@ namespace IntegrationTest
             // ATR423 INSIDE
             simulator.OnDataReceieved(null, new RawTransponderDataEventArgs(testData));
 
-            display.Received(1).ShowTracks(Arg.Any<List<IEnumerable<string>>>());
+            display.Received(2).ShowTracks(Arg.Any<List<IEnumerable<string>>>());
         }
     }
 }

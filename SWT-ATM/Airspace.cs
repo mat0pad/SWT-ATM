@@ -31,10 +31,10 @@ namespace SWT_ATM
 
         public void Update(List<Data> data)
         {
+
             foreach (var track in data)
             {
                 EventType type = Monitor.EventTracker(track);
-
 
                 UpdateListAfterEvent(type, track);
 

@@ -161,8 +161,14 @@ namespace UnitTest
             Data data2 = new Data("test2", 0, 0, 0, "");
 
             List<Data> list = new List<Data> { data1, data2 };
-
             _displayFormatter.ShowTracks(list);
+
+
+            data2 = new Data("test2", 1, 1, 0, "");
+
+            list = new List<Data> { data1, data2 };
+
+
             _displayFormatter.ShowTracks(list);
 
             _display.Received(2).ShowTracks(Arg.Any<List<IEnumerable<string>>>());

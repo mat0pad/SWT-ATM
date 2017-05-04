@@ -62,10 +62,9 @@ namespace SWT_ATM
             {
                 Data oldData = null;
 
-                if (_prevList != null)
                     oldData = _prevList.FirstOrDefault(prevData => prevData.Tag == track.Tag);
 
-                if (oldData != null && track.XCord != oldData.XCord && track.YCord != oldData.YCord)
+                if (oldData != null && (track.XCord != oldData.XCord || track.YCord != oldData.YCord))
                 {
                     trackInfo = _calc.FormatTrackData(track, oldData);
                 }

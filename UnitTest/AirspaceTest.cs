@@ -198,7 +198,7 @@ namespace UnitTest
             _airspace.Update(data);
 
             _monitor.Received(1).GetTracksInConflict();
-            _displayFormatter.Received(1).ShowTracks(list);
+            _displayFormatter.Received(1).ShowWarning(Arg.Any<List<List<Data>>>());
         }
 
         [Test]

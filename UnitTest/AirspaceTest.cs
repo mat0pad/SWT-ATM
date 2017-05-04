@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NSubstitute;
+using NSubstitute.Core.Arguments;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using SWT_ATM;
@@ -198,7 +199,7 @@ namespace UnitTest
             _airspace.Update(data);
 
             _monitor.Received(1).GetTracksInConflict();
-            _displayFormatter.Received(1).ShowTracks(list);
+            _displayFormatter.Received(1).ShowTracks(Arg.Any<List<Data>>());
         }
 
         [Test]

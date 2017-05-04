@@ -1,7 +1,9 @@
-﻿namespace SWT_ATM
+﻿using System.Collections.Generic;
+
+namespace SWT_ATM
 {
     public interface ICoordinateMapper
     {
-        void MapTrack(string rawData);
+        void MapTrack(List<string> rawData);
     }
 }

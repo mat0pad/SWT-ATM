@@ -3,11 +3,9 @@ using System.Collections.Generic;
 
 namespace SWT_ATM
 {
-    public class Airspace : IObserver<Data>
+    public class Airspace : IObserver<List<Data>>
     {
         private List<Data> _tracks;
-
-        private List<Data> _tracksInConlict;
 
         private IDisplayFormatter DisplayFormatter { get; set; }
 
@@ -24,7 +22,6 @@ namespace SWT_ATM
             _tracks = new List<Data>();
             Monitor.SetShareList(ref _tracks);
             
-            _tracksInConlict = new List<Data>();
         }
 
         public List<Data> GetTracks()
@@ -32,9 +29,10 @@ namespace SWT_ATM
             return _tracks;
         }
 
-        public void Update(Data data)
+        public void Update(List<Data> data)
         {
-            EventType type = Monitor.EventTracker(data);
+            Console.WriteLine("Data received!");
+            /*EventType type = Monitor.EventTracker(data);
 
             // Add/Remove track to list
             UpdateListAfterEvent(type, data);
@@ -100,7 +98,7 @@ namespace SWT_ATM
                     DisplayFormatter.ShowTracks(new List<Data>(_tracks));
 
                     break;   
-            }
+            }*/
                
         }
 

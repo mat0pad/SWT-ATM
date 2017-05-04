@@ -39,8 +39,39 @@ namespace UnitTest
             _display.Received(1).WriteRow(Arg.Is<List<string>>((s => s[0] == "test1" && s[1] == "test2")), 10, _display.GetInnerRightLineBound(), 2);
         }
 
+        [Test]
+        public void NotificationDeleteClearNotificationCall()
+        {
+            int returnV = 50;
+            _display.GetInnerRightLineBound().Returns(returnV);
+
+            _notificationCenter.EnqueNotification(new List<string> { "test1", "test2" });
+            _notificationCenter.SetNotificationSignalHandle();
+
+            var a = new string(' ', 10);
+
+            Thread.Sleep(5500);
+
+            _display.Received(1).WriteRow(Arg.Is<List<string>>((s => s[0] == a && s[1] == a)), 10, returnV, 2);
+        }
+
+        [Test]
+        public void NotificationDeleteRewriteNotificationCall()
+        {
+            int returnV = 50;
+            _display.GetInnerRightLineBound().Returns(returnV);
+
+            _notificationCenter.EnqueNotification(new List<string> { "test1", "test2" });
+            _notificationCenter.EnqueNotification(new List<string> { "test3", "test4" });
+            _notificationCenter.SetNotificationSignalHandle();
+
+            Thread.Sleep(5500);
+
+            _display.Received(1).WriteRow(Arg.Is<List<string>>((s => s[0] == "test3" && s[1] == "test4")), 10, returnV, 2);
+        }
+
         [Test] // Kan ikke testes da den afhænger af variabler i Display som afhænger af Console klassen -> virker ikke medmindre konsolvinduet er åbnet
-        public void WarningEnqueueWarningCall()
+        public void WarningEnqueueWarningCall1()
         {
             List<string> warning1 = new List<string> {"test1", "test2"};
             List<string> warning2 = new List<string> { "test3", "test4" };

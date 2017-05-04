@@ -37,6 +37,7 @@ namespace UnitTest
             Assert.IsTrue(_displayFormatter.GetHeight() == _testHeight);
         }
 
+
         [Test]
         public void NotificationShowNotificationCall()
         {
@@ -132,7 +133,6 @@ namespace UnitTest
 
             Data data4 = new Data("test1", 1, 20, 20, "");
             Data data3 = new Data("test2", 10, 20, 20, "");
-            Data data5 = new Data("test2", 10, 20, 20, "");
 
             List<Data> list1 = new List<Data> { data3, data4 };
 
@@ -152,6 +152,20 @@ namespace UnitTest
             _displayFormatter.ShowTracks(list);
 
             _display.Received(1).ShowTracks(Arg.Any<List<IEnumerable<string>>>());
+        }
+
+        [Test]
+        public void ShowTracksCallWithPrev()
+        {
+            Data data1 = new Data("test1", 0, 0, 0, "");
+            Data data2 = new Data("test2", 0, 0, 0, "");
+
+            List<Data> list = new List<Data> { data1, data2 };
+
+            _displayFormatter.ShowTracks(list);
+            _displayFormatter.ShowTracks(list);
+
+            _display.Received(2).ShowTracks(Arg.Any<List<IEnumerable<string>>>());
         }
     }
 }

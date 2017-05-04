@@ -27,22 +27,6 @@ namespace UnitTest
         }
 
         [Test]
-        public void TransponderDataReadyEventRaised()
-        {
-            var testData = new List<string>();
-            int num = 0;
-
-            receiver.TransponderDataReady += delegate(object sender, RawTransponderDataEventArgs e)
-            {
-                testData.Add("test");
-                num += 1;
-            };
-
-            Assert.That(testData.Count, Is.EqualTo(num));
-        }
-
-
-        [Test]
         public void MapTrackIsCalled()
         {
             var testData = new List<string>();

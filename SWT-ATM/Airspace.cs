@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SWT_ATM
 {
@@ -95,7 +96,14 @@ namespace SWT_ATM
                         break;
                 }
             }
-            DisplayFormatter.ShowTracks(new List<Data>(_tracks));
+            List<Data> clonelist;
+            lock (_tracks)
+            {
+
+                clonelist = _tracks.Select(x => x.Clone()).ToList();
+            }
+
+            DisplayFormatter.ShowTracks(clonelist);
 
         }
 

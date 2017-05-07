@@ -56,29 +56,30 @@ namespace SWT_ATM
         {
             List<IEnumerable<string>> formattedTracks = new List<IEnumerable<string>>();
 
-            var i = 2;
             IEnumerable<string> trackInfo;
-            foreach (var track in d)
+
+            lock (_prevList)
             {
-                Data oldData = null;
+                foreach (var track in d)
+                {
+                    Data oldData = null;
 
                     oldData = _prevList.FirstOrDefault(prevData => prevData.Tag == track.Tag);
 
-                if (oldData != null && (track.XCord != oldData.XCord || track.YCord != oldData.YCord))
-                {
-                    trackInfo = _calc.FormatTrackData(track, oldData);
-                }
-                else
-                {
-                    trackInfo = _calc.FormatTrackData(track, new Data("", 0, 0, 0, "0000000000000000"));
+                    if (oldData != null && (track.XCord != oldData.XCord || track.YCord != oldData.YCord))
+                    {
+                        trackInfo = _calc.FormatTrackData(track, oldData);
+                    }
+                    else
+                    {
+                        trackInfo = _calc.FormatTrackData(track, new Data("", 0, 0, 0, "0000000000000000"));
+                    }
+
+                    formattedTracks.Add(trackInfo);
                 }
 
-                formattedTracks.Add(trackInfo);
+                _prevList = d;
             }
-
-
-                lock (_prevList)
-                    _prevList = d;
 
             _display.ShowTracks(formattedTracks);
         }

@@ -13,8 +13,13 @@ namespace SWT_ATM
             // Velocity
             var distance = Math.Sqrt(Math.Pow(current.YCord - prev.YCord, 2) + Math.Pow((current.XCord - prev.XCord), 2));
 
-            var velocity = 0.00;
 
+            var currenttime = Int64.Parse(current.Timestamp);
+            var prevtime = Int64.Parse(prev.Timestamp);
+
+            currenttime -= prevtime;
+
+            /*
             if (current.Timestamp.Length >= 10)
             {
                 var currentTime = current.Timestamp.Substring(10);
@@ -35,6 +40,8 @@ namespace SWT_ATM
 
                 velocity = distance / timeDiff;
             }
+            */
+            var velocity = (distance * 1000) / ((double)currenttime);
 
             return $"{velocity:0}";
         }

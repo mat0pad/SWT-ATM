@@ -24,5 +24,10 @@ namespace SWT_ATM
             Altitude = alt;
             Timestamp = time;
         }
+
+        public Data Clone()
+        {
+            return new Data(Tag, XCord, YCord, Altitude, Timestamp);
+        }
     }
 }

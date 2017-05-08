@@ -1,6 +1,7 @@
 ﻿using SWT_ATM;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -34,7 +35,7 @@ namespace IntegrationTest
             monitor.SetY(0, 5000);
             monitor.SetZ(500, 20000);
 
-            log = new Log();
+            log = new Log(Directory.GetCurrentDirectory() + @"\log.txt");
         }
 
 

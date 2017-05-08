@@ -58,7 +58,7 @@ namespace UnitTest
         public void ExceptionCallConstutWithParameter()
         {
             var file = new StreamReader(Directory.GetCurrentDirectory() + @"\log.txt");
-            Assert.Throws<System.IO.IOException>(() => new Log());
+            Assert.Throws<System.IO.IOException>(() => new Log(Directory.GetCurrentDirectory() + @"\log.txt"));
             file.Close();
 
         }

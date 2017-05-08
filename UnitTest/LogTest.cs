@@ -44,11 +44,6 @@ namespace UnitTest
                 Assert.That(line.Contains("ENTERING"));
         }
 
-        [Test]
-        public void ConstructorTestNoParameter()
-        {
-            Assert.DoesNotThrow(() => new Log());
-        }
 
         [Test]
         public void ExceptionCallConstutNoParameter()

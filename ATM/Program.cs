@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -27,7 +28,7 @@ namespace SWT_ATM
             IDisplayFormatter formatter = new DisplayFormatter(display, calc, notificationCenter);
             notificationCenter.SetFormatter(formatter);
 
-            ILog log = new Log();
+            ILog log = new Log(Directory.GetCurrentDirectory() + @"\log.txt");
 
             Airspace airspace = new Airspace(monitor, formatter, log);
 
